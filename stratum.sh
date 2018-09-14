@@ -55,4 +55,4 @@ sudo sed -i 's/username = root/username = stratum/g' *.conf
 sudo sed -i 's/password = patofpaq/password = '$StratumUserDBPassword'/g' *.conf
 
 echo Stratum build complete...
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
