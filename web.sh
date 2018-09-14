@@ -688,7 +688,7 @@ sudo find $STORAGE_ROOT/yiimp/site/ -type f -exec chmod 664 {} +
 sudo chgrp www-data $STORAGE_ROOT -R
 sudo chmod g+w $STORAGE_ROOT -R
 
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
 
 #Updating YiiMP files for cryptopool.builders build
 echo Adding the cryptopool.builders flare to YiiMP...
