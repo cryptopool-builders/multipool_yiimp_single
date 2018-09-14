@@ -1,6 +1,6 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
 
 echo Installing cron screens to crontab...
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/screens.start.sh") | crontab -
@@ -45,7 +45,7 @@ echo '#!/bin/bash
 #
 #
 # Program: yiimp stratum startup script
-# 
+#
 # BTC Donation: 12Pt3vQhQpXvyzBd5qcoL17ouhNFyihyz5
 #
 ################################################################################
