@@ -175,4 +175,4 @@ InstallSSL='"${InstallSSL}"'
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
 
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
