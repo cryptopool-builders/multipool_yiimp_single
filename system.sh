@@ -141,4 +141,4 @@ build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-de
 echo Downloading selected YiiMP Repo...
 hide_output sudo git clone $YiiMPRepo $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
