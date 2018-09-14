@@ -1,0 +1,99 @@
+#!/bin/bash
+#
+#    10-sysinfo - generate the system information
+#    Copyright (c) 2013 Nick Charlton
+#
+#    Authors: Nick Charlton <hello@nickcharlton.net>
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License along
+#    with this program; if not, write to the Free Software Foundation, Inc.,
+#    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+date=`date`
+ps -aux | grep "[m]ain" > /dev/null 2>&1
+if [[ "$?" == "0" ]]; then
+        main="running"
+else
+        main="stopped"
+fi
+ps -aux | grep "[b]locks" > /dev/null 2>&1
+if [[ "$?" == "0" ]]; then
+        blocks="running"
+else
+        blocks="stopped"
+fi
+ps -aux | grep "[l]oop2" > /dev/null 2>&1
+if [[ "$?" == "0" ]]; then
+        loop2="running"
+else
+        loop2="stopped"
+fi
+ps -aux | grep "[l]og/debug.log" > /dev/null 2>&1
+if [[ "$?" == "0" ]]; then
+        debug="running"
+else
+        debug="stopped"
+fi
+daemon='/home/crypto-data/wallets'
+site='/home/crypto-data/yiimp/site'
+hint1="To view a screen type, screen -r main|loop2|blocks|debug"
+hint2="To detach from a screen type, ctrl+a+d"
+divider===============================
+divider=$divider$divider
+header=" %-7s %-25s %-16s %-15s\n"
+width=50
+RED=$'\033[00;31m'
+GREEN=$'\033[00;32m'
+RESTORE=$'\033[0m'
+echo "System information as of: $date"
+echo
+/usr/bin/landscape-sysinfo
+echo
+echo "YiiMP Information:"
+printf "%$width.${width}s\n" "$divider"
+if [[ $main = stopped ]]; then
+printf "$header" "Main:" $RED$main$RESTORE "Daemon Directory:" $daemon
+else
+printf "$header" "Main:" $GREEN$main$RESTORE "Daemon Directory:" $daemon
+fi
+if [[ $blocks = stopped ]]; then
+printf "$header" "Blocks:" $RED$blocks$RESTORE "YiiMP Directory:" $site
+else
+printf "$header" "Blocks:" $GREEN$blocks$RESTORE "YiiMP Directory:" $site
+fi
+if [[ $loop2 = stopped ]]; then
+printf "$header" "Loop2:" $RED$loop2$RESTORE "Hint: $hint1"
+else
+printf "$header" "Loop2:" $GREEN$loop2$RESTORE "Hint: $hint1"
+fi
+if [[ $debug = stopped ]]; then
+printf "$header" "Debug:" $RED$debug$RESTORE "Hint: $hint2"
+else
+printf "$header" "Debug:" $GREEN$debug$RESTORE "Hint: $hint2"
+fi
+echo
+echo "To start|stop|restart a screen use the following command..."
+echo "screens start|stop|restart main|loop2|blocks|debug"
+echo
+echo "To reload this MOTD just type motd..."
+echo
+echo "Donations for continued support of this script are welcomed at:"
+echo
+echo "BTC 33XUK3hzZxmAPBgh2JMmMuVVSCAtpK9eQX"
+echo "BCH qp75x65svsuntmxze38sxqp47h4fqqgfyge5fgegah"
+echo "ETH 0xF2654882a26C3a226eEFF02E652D3aFFA1Bb682A"
+echo "LTC MTWpEuaLyj5AnvKxCKFh9fDbgsdNJgaECx"
+echo
+/usr/lib/update-notifier/update-motd-reboot-required
+/usr/lib/update-notifier/apt-check --human-readable
+echo
