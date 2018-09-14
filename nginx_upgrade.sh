@@ -1,6 +1,6 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
 
 # NGINX upgrade
 echo Upgrading NGINX...
