@@ -48,4 +48,4 @@ sudo rm -r openssl-1.0.2g.tar.gz openssl-1.0.2g
 
 
 echo Daemon setup completed...
-cd ~/Multi-Pool-Installer/install/yiimp-single
+cd $HOME/multipool/yiimp_single
