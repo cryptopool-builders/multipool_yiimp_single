@@ -699,7 +699,6 @@ echo Adding the cryptopool.builders flare to YiiMP...
 
 sudo sed -i 's/YII MINING POOLS/'$DomainName' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/domain/'$DomainName'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
-sudo sed -i 's/Yii mining pools for alternative crypto currencies/cryptopool.builders for all your crypto server needs/g' $STORAGE_ROOT/yiimp/site/web/yaamp/ui/main.php
 sudo sed -i 's/Notes/AddNodes/g' $STORAGE_ROOT/yiimp/site/web/yaamp/models/db_coinsModel.php
 sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/index.php
 sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/runconsole.php
