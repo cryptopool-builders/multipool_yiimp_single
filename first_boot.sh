@@ -1,7 +1,11 @@
 #!/bin/bash
-source /etc/functions.sh
-# Needed to be ran after the first reboot of the system after permissions are set
 #####################################################
+# Created by cryptopool.builders for crypto use...
+#####################################################
+# Needs to be ran after the first reboot of the system after permissions are set
+#####################################################
+
+source /etc/functions.sh
 
 sleep 5
 hide_output yiimp checkup
@@ -38,8 +42,13 @@ hide_output yiimp coin HEDG delete
 hide_output yiimp coin AMBER delete
 hide_output yiimp coin HTML5 delete
 hide_output yiimp coin ZRC delete
+
+# Prevents error when trying to log in to admin panel the first time...
+
 sudo touch $STORAGE_ROOT/yiimp/site/log/debug.log
 sudo chmod 777 $STORAGE_ROOT/yiimp/site/log/.
 sudo chmod 777 $STORAGE_ROOT/yiimp/site/log/debug.log
-# Delete me
+
+# Delete me no longer needed after it runs the first time
+
 sudo rm -r $STORAGE_ROOT/yiimp/first_boot.sh

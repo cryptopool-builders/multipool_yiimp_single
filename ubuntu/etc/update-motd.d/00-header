@@ -1,5 +1,4 @@
 #!/bin/sh
-clear
 #
 #    00-header - create the header of the MOTD
 #    Copyright (c) 2013 Nick Charlton
@@ -21,6 +20,11 @@ clear
 #    You should have received a copy of the GNU General Public License along
 #    with this program; if not, write to the Free Software Foundation, Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#####################################################
+# Updated by cryptopool.builders for crypto use...
+#####################################################
+
+clear
 
 [ -r /etc/lsb-release ] && . /etc/lsb-release
 

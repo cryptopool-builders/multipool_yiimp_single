@@ -1,3 +1,7 @@
+#####################################################
+# Created by cryptopool.builders for crypto use...
+#####################################################
+
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
@@ -143,7 +147,7 @@ restart_service php7.2-fpm
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo Installing LetsEncrypt and setting up SSL...
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --staging --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName"
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName"
 sudo rm /etc/nginx/sites-available/$DomainName.conf
 echo Generating DHPARAM, this may take awhile...
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
@@ -406,7 +410,7 @@ restart_service php7.2-fpm
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo Installing LetsEncrypt and setting up SSL...
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --staging --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName" -d www."$DomainName"
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName" -d www."$DomainName"
 sudo rm /etc/nginx/sites-available/$DomainName.conf
 echo Generating DHPARAM, this may take awhile...
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048

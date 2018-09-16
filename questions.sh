@@ -1,5 +1,7 @@
+#####################################################
 # Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
 # Updated by cryptopool.builders for crypto use...
+#####################################################
 
 source /etc/functions.sh
 source /etc/multipool.conf
@@ -172,6 +174,7 @@ PanelUserDBPassword='"${PanelUserDBPassword}"'
 StratumUserDBPassword='"${StratumUserDBPassword}"'
 UsingSubDomain='"${UsingSubDomain}"'
 InstallSSL='"${InstallSSL}"'
+# Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
 

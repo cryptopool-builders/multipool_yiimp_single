@@ -1,3 +1,7 @@
+#####################################################
+# Created by cryptopool.builders for crypto use...
+#####################################################
+
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
