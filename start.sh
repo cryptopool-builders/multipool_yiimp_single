@@ -46,6 +46,7 @@ source web.sh
 source nginx_upgrade.sh
 source stratum.sh
 source daemon.sh
+source send_mail.sh
 source server_cleanup.sh
 source motd.sh
 source server_harden.sh
