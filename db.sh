@@ -61,14 +61,12 @@ sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-11-segwit.
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-01-stratums_ports.sql
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_getinfo.sql
 
-
-sudo sed -i 's|max_connections         = 100|max_connections         = 800|g' /etc/mysql/my.cnf
-sudo sed -i 's|thread_cache_size       = 128|thread_cache_size       = 512|g' /etc/mysql/my.cnf
-sudo sed -i 's|tmp_table_size          = 32M|tmp_table_size          = 128M|g' /etc/mysql/my.cnf
-sudo sed -i 's|max_heap_table_size     = 32M|max_heap_table_size     = 128M|g' /etc/mysql/my.cnf
-sudo sed -i 's|wait_timeout            = 600|wait_timeout            = 60|g' /etc/mysql/my.cnf
-sudo sed -i 's|max_allowed_packet      = 16M|max_allowed_packet      = 64M|g' /etc/mysql/my.cnf
-sudo sed -i 's/#bind-address=0.0.0.0/bind-address='$DBInternalIP'/g' /etc/mysql/my.cnf
+sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
+sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
+sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
+sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
+sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
+sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
 restart_service mysql
 echo Database build complete...
 cd $HOME/multipool/yiimp_single
