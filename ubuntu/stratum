@@ -1,0 +1,1206 @@
+#####################################################
+# Source code from https://codereview.stackexchange.com/questions/55077/small-bash-script-to-start-and-stop-named-services
+# Updated by cryptopool.builders for crypto use...
+#####################################################
+
+source /etc/multipool.conf
+source $STORAGE_ROOT/yiimp/.yiimp.conf
+STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
+LOG_DIR=$STORAGE_ROOT/yiimp/site/log
+#!/bin/sh -e
+
+sha256="screen -dmS sha256 bash $STRATUM_DIR/run.sh sha"
+sha256stop='screen -X -S sha256 quit'
+
+sha256t="screen -dmS sha256t bash $STRATUM_DIR/run.sh sha256t"
+sha256tstop='screen -X -S sha256t quit'
+
+lbry="screen -dmS lbry bash $STRATUM_DIR/run.sh lbry"
+lbrystop='screen -X -S lbry quit'
+
+scrypt="screen -dmS scrypt bash $STRATUM_DIR/run.sh scrypt"
+scryptstop='screen -X -S scrypt quit'
+
+timetravel="screen -dmS timetravel bash $STRATUM_DIR/run.sh timetravel"
+timetravelstop='screen -X -S timetravel quit'
+
+bitcore="screen -dmS bitcore bash $STRATUM_DIR/run.sh bitcore"
+bitcorestop='screen -X -S bitcore quit'
+
+exosis="screen -dmS exosis bash $STRATUM_DIR/run.sh exosis"
+exosisstop='screen -X -S exosis quit'
+
+c11="screen -dmS c11 bash $STRATUM_DIR/run.sh c11"
+c11stop='screen -X -S c11 quit'
+
+deep="screen -dmS deep bash $STRATUM_DIR/run.sh deep"
+deepstop='screen -X -S deep quit'
+
+x11="screen -dmS x11 bash $STRATUM_DIR/run.sh x11"
+x11stop='screen -X -S x11 quit'
+
+x11evo="screen -dmS x11evo bash $STRATUM_DIR/run.sh x11evo"
+x11evostop='screen -X -S x11evo quit'
+
+x12="screen -dmS x12 bash $STRATUM_DIR/run.sh x12"
+x12stop='screen -X -S x12 quit'
+
+x13="screen -dmS x13 bash $STRATUM_DIR/run.sh x13"
+x13stop='screen -X -S x13 quit'
+
+x15="screen -dmS x15 bash $STRATUM_DIR/run.sh x15"
+x15stop='screen -X -S x15 quit'
+
+x16r="screen -dmS x16r bash $STRATUM_DIR/run.sh x16r"
+x16rstop='screen -X -S x16r quit'
+
+x16s="screen -dmS x16s bash $STRATUM_DIR/run.sh x16s"
+x16sstop='screen -X -S x16s quit'
+
+x17="screen -dmS x17 bash $STRATUM_DIR/run.sh x17"
+x17stop='screen -X -S x17 quit'
+
+x22i="screen -dmS x22i bash $STRATUM_DIR/run.sh x22i"
+x22istop='screen -X -S x22i quit'
+
+aergo="screen -dmS aergo bash $STRATUM_DIR/run.sh aergo"
+aergostop='screen -X -S aergo quit'
+
+xevan="screen -dmS xevan bash $STRATUM_DIR/run.sh xevan"
+xevanstop='screen -X -S xevan quit'
+
+hmq1725="screen -dmS hmq1725 bash $STRATUM_DIR/run.sh hmq1725"
+hmq1725stop='screen -X -S hmq1725 quit'
+
+nist5="screen -dmS nist5 bash $STRATUM_DIR/run.sh nist5"
+nist5stop='screen -X -S nist5 quit'
+
+x14="screen -dmS x14 bash $STRATUM_DIR/run.sh x14"
+x14stop='screen -X -S x14 quit'
+
+quark="screen -dmS quark bash $STRATUM_DIR/run.sh quark"
+quarkstop='screen -X -S quark quit'
+
+whirlpool="screen -dmS whirlpool bash $STRATUM_DIR/run.sh whirlpool"
+whirlpoolstop='screen -X -S whirlpool quit'
+
+neoscrypt="screen -dmS neoscrypt bash $STRATUM_DIR/run.sh neoscrypt"
+neoscryptstop='screen -X -S neoscrypt quit'
+
+argon2="screen -dmS argon2 bash $STRATUM_DIR/run.sh argon2"
+argon2stop='screen -X -S argon2 quit'
+
+argon2ddyn="screen -dmS argon2ddyn bash $STRATUM_DIR/run.sh argon2ddyn"
+argon2ddynstop='screen -X -S argon2ddyn quit'
+
+scryptn="screen -dmS scryptn bash $STRATUM_DIR/run.sh scryptn"
+scryptnstop='screen -X -S scryptn quit'
+
+allium="screen -dmS allium bash $STRATUM_DIR/run.sh allium"
+alliumstop='screen -X -S allium quit'
+
+lbk3="screen -dmS lbk3 bash $STRATUM_DIR/run.sh lbk3"
+lbk3stop='screen -X -S lbk3 quit'
+
+lyra2="screen -dmS lyra2 bash $STRATUM_DIR/run.sh lyra2"
+lyra2stop='screen -X -S lyra2 quit'
+
+lyra2v2="screen -dmS lyra2v2 bash $STRATUM_DIR/run.sh lyra2v2"
+lyra2v2stop='screen -X -S lyra2v2 quit'
+
+lyra2z="screen -dmS lyra2z bash $STRATUM_DIR/run.sh lyra2z"
+lyra2zstop='screen -X -S lyra2z quit'
+
+jha="screen -dmS jha bash $STRATUM_DIR/run.sh jha"
+jhastop='screen -X -S jha quit'
+
+qubit="screen -dmS qubit bash $STRATUM_DIR/run.sh qubit"
+qubitstop='screen -X -S qubit quit'
+
+zr5="screen -dmS zr5 bash $STRATUM_DIR/run.sh zr5"
+zr5stop='screen -X -S zr5 quit'
+
+skein="screen -dmS skein bash $STRATUM_DIR/run.sh skein"
+skeinstop='screen -X -S skein quit'
+
+sib="screen -dmS sib bash $STRATUM_DIR/run.sh sib"
+sibstop='screen -X -S sib quit'
+
+keccak="screen -dmS keccak bash $STRATUM_DIR/run.sh keccak"
+keccakstop='screen -X -S keccak quit'
+
+keccakc="screen -dmS keccakc bash $STRATUM_DIR/run.sh keccakc"
+keccakcstop='screen -X -S keccakc quit'
+
+hex="screen -dmS hex bash $STRATUM_DIR/run.sh hex"
+hexstop='screen -X -S hex quit'
+
+skein2="screen -dmS skein2 bash $STRATUM_DIR/run.sh skein2"
+skein2stop='screen -X -S skein2 quit'
+
+dmdgr="screen -dmS dmdgr bash $STRATUM_DIR/run.sh dmdgr"
+dmdgrstop='screen -X -S dmdgr quit'
+
+myrgr="screen -dmS myrgr bash $STRATUM_DIR/run.sh myrgr"
+myrgrstop='screen -X -S myrgr quit'
+
+zr5="screen -dmS zr5 bash $STRATUM_DIR/run.sh zr5"
+zr5stop='screen -X -S zr5 quit'
+
+blake="screen -dmS blake bash $STRATUM_DIR/run.sh blake"
+blakestop='screen -X -S blake quit'
+
+blakecoin="screen -dmS blakecoin bash $STRATUM_DIR/run.sh blakecoin"
+blakecoinstop='screen -X -S blakecoin quit'
+
+decred="screen -dmS decred bash $STRATUM_DIR/run.sh decred"
+decredstop='screen -X -S decred quit'
+
+vanilla="screen -dmS vanilla bash $STRATUM_DIR/run.sh vanilla"
+vanillastop='screen -X -S vanilla quit'
+
+blake2s="screen -dmS blake2s bash $STRATUM_DIR/run.sh blake2s"
+blake2sstop='screen -X -S blake2s quit'
+
+penta="screen -dmS penta bash $STRATUM_DIR/run.sh penta"
+pentastop='screen -X -S penta quit'
+
+rainforest="screen -dmS rainforest bash $STRATUM_DIR/run.sh rainforest"
+rainforeststop='screen -X -S rainforest quit'
+
+luffa="screen -dmS luffa bash $STRATUM_DIR/run.sh luffa"
+luffastop='screen -X -S luffa quit'
+
+m7m="screen -dmS m7m bash $STRATUM_DIR/run.sh m7m"
+m7mstop='screen -X -S m7m quit'
+
+veltor="screen -dmS veltor bash $STRATUM_DIR/run.sh veltor"
+veltorstop='screen -X -S veltor quit'
+
+velvet="screen -dmS velvet bash $STRATUM_DIR/run.sh velvet"
+velvetstop='screen -X -S velvet quit'
+
+vitalium="screen -dmS vitalium bash $STRATUM_DIR/run.sh vitalium"
+vitaliumstop='screen -X -S vitalium quit'
+
+yescrypt="screen -dmS yescrypt bash $STRATUM_DIR/run.sh yescrypt"
+yescryptstop='screen -X -S yescrypt quit'
+
+yescryptR16="screen -dmS yescryptR16 bash $STRATUM_DIR/run.sh yescryptR16"
+yescryptR16stop='screen -X -S yescryptR16 quit'
+
+yescryptR32="screen -dmS yescryptR32 bash $STRATUM_DIR/run.sh yescryptR32"
+yescryptR32stop='screen -X -S yescryptR32 quit'
+
+bastion="screen -dmS bastion bash $STRATUM_DIR/run.sh bastion"
+bastionstop='screen -X -S bastion quit'
+
+hsr="screen -dmS hsr bash $STRATUM_DIR/run.sh hsr"
+hsrstop='screen -X -S hsr quit'
+
+phi="screen -dmS phi bash $STRATUM_DIR/run.sh phi"
+phistop='screen -X -S phi quit'
+
+phi2="screen -dmS phi2 bash $STRATUM_DIR/run.sh phi2"
+phi2stop='screen -X -S phi2 quit'
+
+polytimos="screen -dmS polytimos bash $STRATUM_DIR/run.sh polytimos"
+polytimosstop='screen -X -S polytimos quit'
+
+skunk="screen -dmS skunk bash $STRATUM_DIR/run.sh skunk"
+skunkstop='screen -X -S skunk quit'
+
+tribus="screen -dmS tribus bash $STRATUM_DIR/run.sh tribus"
+tribusstop='screen -X -S tribus quit'
+
+a5a="screen -dmS a5a bash $STRATUM_DIR/run.sh a5a"
+a5astop='screen -X -S a5a quit'
+
+startstop_service() {
+    cmd=$1
+    name=$2
+    sudo service $name $cmd
+}
+
+startstop_sha256() {
+    cmd=$1
+    case $cmd in
+        stop) $sha256stop ;;
+        start) $sha256 ;;
+        restart)
+            $sha256stop
+            sleep 1
+            $sha256
+            ;;
+    esac
+}
+
+startstop_sha256t() {
+    cmd=$1
+    case $cmd in
+        stop) $sha256tstop ;;
+        start) $sha256t ;;
+        restart)
+            $sha256tstop
+            sleep 1
+            $sha256t
+            ;;
+    esac
+}
+
+startstop_lbry() {
+    cmd=$1
+    case $cmd in
+        stop) $lbrystop ;;
+        start) $lbry ;;
+        restart)
+            $lbrystop
+            sleep 1
+            $lbry
+            ;;
+    esac
+}
+
+startstop_scrypt() {
+    cmd=$1
+    case $cmd in
+        stop) $scryptstop ;;
+        start) $scrypt ;;
+        restart)
+            $scryptstop
+            sleep 1
+            $scrypt
+            ;;
+    esac
+}
+
+startstop_timetravel() {
+    cmd=$1
+    case $cmd in
+        stop) $timetravelstop ;;
+        start) $timetravel ;;
+        restart)
+            $timetravelstop
+            sleep 1
+            $timetravel
+            ;;
+    esac
+}
+
+startstop_bitcore() {
+    cmd=$1
+    case $cmd in
+        stop) $bitcorestop ;;
+        start) $bitcore ;;
+        restart)
+            $bitcorestop
+            sleep 1
+            $bitcore
+            ;;
+    esac
+}
+
+startstop_exosis() {
+    cmd=$1
+    case $cmd in
+        stop) $sexosisstop ;;
+        start) $exosis ;;
+        restart)
+            $exosisstop
+            sleep 1
+            $exosis
+            ;;
+    esac
+}
+
+startstop_c11() {
+    cmd=$1
+    case $cmd in
+        stop) $sc11stop ;;
+        start) $c11 ;;
+        restart)
+            $c11stop
+            sleep 1
+            $c11
+            ;;
+    esac
+}
+
+startstop_deep() {
+    cmd=$1
+    case $cmd in
+        stop) $deepstop ;;
+        start) $deep ;;
+        restart)
+            $deepstop
+            sleep 1
+            $deep
+            ;;
+    esac
+}
+
+startstop_x11() {
+    cmd=$1
+    case $cmd in
+        stop) $x11stop ;;
+        start) $x11 ;;
+        restart)
+            $x11stop
+            sleep 1
+            $x11
+            ;;
+    esac
+}
+
+startstop_x11evo() {
+    cmd=$1
+    case $cmd in
+        stop) $x11evostop ;;
+        start) $x11evo ;;
+        restart)
+            $x11evostop
+            sleep 1
+            $x11evo
+            ;;
+    esac
+}
+
+startstop_x12() {
+    cmd=$1
+    case $cmd in
+        stop) $x12stop ;;
+        start) $x12 ;;
+        restart)
+            $x12stop
+            sleep 1
+            $x12
+            ;;
+    esac
+}
+
+startstop_x13() {
+    cmd=$1
+    case $cmd in
+        stop) $x13stop ;;
+        start) $x13 ;;
+        restart)
+            $x13stop
+            sleep 1
+            $x13
+            ;;
+    esac
+}
+
+startstop_x15() {
+    cmd=$1
+    case $cmd in
+        stop) $x15stop ;;
+        start) $x15 ;;
+        restart)
+            $x15stop
+            sleep 1
+            $x15
+            ;;
+    esac
+}
+
+startstop_x16r() {
+    cmd=$1
+    case $cmd in
+        stop) $x16rstop ;;
+        start) $x16r ;;
+        restart)
+            $x16rstop
+            sleep 1
+            $x16r
+            ;;
+    esac
+}
+
+startstop_x16s() {
+    cmd=$1
+    case $cmd in
+        stop) $x16sstop ;;
+        start) $x16s ;;
+        restart)
+            $x16sstop
+            sleep 1
+            $x16s
+            ;;
+    esac
+}
+
+startstop_x17() {
+    cmd=$1
+    case $cmd in
+        stop) $x17stop ;;
+        start) $x17 ;;
+        restart)
+            $x17stop
+            sleep 1
+            $x17
+            ;;
+    esac
+}
+
+startstop_x22i() {
+    cmd=$1
+    case $cmd in
+        stop) $x22istop ;;
+        start) $x22i ;;
+        restart)
+            $x22istop
+            sleep 1
+            $x22i
+            ;;
+    esac
+}
+
+startstop_aergo() {
+    cmd=$1
+    case $cmd in
+        stop) $aergostop ;;
+        start) $aergo ;;
+        restart)
+            $aergostop
+            sleep 1
+            $aergo
+            ;;
+    esac
+}
+
+startstop_xevan() {
+    cmd=$1
+    case $cmd in
+        stop) $xevanstop ;;
+        start) $xevan ;;
+        restart)
+            $xevanstop
+            sleep 1
+            $xevan
+            ;;
+    esac
+}
+
+startstop_hmq1725() {
+    cmd=$1
+    case $cmd in
+        stop) $hmq1725stop ;;
+        start) $hmq1725 ;;
+        restart)
+            $hmq1725stop
+            sleep 1
+            $hmq1725
+            ;;
+    esac
+}
+
+startstop_nist5() {
+    cmd=$1
+    case $cmd in
+        stop) $nist5stop ;;
+        start) $nist5 ;;
+        restart)
+            $nist5stop
+            sleep 1
+            $nist5
+            ;;
+    esac
+}
+
+startstop_x14() {
+    cmd=$1
+    case $cmd in
+        stop) $x14stop ;;
+        start) $x14 ;;
+        restart)
+            $x14stop
+            sleep 1
+            $x14
+            ;;
+    esac
+}
+
+startstop_quark() {
+    cmd=$1
+    case $cmd in
+        stop) $quarkstop ;;
+        start) $quark ;;
+        restart)
+            $quarkstop
+            sleep 1
+            $quark
+            ;;
+    esac
+}
+
+startstop_whirlpool() {
+    cmd=$1
+    case $cmd in
+        stop) $whirlpoolstop ;;
+        start) $whirlpool ;;
+        restart)
+            $whirlpoolstop
+            sleep 1
+            $whirlpool
+            ;;
+    esac
+}
+
+startstop_neoscrypt() {
+    cmd=$1
+    case $cmd in
+        stop) $neoscryptstop ;;
+        start) $neoscrypt ;;
+        restart)
+            $neoscryptstop
+            sleep 1
+            $neoscrypt
+            ;;
+    esac
+}
+
+startstop_argon2() {
+    cmd=$1
+    case $cmd in
+        stop) $argon2stop ;;
+        start) $argon2 ;;
+        restart)
+            $argon2stop
+            sleep 1
+            $argon2
+            ;;
+    esac
+}
+
+startstop_argon2ddyn() {
+    cmd=$1
+    case $cmd in
+        stop) $argon2ddynstop ;;
+        start) $argon2ddyn ;;
+        restart)
+            $argon2ddynstop
+            sleep 1
+            $argon2ddyn
+            ;;
+    esac
+}
+
+startstop_scryptn() {
+    cmd=$1
+    case $cmd in
+        stop) $scryptnstop ;;
+        start) $scryptn ;;
+        restart)
+            $scryptnstop
+            sleep 1
+            $scryptn
+            ;;
+    esac
+}
+
+startstop_allium() {
+    cmd=$1
+    case $cmd in
+        stop) $alliumstop ;;
+        start) $allium ;;
+        restart)
+            $alliumstop
+            sleep 1
+            $allium
+            ;;
+    esac
+}
+
+startstop_lbk3() {
+    cmd=$1
+    case $cmd in
+        stop) $lbk3stop ;;
+        start) $lbk3 ;;
+        restart)
+            $lbk3stop
+            sleep 1
+            $lbk3
+            ;;
+    esac
+}
+
+startstop_lyra2() {
+    cmd=$1
+    case $cmd in
+        stop) $lyra2stop ;;
+        start) $lyra2 ;;
+        restart)
+            $lyra2stop
+            sleep 1
+            $lyra2
+            ;;
+    esac
+}
+
+startstop_lyra2v2() {
+    cmd=$1
+    case $cmd in
+        stop) $lyra2v2stop ;;
+        start) $lyra2v2 ;;
+        restart)
+            $lyra2v2stop
+            sleep 1
+            $lyra2v2
+            ;;
+    esac
+}
+
+startstop_lyra2z() {
+    cmd=$1
+    case $cmd in
+        stop) $lyra2zstop ;;
+        start) $lyra2z ;;
+        restart)
+            $lyra2zstop
+            sleep 1
+            $lyra2z
+            ;;
+    esac
+}
+
+startstop_jha() {
+    cmd=$1
+    case $cmd in
+        stop) $jhastop ;;
+        start) $jha ;;
+        restart)
+            $jhastop
+            sleep 1
+            $jha
+            ;;
+    esac
+}
+
+startstop_qubit() {
+    cmd=$1
+    case $cmd in
+        stop) $qubitstop ;;
+        start) $qubit ;;
+        restart)
+            $qubitstop
+            sleep 1
+            $qubit
+            ;;
+    esac
+}
+
+startstop_zr5() {
+    cmd=$1
+    case $cmd in
+        stop) $zr5stop ;;
+        start) $zr5 ;;
+        restart)
+            $zr5stop
+            sleep 1
+            $zr5
+            ;;
+    esac
+}
+
+startstop_skein() {
+    cmd=$1
+    case $cmd in
+        stop) $skeinstop ;;
+        start) $skein ;;
+        restart)
+            $skeinstop
+            sleep 1
+            $skein
+            ;;
+    esac
+}
+
+startstop_sib() {
+    cmd=$1
+    case $cmd in
+        stop) $sibstop ;;
+        start) $sib ;;
+        restart)
+            $sibstop
+            sleep 1
+            $sib
+            ;;
+    esac
+}
+
+startstop_keccak() {
+    cmd=$1
+    case $cmd in
+        stop) $keccakstop ;;
+        start) $keccak ;;
+        restart)
+            $keccakstop
+            sleep 1
+            $keccak
+            ;;
+    esac
+}
+
+startstop_keccakc() {
+    cmd=$1
+    case $cmd in
+        stop) $keccakcstop ;;
+        start) $keccakc ;;
+        restart)
+            $keccakcstop
+            sleep 1
+            $keccakc
+            ;;
+    esac
+}
+
+startstop_hex() {
+    cmd=$1
+    case $cmd in
+        stop) $hexstop ;;
+        start) $hex ;;
+        restart)
+            $hexstop
+            sleep 1
+            $hex
+            ;;
+    esac
+}
+
+startstop_skein2() {
+    cmd=$1
+    case $cmd in
+        stop) $skein2stop ;;
+        start) $skein2 ;;
+        restart)
+            $skein2stop
+            sleep 1
+            $skein2
+            ;;
+    esac
+}
+
+startstop_dmdgr() {
+    cmd=$1
+    case $cmd in
+        stop) $dmdgrstop ;;
+        start) $dmdgr ;;
+        restart)
+            $dmdgrstop
+            sleep 1
+            $dmdgr
+            ;;
+    esac
+}
+
+startstop_myrgr() {
+    cmd=$1
+    case $cmd in
+        stop) $myrgrstop ;;
+        start) $myrgr ;;
+        restart)
+            $myrgrstop
+            sleep 1
+            $myrgr
+            ;;
+    esac
+}
+
+startstop_zr5() {
+    cmd=$1
+    case $cmd in
+        stop) $zr5stop ;;
+        start) $zr5 ;;
+        restart)
+            $zr5stop
+            sleep 1
+            $zr5
+            ;;
+    esac
+}
+
+startstop_blake() {
+    cmd=$1
+    case $cmd in
+        stop) $blakestop ;;
+        start) $blake ;;
+        restart)
+            $blakestop
+            sleep 1
+            $blake
+            ;;
+    esac
+}
+
+startstop_blakecoin() {
+    cmd=$1
+    case $cmd in
+        stop) $blakecoinstop ;;
+        start) $blakecoin ;;
+        restart)
+            $blakecoinstop
+            sleep 1
+            $blakecoin
+            ;;
+    esac
+}
+
+startstop_decred() {
+    cmd=$1
+    case $cmd in
+        stop) $decredstop ;;
+        start) $decred ;;
+        restart)
+            $decredstop
+            sleep 1
+            $decred
+            ;;
+    esac
+}
+
+startstop_vanilla() {
+    cmd=$1
+    case $cmd in
+        stop) $vanillastop ;;
+        start) $vanilla ;;
+        restart)
+            $vanillastop
+            sleep 1
+            $vanilla
+            ;;
+    esac
+}
+
+startstop_blake2s() {
+    cmd=$1
+    case $cmd in
+        stop) $blake2sstop ;;
+        start) $blake2s ;;
+        restart)
+            $blake2sstop
+            sleep 1
+            $blake2s
+            ;;
+    esac
+}
+
+startstop_penta() {
+    cmd=$1
+    case $cmd in
+        stop) $pentastop ;;
+        start) $penta ;;
+        restart)
+            $pentastop
+            sleep 1
+            $penta
+            ;;
+    esac
+}
+
+startstop_rainforest() {
+    cmd=$1
+    case $cmd in
+        stop) $rainforeststop ;;
+        start) $rainforest ;;
+        restart)
+            $rainforeststop
+            sleep 1
+            $rainforest
+            ;;
+    esac
+}
+
+startstop_luffa() {
+    cmd=$1
+    case $cmd in
+        stop) $luffastop ;;
+        start) $luffa ;;
+        restart)
+            $luffastop
+            sleep 1
+            $luffa
+            ;;
+    esac
+}
+
+startstop_m7m() {
+    cmd=$1
+    case $cmd in
+        stop) $m7mstop ;;
+        start) $m7m ;;
+        restart)
+            $m7mstop
+            sleep 1
+            $m7m
+            ;;
+    esac
+}
+
+startstop_veltor() {
+    cmd=$1
+    case $cmd in
+        stop) $veltorstop ;;
+        start) $veltor ;;
+        restart)
+            $veltorstop
+            sleep 1
+            $veltor
+            ;;
+    esac
+}
+
+startstop_velvet() {
+    cmd=$1
+    case $cmd in
+        stop) $velvetstop ;;
+        start) $velvet ;;
+        restart)
+            $velvetstop
+            sleep 1
+            $velvet
+            ;;
+    esac
+}
+
+startstop_vitalium() {
+    cmd=$1
+    case $cmd in
+        stop) $vitaliumstop ;;
+        start) $vitalium ;;
+        restart)
+            $vitaliumstop
+            sleep 1
+            $vitalium
+            ;;
+    esac
+}
+
+startstop_yescrypt() {
+    cmd=$1
+    case $cmd in
+        stop) $yescryptstop ;;
+        start) $yescrypt ;;
+        restart)
+            $yescryptstop
+            sleep 1
+            $yescrypt
+            ;;
+    esac
+}
+
+startstop_yescryptR16() {
+    cmd=$1
+    case $cmd in
+        stop) $yescryptR16stop ;;
+        start) $yescryptR16 ;;
+        restart)
+            $yescryptR16stop
+            sleep 1
+            $yescryptR16
+            ;;
+    esac
+}
+
+startstop_yescryptR32() {
+    cmd=$1
+    case $cmd in
+        stop) $yescryptR32stop ;;
+        start) $yescryptR32 ;;
+        restart)
+            $yescryptR32stop
+            sleep 1
+            $yescryptR32
+            ;;
+    esac
+}
+
+startstop_bastion() {
+    cmd=$1
+    case $cmd in
+        stop) $bastionstop ;;
+        start) $bastion ;;
+        restart)
+            $bastionstop
+            sleep 1
+            $bastion
+            ;;
+    esac
+}
+
+startstop_hsr() {
+    cmd=$1
+    case $cmd in
+        stop) $hsrstop ;;
+        start) $hsr ;;
+        restart)
+            $hsrstop
+            sleep 1
+            $hsr
+            ;;
+    esac
+}
+
+startstop_phi() {
+    cmd=$1
+    case $cmd in
+        stop) $phistop ;;
+        start) $phi ;;
+        restart)
+            $phistop
+            sleep 1
+            $phi
+            ;;
+    esac
+}
+
+startstop_phi2() {
+    cmd=$1
+    case $cmd in
+        stop) $phi2stop ;;
+        start) $phi2 ;;
+        restart)
+            $phi2stop
+            sleep 1
+            $phi2
+            ;;
+    esac
+}
+
+startstop_polytimos() {
+    cmd=$1
+    case $cmd in
+        stop) $polytimosstop ;;
+        start) $polytimos ;;
+        restart)
+            $polytimosstop
+            sleep 1
+            $polytimos
+            ;;
+    esac
+}
+
+startstop_skunk() {
+    cmd=$1
+    case $cmd in
+        stop) $skunkstop ;;
+        start) $skunk ;;
+        restart)
+            $skunkstop
+            sleep 1
+            $skunk
+            ;;
+    esac
+}
+
+startstop_tribus() {
+    cmd=$1
+    case $cmd in
+        stop) $tribusstop ;;
+        start) $tribus ;;
+        restart)
+            $tribusstop
+            sleep 1
+            $tribus
+            ;;
+    esac
+}
+
+startstop_a5a() {
+    cmd=$1
+    case $cmd in
+        stop) $a5astop ;;
+        start) $a5a ;;
+        restart)
+            $a5astop
+            sleep 1
+            $a5a
+            ;;
+    esac
+}
+
+
+case "$1" in
+    start|stop|restart) cmd=$1 ;;
+    *)
+        shift
+        servicenames=${@-servicenames}
+        echo "usage: $0 [start|stop|restart] $servicenames"
+        exit 1
+esac
+shift
+
+for name; do
+    case "$name" in
+    sha256) startstop_sha256 $cmd ;;
+    sha256t) startstop_sha256t $cmd ;;
+    lbry) startstop_lbry $cmd ;;
+    scrypt) startstop_scrypt $cmd ;;
+    timetravel) startstop_timetravel $cmd ;;
+    bitcore) startstop_bitcore $cmd ;;
+    exosis) startstop_exosis $cmd ;;
+    c11) startstop_c11 $cmd ;;
+    deep) startstop_deep $cmd ;;
+    x11) startstop_x11 $cmd ;;
+    x11evo) startstop_x11evo $cmd ;;
+    x12) startstop_x12 $cmd ;;
+    x13) startstop_x13 $cmd ;;
+    x15) startstop_x15 $cmd ;;
+    x16r) startstop_x16r $cmd ;;
+    x16s) startstop_x16s $cmd ;;
+    x17) startstop_x17 $cmd ;;
+    x22i) startstop_x22i $cmd ;;
+    aergo) startstop_aergo $cmd ;;
+    xevan) startstop_xevan $cmd ;;
+    hmq1725) startstop_hmq1725 $cmd ;;
+    nist5) startstop_nist5 $cmd ;;
+    x14) startstop_x14 $cmd ;;
+    quark) startstop_quark $cmd ;;
+    whirlpool) startstop_whirlpool $cmd ;;
+    neoscrypt) startstop_neoscrypt $cmd ;;
+    argon2) startstop_argon2 $cmd ;;
+    argon2ddyn) startstop_argon2ddyn $cmd ;;
+    scryptn) startstop_scryptn $cmd ;;
+    allium) startstop_allium $cmd ;;
+    lbk3) startstop_lbk3 $cmd ;;
+    lyra2) startstop_lyra2 $cmd ;;
+    lyra2v2) startstop_lyra2v2 $cmd ;;
+    lyra2z) startstop_lyra2z $cmd ;;
+    jha) startstop_jha $cmd ;;
+    qubit) startstop_qubit $cmd ;;
+    zr5) startstop_zr5 $cmd ;;
+    skein) startstop_skein $cmd ;;
+    sib) startstop_sib $cmd ;;
+    keccak) startstop_keccak $cmd ;;
+    keccakc) startstop_keccakc $cmd ;;
+    hex) startstop_hex $cmd ;;
+    skein2) startstop_skein2 $cmd ;;
+    dmdgr) startstop_dmdgr $cmd ;;
+    myrgr) startstop_myrgr $cmd ;;
+    zr5) startstop_zr5 $cmd ;;
+    blake) startstop_blake $cmd ;;
+    blakecoin) startstop_blakecoin $cmd ;;
+    decred) startstop_decred $cmd ;;
+    vanilla) startstop_vanilla $cmd ;;
+    blake2s) startstop_blake2s $cmd ;;
+    penta) startstop_penta $cmd ;;
+    rainforest) startstop_rainforest $cmd ;;
+    luffa) startstop_luffa $cmd ;;
+    m7m) startstop_m7m $cmd ;;
+    veltor) startstop_veltor $cmd ;;
+    velvet) startstop_velvet $cmd ;;
+    vitalium) startstop_vitalium $cmd ;;
+    yescrypt) startstop_yescrypt $cmd ;;
+    yescryptR16) startstop_yescryptR16 $cmd ;;
+    yescryptR32) startstop_yescryptR32 $cmd ;;
+    bastion) startstop_bastion $cmd ;;
+    hsr) startstop_hsr $cmd ;;
+    phi) startstop_phi $cmd ;;
+    phi2) startstop_phi2 $cmd ;;
+    polytimos) startstop_polytimos $cmd ;;
+    skunk) startstop_skunk $cmd ;;
+    tribus) startstop_tribus $cmd ;;
+    a5a) startstop_a5a $cmd ;;
+        *) startstop_service $cmd $name ;;
+    esac
+done
