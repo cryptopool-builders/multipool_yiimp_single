@@ -6,6 +6,7 @@
 source /etc/functions.sh
 source /etc/multipool.conf
 
+show_menu(){
 message_box "Ultimate Crypto-Server Setup Installer v1.02" \
 "You have choosen to install YiiMP Single Server!
 \n\nThis option will install all componets of YiiMP on a single server.
@@ -202,12 +203,15 @@ YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 
 1)
 
-echo "Run multipool again."
-exit 0;;
+clear;
+show_menu;
+;;
 
 255)
 
-echo "[ESC] key pressed."
-exit 0;;
+clear;
+show_menu;
+;;
 
+}
 cd $HOME/multipool/yiimp_single
