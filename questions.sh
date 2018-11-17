@@ -165,13 +165,13 @@ clear
 dialog --title "Verify Your Answers" \
 --yesno "Please verify your answer before you continue:
 
-Using Sub-Domain : ${InstallSub}
+Using Sub-Domain : ${UsingSubDomain}
 Install SSL      : ${InstallSSL}
 Domain Name      : ${DomainName}
 Stratum URL      : ${StratumURL}
 System Email     : ${SupportEmail}
 Your Public IP   : ${PublicIP}
-Admin Location   : ${AdminPanel}" 15 60
+Admin Location   : ${AdminPanel}" 13 60
 
 
 # Get exit status
