@@ -1125,7 +1125,7 @@ case "$1" in
     *)
         shift
         servicenames=${@-servicenames}
-        echo "usage: $0 [start|stop|restart] $servicenames"
+        echo "usage: $0 [start|stop|restart] algo"
         exit 1
 esac
 shift

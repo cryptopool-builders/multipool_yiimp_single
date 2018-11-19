@@ -162,8 +162,8 @@ fi
 
 clear
 
-dialog --title "Verify Your Answers" \
---yesno "Please verify your answer before you continue:
+dialog --title "Verify Your Responses" \
+--yesno "Please verify your answers to continue setup:
 
 Using Sub-Domain : ${UsingSubDomain}
 Install SSL      : ${InstallSSL}
