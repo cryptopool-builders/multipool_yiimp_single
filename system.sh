@@ -19,14 +19,14 @@ if
 [ -z "$SWAP_IN_FSTAB" ] &&
 [ ! -e /swapfile ] &&
 [ -z "$ROOT_IS_BTRFS" ] &&
-[ $TOTAL_PHYSICAL_MEM -lt 1900000 ] &&
+[ $TOTAL_PHYSICAL_MEM -lt 19000000 ] &&
 [ $AVAILABLE_DISK_SPACE -gt 5242880 ]
 then
 echo "Adding a swap file to the system..."
 
 # Allocate and activate the swap file. Allocate in 1KB chuncks
 # doing it in one go, could fail on low memory systems
-dd if=/dev/zero of=/swapfile bs=1024 count=$[1024*1024] status=none
+dd if=/dev/zero of=/swapfile bs=2048 count=$[1024*1024] status=none
 if [ -e /swapfile ]; then
 chmod 600 /swapfile
 hide_output mkswap /swapfile
@@ -137,7 +137,7 @@ fail2ban ntpdate python3 python3-dev python3-pip \
 curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 nginx pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-build-essential libtool autotools-dev automake pkg-config libssl-dev libevent-dev bsdmainutils
+build-essential libtool autotools-dev automake pkg-config openssl=1.0.2g-1ubuntu4.13 libevent-dev bsdmainutils
 
 
 echo Downloading selected YiiMP Repo...
