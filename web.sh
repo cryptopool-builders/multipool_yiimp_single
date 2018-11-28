@@ -702,7 +702,7 @@ sudo sed -i "s|/root/backup|${STORAGE_ROOT}/yiimp/site/backup|g" $STORAGE_ROOT/y
 sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 
-echo '#!/bin/bash
+echo '#!/usr/bin/env bash
 
 PHP_CLI='"'"''"php -d max_execution_time=120"''"'"'
 
@@ -719,7 +719,7 @@ done
 exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/crons/main.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/crons/main.sh
 
-echo '#!/bin/bash
+echo '#!/usr/bin/env bash
 
 PHP_CLI='"'"''"php -d max_execution_time=120"''"'"'
 
@@ -736,7 +736,7 @@ done
 exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/crons/loop2.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/crons/loop2.sh
 
-echo '#!/bin/bash
+echo '#!/usr/bin/env bash
 
 PHP_CLI='"'"''"php -d max_execution_time=60"''"'"'
 

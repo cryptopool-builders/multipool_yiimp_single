@@ -14,7 +14,7 @@ echo Installing cron screens to crontab...
 sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/
 
 echo Creating YiiMP Screens startup script...
-echo '#!/bin/bash
+echo '#!/usr/bin/env bash
 source /etc/multipool.conf
 # Ugly way to remove junk coins from initial YiiMP database on first boot
 source $STORAGE_ROOT/yiimp/.yiimp.conf
@@ -45,7 +45,7 @@ sudo chmod +x $STORAGE_ROOT/yiimp/starts/screens.start.sh
 
 echo Creating Stratum screens start script...
 
-echo '#!/bin/bash
+echo '#!/usr/bin/env bash
 ################################################################################
 # Author: cryptopool.builders
 #
