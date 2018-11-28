@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -o nounset
+
 set -o errexit
 #####################################################
 # Created by cryptopool.builders for crypto use...
