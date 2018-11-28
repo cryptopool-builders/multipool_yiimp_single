@@ -7,10 +7,6 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo Building web file structure and copying files...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-if [[ ("$CoinPort" == "y" || "$CoinPort" == "Y" || "$CoinPort" == "yes" || "$CoinPort" == "Yes" || "$CoinPort" == "YES") ]]; then
-	git fetch
-	git checkout multi-port
-fi
 sudo sed -i 's/AdminRights/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web $STORAGE_ROOT/yiimp/site/
 cd $STORAGE_ROOT/yiimp/yiimp_setup/

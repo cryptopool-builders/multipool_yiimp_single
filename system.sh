@@ -103,7 +103,7 @@ fail2ban ntpdate python3 python3-dev python3-pip \
 curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 nginx pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-build-essential libtool autotools-dev automake pkg-config openssl=1.0.2g-1ubuntu4.13 libevent-dev bsdmainutils
+build-essential libtool autotools-dev automake pkg-config openssl=1.0.2g-1ubuntu4.13 libevent-dev bsdmainutils --allow-downgrades
 
 
 echo Downloading selected YiiMP Repo...

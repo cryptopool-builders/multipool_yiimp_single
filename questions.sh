@@ -218,7 +218,9 @@ clear
 bash $(basename $0) && exit;;
 
 255)
-
+clear
+echo "User canceled installation"
+exit 0
 ;;
 esac
 

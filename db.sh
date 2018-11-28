@@ -7,14 +7,14 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo Installing MariaDB...
 MARIADB_VERSION='10.3'
-sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password password ${DBRootPassword}"
-sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password_again password ${DBRootPassword}"
+sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
+sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password_again password $DBRootPassword"
 apt_install mariadb-server mariadb-client
 
 echo Creating DB users for YiiMP...
 Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
-Q2="GRANT ALL ON *.* TO 'panel'@'localhost' IDENTIFIED BY '${PanelUserDBPassword}';"
-Q3="GRANT ALL ON *.* TO 'stratum'@'localhost' IDENTIFIED BY '${StratumUserDBPassword}';"
+Q2="GRANT ALL ON *.* TO 'panel'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
+Q3="GRANT ALL ON *.* TO 'stratum'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
 Q4="FLUSH PRIVILEGES;"
 SQL="${Q1}${Q2}${Q3}${Q4}"
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"

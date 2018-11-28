@@ -7,10 +7,6 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo Building blocknotify and stratum...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-if [[ ("$CoinPort" == "y" || "$CoinPort" == "Y" || "$CoinPort" == "yes" || "$CoinPort" == "Yes" || "$CoinPort" == "YES") ]]; then
-	git fetch
-	git checkout multi-port
-fi
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
 sudo sed -i 's/tu8tu5/'${blckntifypass}'/' blocknotify.cpp
