@@ -677,10 +677,6 @@ sudo find $STORAGE_ROOT/yiimp/site/ -type f -exec chmod 664 {} +
 sudo chgrp www-data $STORAGE_ROOT -R
 sudo chmod g+w $STORAGE_ROOT -R
 
-#set permissions
-sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/
-sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
-
 cd $HOME/multipool/yiimp_single
 
 #Updating YiiMP files for cryptopool.builders build
