@@ -107,6 +107,6 @@ build-essential libtool autotools-dev automake pkg-config openssl=1.0.2g-1ubuntu
 
 
 echo Downloading selected YiiMP Repo...
-hide_output sudo git clone $YiiMPRepo $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
+hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 
 cd $HOME/multipool/yiimp_single

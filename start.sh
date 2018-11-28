@@ -58,7 +58,7 @@ echo You *MUST* reboot the machine to finalize the machine updates and folder pe
 echo
 echo "Important! After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
 echo "After 1 minute, type motd to refresh"
-echo You can access your admin panel at, http://$DomainName/site/$AdminPanel
+echo You can access your admin panel at, http://${DomainName}/site/${AdminPanel}
 echo
 echo By default all stratum ports are blocked by the firewall. To allow a port through, from the command prompt type sudo ufw allow port number.
 echo Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf

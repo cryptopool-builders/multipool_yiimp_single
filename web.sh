@@ -7,14 +7,18 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo Building web file structure and copying files...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
-sudo sed -i 's/AdminRights/'$AdminPanel'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
+if [[ ("$CoinPort" == "y" || "$CoinPort" == "Y" || "$CoinPort" == "yes" || "$CoinPort" == "Yes" || "$CoinPort" == "YES") ]]; then
+	git fetch
+	git checkout multi-port
+fi
+sudo sed -i 's/AdminRights/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web $STORAGE_ROOT/yiimp/site/
 cd $STORAGE_ROOT/yiimp/yiimp_setup/
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/bin/. /bin/
-sudo mkdir -p /var/www/$DomainName/html
+sudo mkdir -p /var/www/${DomainName}/html
 sudo mkdir -p /etc/yiimp
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/backup/
-sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=$STORAGE_ROOT/yiimp/site|g" /bin/yiimp
+sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${STORAGE_ROOT}/yiimp/site|g" /bin/yiimp
 
 echo Creating NGINX config file...
 echo 'map $http_user_agent $blockedagent {
@@ -136,10 +140,10 @@ server {
 		}
 
 }
-' | sudo -E tee /etc/nginx/sites-available/$DomainName.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 
-sudo ln -s /etc/nginx/sites-available/$DomainName.conf /etc/nginx/sites-enabled/$DomainName.conf
-sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/$DomainName/html
+sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
+sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
 restart_service nginx
 restart_service php7.2-fpm
@@ -147,8 +151,8 @@ restart_service php7.2-fpm
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo Installing LetsEncrypt and setting up SSL...
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName"
-sudo rm /etc/nginx/sites-available/$DomainName.conf
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
+sudo rm /etc/nginx/sites-available/${DomainName}.conf
 echo Generating DHPARAM, this may take awhile...
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
@@ -284,7 +288,7 @@ server {
 				deny all;
 		}
 }
-' | sudo -E tee /etc/nginx/sites-available/$DomainName.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 fi
 
 restart_service nginx
@@ -399,10 +403,10 @@ server {
 		}
 
 }
-' | sudo -E tee /etc/nginx/sites-available/$DomainName.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 
-sudo ln -s /etc/nginx/sites-available/$DomainName.conf /etc/nginx/sites-enabled/$DomainName.conf
-sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/$DomainName/html
+sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
+sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
 restart_service nginx
 restart_service php7.2-fpm
@@ -410,8 +414,8 @@ restart_service php7.2-fpm
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo Installing LetsEncrypt and setting up SSL...
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --webroot-path=$STORAGE_ROOT/yiimp/site/web --email "$SupportEmail" --agree-tos -d "$DomainName" -d www."$DomainName"
-sudo rm /etc/nginx/sites-available/$DomainName.conf
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
+sudo rm /etc/nginx/sites-available/${DomainName}.conf
 echo Generating DHPARAM, this may take awhile...
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
@@ -547,7 +551,7 @@ server {
 				deny all;
 		}
 }
-' | sudo -E tee /etc/nginx/sites-available/$DomainName.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 fi
 
 restart_service nginx
@@ -686,15 +690,15 @@ cd $HOME/multipool/yiimp_single
 #Updating YiiMP files for cryptopool.builders build
 echo Adding the cryptopool.builders flare to YiiMP...
 
-sudo sed -i 's/YII MINING POOLS/'$DomainName' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
-sudo sed -i 's/domain/'$DomainName'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
+sudo sed -i 's/YII MINING POOLS/'${DomainName}' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
+sudo sed -i 's/domain/'${DomainName}'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/Notes/AddNodes/g' $STORAGE_ROOT/yiimp/site/web/yaamp/models/db_coinsModel.php
-sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/index.php
-sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/runconsole.php
-sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/run.php
-sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
-sudo sed -i "s|serverconfig.php|$STORAGE_ROOT/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
-sudo sed -i "s|/root/backup|$STORAGE_ROOT/yiimp/site/backup|g" $STORAGE_ROOT/yiimp/site/web/yaamp/core/backend/system.php
+sudo sed -i "s|serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/index.php
+sudo sed -i "s|serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/runconsole.php
+sudo sed -i "s|serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/run.php
+sudo sed -i "s|serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/yiic.php
+sudo sed -i "s|serverconfig.php|${STORAGE_ROOT}/yiimp/site/configuration/serverconfig.php|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
+sudo sed -i "s|/root/backup|${STORAGE_ROOT}/yiimp/site/backup|g" $STORAGE_ROOT/yiimp/site/web/yaamp/core/backend/system.php
 sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 

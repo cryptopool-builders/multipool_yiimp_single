@@ -8,10 +8,10 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo "Installing mail system"
 
-echo $DomainName | hide_output sudo tee -a /etc/hostname
-sudo hostname "$DomainName"
+echo ${DomainName} | hide_output sudo tee -a /etc/hostname
+sudo hostname "${DomainName}"
 
-sudo debconf-set-selections <<< "postfix postfix/mailname string $host_name"
+sudo debconf-set-selections <<< "postfix postfix/mailname string ${host_name}"
 sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 apt_install mailutils
 
@@ -22,8 +22,8 @@ sudo sed -i '/#mydestination/i mydestination = $myhostname, localhost.$mydomain,
 sudo systemctl restart postfix
 whoami=`whoami`
 
-sudo sed -i '/postmaster:    root/a root:          '$SupportEmail'' /etc/aliases
-sudo sed -i '/root:/a '$whoami':     '$SupportEmail'' /etc/aliases
+sudo sed -i '/postmaster:    root/a root:          '${SupportEmail}'' /etc/aliases
+sudo sed -i '/root:/a '$whoami':     '${SupportEmail}'' /etc/aliases
 sudo newaliases
 
 sudo adduser $whoami mail
