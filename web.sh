@@ -602,8 +602,8 @@ define('"'"'YAAMP_TXFEE_RENTING_WD'"'"', 0.002);
 define('"'"'YAAMP_PAYMENTS_FREQ'"'"', 3*60*60);
 define('"'"'YAAMP_PAYMENTS_MINI'"'"', 0.001);
 define('"'"'YAAMP_ALLOW_EXCHANGE'"'"', false);
-define('"'"'YIIMP_PUBLIC_EXPLORER'"'"', true);
-define('"'"'YIIMP_PUBLIC_BENCHMARK'"'"', true);
+define('"'"'YIIMP_PUBLIC_EXPLORER'"'"', false);
+define('"'"'YIIMP_PUBLIC_BENCHMARK'"'"', false);
 define('"'"'YIIMP_FIAT_ALTERNATIVE'"'"', '"'"'USD'"'"'); // USD is main
 define('"'"'YAAMP_USE_NICEHASH_API'"'"', false);
 define('"'"'YAAMP_BTCADDRESS'"'"', '"'"'12Pt3vQhQpXvyzBd5qcoL17ouhNFyihyz5'"'"');
@@ -676,6 +676,10 @@ sudo find $STORAGE_ROOT/yiimp/site/ -type f -exec chmod 664 {} +
 
 sudo chgrp www-data $STORAGE_ROOT -R
 sudo chmod g+w $STORAGE_ROOT -R
+
+#set permissions
+sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/
+sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 
 cd $HOME/multipool/yiimp_single
 
