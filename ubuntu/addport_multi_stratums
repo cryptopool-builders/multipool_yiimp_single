@@ -1,0 +1,275 @@
+#!/usr/bin/env bash
+source /etc/multipool.conf
+source $STORAGE_ROOT/yiimp/.yiimp.conf
+#####################################################
+# Dedicated Port config generator
+# Created by cryptopool.builders for multipool
+# This generator will modify the main algo.conf file
+# Create the new coin.algo.conf file
+# And update the stratum start file
+#####################################################
+
+clear
+
+# Generate random open PORT
+function EPHYMERAL_PORT(){
+    LPORT=2768;
+    UPORT=6999;
+    while true; do
+        MPORT=$[$LPORT + ($RANDOM % $UPORT)];
+        (echo "" >/dev/tcp/127.0.0.1/${MPORT}) >/dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo $MPORT;
+            return 0;
+        fi
+    done
+}
+
+coinport=$(EPHYMERAL_PORT)
+
+cd /home/crypto-data/yiimp/site/stratum/config
+echo "This program will create a new coin.algo.conf file and also create a new stratum start file."
+echo "This program also randomly selects an open port for the coin between ports 2768 and 6999."
+echo "This program will also open the new port in UFW."
+echo ""
+echo "Make sure coin symbol is all upper case."
+read -e -p "Please enter the coin symbol : " coinsymbol
+echo ""
+echo "Make sure algo is in all lower case."
+read -e -p "Please enter the coin algo : " coinalgo
+
+# Make the coin symbol lower case
+
+coinsymbollower=${coinsymbol,,}
+
+# Copy the default algo.conf to the new coin.algo.conf
+cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf
+
+# Insert the port in to the new coin.algo.conf
+sed -i '/port/c\port = '${coinport}'' $coinsymbollower.$coinalgo.conf
+
+# Insert the include 
+sed -i -e '$a\
+[WALLETS]\
+include = '${coinsymbol}'' $coinsymbollower.$coinalgo.conf
+
+# Insert the exclude
+sed -i -e '$a\
+[WALLETS]\
+exclude = '${coinsymbol}'' $coinalgo.conf
+
+
+# New coin stratum start file
+
+echo '#####################################################
+# Source code from https://codereview.stackexchange.com/questions/55077/small-bash-script-to-sta$
+# Updated by cryptopool.builders for crypto use...
+#####################################################
+
+source /etc/multipool.conf
+source $STORAGE_ROOT/yiimp/.yiimp.conf
+STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
+LOG_DIR=$STORAGE_ROOT/yiimp/site/log
+#!/usr/bin/env bash
+
+'""''"${coinsymbollower}"''""'="screen -dmS '""''"${coinsymbollower}"''""' bash $STRATUM_DIR/run.sh '""''"${coinsymbollower}"''""'.'""''"${coinalgo}"''""'"
+'""''"${coinsymbollower}"''""'stop="'screen -X -S ${coinsymbollower} quit'"
+
+startstop_'""''"${coinsymbollower}"''""'() {
+    cmd=$1
+    case $cmd in
+        stop) $'""''"${coinsymbollower}"''""'stop ;;
+        start) $'""''"${coinsymbollower}"''""' ;;
+        restart)
+            $'""''"${coinsymbollower}"''""'stop
+            sleep 1
+            $'""''"${coinsymbollower}"''""'
+            ;;
+    esac
+}
+
+case "$1" in
+    start|stop|restart) cmd=$1 ;;
+    *)
+        shift
+        servicenames=${@-servicenames}
+        echo "usage: $0 [start|stop|restart] algo"
+        exit 1
+esac
+
+
+shift
+
+for name; do
+    case "$name" in
+    '""''"${coinsymbollower}"''""') startstop_'""''"${coinsymbollower}"''""' $cmd ;;
+    *) startstop_service $cmd $name ;;
+    esac
+done ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower} >/dev/null 2>&1
+sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower}
+
+sudo cp -r stratum.${coinsymbollower} /usr/bin 
+sudo ufw allow $coinport
+
+
+echo "Adding port and config files to remote stratums, script will seem to hang for a few minutes..."
+
+#################################################################
+# Add the user name and password for each of your remote stratums
+#################################################################
+
+stratum_one_user="user_name"
+stratum_one_pass='password'
+stratum_one_server="internal_ip"
+stratum_two_user="user_name"
+stratum_two_pass='password'
+stratum_two_server="internal_ip"
+stratum_three_user="user_name"
+stratum_three_pass='password'
+stratum_three_server="internal_ip"
+dir=$HOME
+
+##################################################################
+# create variable temp file and set global script path
+##################################################################
+
+echo '
+coinsymbol='""''"${coinsymbol}"''""'
+coinsymbollower='""''"${coinsymbollower}"''""'
+coinalgo='""''"${coinalgo}"''""'
+coinport='""''"${coinport}"''""'
+' | sudo -E tee /tmp/var_tmp.conf >/dev/null 2>&1
+
+script_config="/home/crypto-data/yiimp/site/stratum/config/$coinsymbollower.$coinalgo.conf"
+script_stratum="/home/crypto-data/yiimp/site/stratum/config/stratum.${coinsymbollower}"
+script_source='/tmp/var_tmp.conf'
+script_remote="/home/crypto-data/yiimp/remote.sh"
+
+remote_script='/tmp/remote.sh'
+
+####################################################################
+# Begin Remote Server One
+####################################################################
+
+SSH_ASKPASS_SCRIPT=/tmp/ssh-askpass-script
+cat > ${SSH_ASKPASS_SCRIPT} <<EOL
+#!/usr/bin/env bash
+echo '${stratum_one_pass}'
+EOL
+chmod u+x ${SSH_ASKPASS_SCRIPT}
+
+# Set no display, necessary for ssh to play nice with setsid and SSH_ASKPASS.
+export DISPLAY=:0
+
+# Tell SSH to read in the output of the provided script as the password.
+# We still have to use setsid to eliminate access to a terminal and thus avoid
+# it ignoring this and asking for a password.
+export SSH_ASKPASS=${SSH_ASKPASS_SCRIPT}
+
+# LogLevel error is to suppress the hosts warning. The others are
+# necessary if working with development servers with self-signed
+# certificates.
+SSH_OPTIONS="-oLogLevel=error"
+SSH_OPTIONS="${SSH_OPTIONS} -oStrictHostKeyChecking=no"
+SSH_OPTIONS="${SSH_OPTIONS} -oUserKnownHostsFile=/dev/null"
+
+B64_remote=`base64 --wrap=0 ${script_remote}`
+system_remote="base64 -d - > ${remote_script} <<< ${B64_remote};"
+system_remote="${system_remote} chmod u+x ${remote_script};"
+system_remote="${system_remote} sh -c 'nohup ${remote_script}'"
+
+cat $script_config | setsid ssh ${SSH_OPTIONS} ${stratum_one_user}@${stratum_one_server} "cat > /tmp/$coinsymbollower.$coinalgo.conf"
+cat $script_stratum | setsid ssh ${SSH_OPTIONS} ${stratum_one_user}@${stratum_one_server} "cat > /tmp/stratum.${coinsymbollower}"
+cat $script_source | setsid ssh ${SSH_OPTIONS} ${stratum_one_user}@${stratum_one_server} "cat > /tmp/var_tmp.conf"
+setsid ssh ${SSH_OPTIONS} ${stratum_one_user}@${stratum_one_server} "${system_remote}"
+
+####################################################################
+# Begin Remote Server Two
+####################################################################
+
+SSH_ASKPASS_SCRIPT=/tmp/ssh-askpass-script
+cat > ${SSH_ASKPASS_SCRIPT} <<EOL
+#!/usr/bin/env bash
+echo '${stratum_two_pass}'
+EOL
+chmod u+x ${SSH_ASKPASS_SCRIPT}
+
+# Set no display, necessary for ssh to play nice with setsid and SSH_ASKPASS.
+export DISPLAY=:0
+
+# Tell SSH to read in the output of the provided script as the password.
+# We still have to use setsid to eliminate access to a terminal and thus avoid
+# it ignoring this and asking for a password.
+export SSH_ASKPASS=${SSH_ASKPASS_SCRIPT}
+
+# LogLevel error is to suppress the hosts warning. The others are
+# necessary if working with development servers with self-signed
+# certificates.
+SSH_OPTIONS="-oLogLevel=error"
+SSH_OPTIONS="${SSH_OPTIONS} -oStrictHostKeyChecking=no"
+SSH_OPTIONS="${SSH_OPTIONS} -oUserKnownHostsFile=/dev/null"
+
+B64_remote=`base64 --wrap=0 ${script_remote}`
+system_remote="base64 -d - > ${remote_script} <<< ${B64_remote};"
+system_remote="${system_remote} chmod u+x ${remote_script};"
+system_remote="${system_remote} sh -c 'nohup ${remote_script}'"
+
+cat $script_config | setsid ssh ${SSH_OPTIONS} ${stratum_two_user}@${stratum_two_server} "cat > /tmp/$coinsymbollower.$coinalgo.conf"
+cat $script_stratum | setsid ssh ${SSH_OPTIONS} ${stratum_two_user}@${stratum_two_server} "cat > /tmp/stratum.${coinsymbollower}"
+cat $script_source | setsid ssh ${SSH_OPTIONS} ${stratum_two_user}@${stratum_two_server} "cat > /tmp/var_tmp.conf"
+setsid ssh ${SSH_OPTIONS} ${stratum_two_user}@${stratum_two_server} "${system_remote}"
+
+####################################################################
+# Begin Remote Server Three
+####################################################################
+
+SSH_ASKPASS_SCRIPT=/tmp/ssh-askpass-script
+cat > ${SSH_ASKPASS_SCRIPT} <<EOL
+#!/usr/bin/env bash
+echo '${stratum_three_pass}'
+EOL
+chmod u+x ${SSH_ASKPASS_SCRIPT}
+
+# Set no display, necessary for ssh to play nice with setsid and SSH_ASKPASS.
+export DISPLAY=:0
+
+# Tell SSH to read in the output of the provided script as the password.
+# We still have to use setsid to eliminate access to a terminal and thus avoid
+# it ignoring this and asking for a password.
+export SSH_ASKPASS=${SSH_ASKPASS_SCRIPT}
+
+# LogLevel error is to suppress the hosts warning. The others are
+# necessary if working with development servers with self-signed
+# certificates.
+SSH_OPTIONS="-oLogLevel=error"
+SSH_OPTIONS="${SSH_OPTIONS} -oStrictHostKeyChecking=no"
+SSH_OPTIONS="${SSH_OPTIONS} -oUserKnownHostsFile=/dev/null"
+
+B64_remote=`base64 --wrap=0 ${script_remote}`
+system_remote="base64 -d - > ${remote_script} <<< ${B64_remote};"
+system_remote="${system_remote} chmod u+x ${remote_script};"
+system_remote="${system_remote} sh -c 'nohup ${remote_script}'"
+
+cat $script_config | setsid ssh ${SSH_OPTIONS} ${stratum_three_user}@${stratum_three_server} "cat > /tmp/$coinsymbollower.$coinalgo.conf"
+cat $script_stratum | setsid ssh ${SSH_OPTIONS} ${stratum_three_user}@${stratum_three_server} "cat > /tmp/stratum.${coinsymbollower}"
+cat $script_source | setsid ssh ${SSH_OPTIONS} ${stratum_three_user}@${stratum_three_server} "cat > /tmp/var_tmp.conf"
+setsid ssh ${SSH_OPTIONS} ${stratum_three_user}@${stratum_three_server} "${system_remote}"
+
+##########################################################################
+# Add or remove server sections as needed
+##########################################################################
+
+clear
+echo "Starting new stratum on primary stratum server..."
+bash stratum.${coinsymbollower} start ${coinsymbollower}
+echo "To use your new stratum start file type stratum.${coinsymbollower} start|stop|restart ${coinsymbollower}"
+echo "To see the screen type screen -r ${coinsymbollower}"
+echo "Addport is completed and all stratums have been updated and the stratums have been started."
+echo "You must update your coin.conf on your DAEMON server(s) for blocknotify to use this new port : $coinport"
+echo "If you do not update this you will get blocknotify errors!"
+
+cd ~
+exit 0
+
+
+
