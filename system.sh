@@ -30,7 +30,7 @@ fi
 # MariaDB
 echo Installing MariaDB Repository...
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
-sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] https://mirrors.evowise.com/mariadb/repo/10.3/ubuntu xenial main'
+sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu xenial main'
 
 # Upgrade System Files
 echo Updating system packages...
