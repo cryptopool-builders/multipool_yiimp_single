@@ -41,6 +41,7 @@ sudo mkdir -p $STORAGE_ROOT/wallets
 fi
 
 # Start the installation.
+source menu.sh
 source questions.sh
 source system.sh
 source db.sh

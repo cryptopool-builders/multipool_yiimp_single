@@ -6,6 +6,7 @@
 clear
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
+source $HOME/multipool/daemon_builder/.wireguard.install.cnf
 
 # Set timezone
 echo Setting TimeZone to UTC...
@@ -103,7 +104,7 @@ fail2ban ntpdate python3 python3-dev python3-pip \
 curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 nginx pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils
+build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
 
 
 echo Downloading selected YiiMP Repo...
