@@ -111,6 +111,9 @@ sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower}
 sudo cp -r stratum.${coinsymbollower} /usr/bin 
 sudo ufw allow $coinport
 
+echo "Adding new stratum port to cron"
+(crontab -l 2>/dev/null; echo "@reboot sleep 10 && bash stratum.${coinsymbollower} start ${coinsymbollower}") | crontab -
+
 echo "To use your new start file type stratum.${coinsymbollower} start|stop|restart ${coinsymbollower}"
 echo "To see the screen type screen -r ${coinsymbollower}"
 echo "Make sure that you update your coin.conf on your DAEMON server for blocknotify to use this new port : $coinport"
