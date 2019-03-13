@@ -42,6 +42,10 @@ fi
 
 # Start the installation.
 source menu.sh
+source $HOME/multipool/daemon_builder/.wireguard.install.cnf
+if [[ ("$wireguard" == "true") ]]; then
+  source wireguard.sh
+fi
 source questions.sh
 source system.sh
 source db.sh

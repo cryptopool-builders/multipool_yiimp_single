@@ -14,7 +14,7 @@ hide_output sudo make
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/iniparser
 hide_output sudo make
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
-if [[ ("$AutoExchange" == "y" || "$AutoExchange" == "Y" || "$AutoExchange" == "yes" || "$AutoExchange" == "Yes" || "$AutoExchange" == "YES") ]]; then
+if [[ ("$AutoExchange" == "yes") ]]; then
 sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/Makefile
 fi
 hide_output sudo make

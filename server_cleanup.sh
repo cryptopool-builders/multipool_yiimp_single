@@ -8,7 +8,9 @@ cd $HOME/multipool/yiimp_single
 
 echo Installing cron screens to crontab...
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/screens.start.sh") | crontab -
+if [[ ("$CoinPort" == "no") ]]; then
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/stratum.start.sh") | crontab -
+fi
 (crontab -l 2>/dev/null; echo "@reboot source /etc/functions.sh") | crontab -
 (crontab -l 2>/dev/null; echo "@reboot source /etc/multipool.conf") | crontab -
 sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/

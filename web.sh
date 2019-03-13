@@ -27,7 +27,7 @@ echo 'map $http_user_agent $blockedagent {
 }
 ' | sudo -E tee /etc/nginx/blockuseragents.rules >/dev/null 2>&1
 
-if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
+if [[ ("$UsingSubDomain" == "yes") ]]; then
 echo 'include /etc/nginx/blockuseragents.rules;
 
 		# NGINX Simple DDoS Defense
@@ -144,7 +144,7 @@ sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 restart_service nginx
 restart_service php7.2-fpm
 
-if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+if [[ ($InstallSSL" == "yes") ]]; then
 echo Installing LetsEncrypt and setting up SSL...
 apt_install letsencrypt
 hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
