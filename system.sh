@@ -6,7 +6,7 @@
 clear
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-source $HOME/multipool/daemon_builder/.wireguard.install.cnf
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 
 # Set timezone
 echo Setting TimeZone to UTC...

@@ -2,6 +2,7 @@
 # Created by cryptopool.builders for crypto use...
 #####################################################
 
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 source /etc/multipool.conf
 

@@ -42,7 +42,7 @@ fi
 
 # Start the installation.
 source menu.sh
-source $HOME/multipool/daemon_builder/.wireguard.install.cnf
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 if [[ ("$wireguard" == "true") ]]; then
   source wireguard.sh
 fi

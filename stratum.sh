@@ -4,7 +4,7 @@
 
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 echo Building blocknotify and stratum...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify

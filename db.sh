@@ -4,6 +4,8 @@
 
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+source $STORAGE_ROOT/yiimp/.wireguard.conf
 
 echo Installing MariaDB...
 MARIADB_VERSION='10.3'
@@ -12,14 +14,29 @@ sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_pas
 apt_install mariadb-server mariadb-client
 
 echo Creating DB users for YiiMP...
+
+if [[ ("$wireguard" == "false") ]]; then
+
 Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
-Q2="GRANT ALL ON *.* TO 'panel'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
-Q3="GRANT ALL ON *.* TO 'stratum'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
+Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
+Q3="GRANT ALL ON yiimpfrontend.* TO 'stratum'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
 Q4="FLUSH PRIVILEGES;"
 SQL="${Q1}${Q2}${Q3}${Q4}"
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
 
+else
+  Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
+  Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'${DBInternalIP}' IDENTIFIED BY '$PanelUserDBPassword';"
+  Q3="GRANT ALL ON yiimpfrontend.* TO 'stratum'@'${DBInternalIP}' IDENTIFIED BY '$StratumUserDBPassword';"
+  Q4="FLUSH PRIVILEGES;"
+  SQL="${Q1}${Q2}${Q3}${Q4}"
+  sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
+fi
+
 echo Creating my.cnf...
+
+if [[ ("$wireguard" == "false") ]]; then
+
 echo '[clienthost1]
 user=panel
 password='"${PanelUserDBPassword}"'
@@ -34,6 +51,23 @@ host=localhost
 user=root
 password='"${DBRootPassword}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
+
+else
+
+  echo '[clienthost1]
+  user=panel
+  password='"${PanelUserDBPassword}"'
+  database=yiimpfrontend
+  host='"${DBInternalIP}"'
+  [clienthost2]
+  user=stratum
+  password='"${StratumUserDBPassword}"'
+  database=yiimpfrontend
+  host='"${DBInternalIP}"'
+  [mysql]
+  user=root
+  password='"${DBRootPassword}"'
+  ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
 
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
 echo Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf
@@ -62,12 +96,25 @@ sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-01-stratum
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_getinfo.sql
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2019-03-coins_thepool_life.sql
 
+if [[ ("$wireguard" == "false") ]]; then
+
 sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
 sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
 sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
 sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
 sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
 sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
+
+
+else
+  sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
+  sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
+  sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
+  sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
+  sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
+  sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
+  sudo sed -i 's/#bind-address=0.0.0.0/bind-address='${DBInternalIP}'/g' /etc/mysql/my.cnf
+fi
 
 restart_service mysql
 echo Database build complete...

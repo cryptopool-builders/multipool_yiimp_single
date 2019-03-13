@@ -5,7 +5,7 @@
 
 source /etc/functions.sh
 source /etc/multipool.conf
-source $HOME/multipool/daemon_builder/.wireguard.install.cnf
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 
 message_box "Ultimate Crypto-Server Setup Installer v1.02" \
 "You have choosen to install YiiMP Single Server!
