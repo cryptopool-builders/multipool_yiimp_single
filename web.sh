@@ -839,3 +839,4 @@ exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/crons/blocks.sh >/dev/null 2>&
 sudo chmod +x $STORAGE_ROOT/yiimp/site/crons/blocks.sh
 
 echo Web build complete...
+cd $HOME/multipool/yiimp_single

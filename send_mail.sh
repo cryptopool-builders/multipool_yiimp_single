@@ -27,3 +27,4 @@ sudo sed -i '/root:/a '$whoami':     '${SupportEmail}'' /etc/aliases
 sudo newaliases
 
 sudo adduser $whoami mail
+cd $HOME/multipool/yiimp_single

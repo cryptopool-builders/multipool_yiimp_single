@@ -23,3 +23,4 @@ sudo cp -r nginx_confs/nginx.conf /etc/nginx/
 
 restart_service nginx
 restart_service php7.2-fpm
+cd $HOME/multipool/yiimp_single

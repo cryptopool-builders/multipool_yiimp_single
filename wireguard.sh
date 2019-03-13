@@ -27,3 +27,6 @@ mypublic="$(sudo cat /etc/wireguard/publickey)"
 echo '  Public Ip: '"${dbpublic}"'
 Public Key: '"${mypublic}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.wireguard_public.conf >/dev/null 2>&1;
+
+echo "WireGuard setup completed..."
+cd $HOME/multipool/yiimp_single
