@@ -18,14 +18,12 @@ apt_install mariadb-server mariadb-client
 echo Creating DB users for YiiMP...
 
 if [[ ("$wireguard" == "false") ]]; then
-
 Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
 Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
 Q3="GRANT ALL ON yiimpfrontend.* TO 'stratum'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
 Q4="FLUSH PRIVILEGES;"
 SQL="${Q1}${Q2}${Q3}${Q4}"
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
-
 else
   Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
   Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'${DBInternalIP}' IDENTIFIED BY '$PanelUserDBPassword';"
@@ -38,7 +36,6 @@ fi
 echo Creating my.cnf...
 
 if [[ ("$wireguard" == "false") ]]; then
-
 echo '[clienthost1]
 user=panel
 password='"${PanelUserDBPassword}"'
@@ -53,10 +50,8 @@ host=localhost
 user=root
 password='"${DBRootPassword}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
-
 else
-
-  echo '[clienthost1]
+echo '[clienthost1]
   user=panel
   password='"${PanelUserDBPassword}"'
   database=yiimpfrontend
@@ -70,6 +65,7 @@ else
   user=root
   password='"${DBRootPassword}"'
   ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
+fi
 
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
 echo Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf
