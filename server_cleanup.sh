@@ -128,3 +128,4 @@ echo "source /etc/multipool.conf" | hide_output tee -a ~/.bashrc
 echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
 
 sudo rm -r $STORAGE_ROOT/yiimp/yiimp_setup
+cd $HOME/multipool/yiimp_single

@@ -26,3 +26,4 @@ echo 'net.ipv4.tcp_no_metrics_save = 1' | hide_output sudo tee -a /etc/sysctl.co
 echo 'net.core.netdev_max_backlog = 5000' | hide_output sudo tee -a /etc/sysctl.conf
 
 echo Tuning complete...
+cd $HOME/multipool/yiimp_single

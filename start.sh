@@ -42,11 +42,11 @@ fi
 
 # Start the installation.
 source menu.sh
+source questions.sh
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 if [[ ("$wireguard" == "true") ]]; then
   source wireguard.sh
 fi
-source questions.sh
 source system.sh
 source db.sh
 source web.sh
@@ -69,3 +69,4 @@ echo You can access your admin panel at, http://${DomainName}/site/${AdminPanel}
 echo
 echo By default all stratum ports are blocked by the firewall. To allow a port through, from the command prompt type sudo ufw allow port number.
 echo Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf
+exit 0
