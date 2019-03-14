@@ -6,6 +6,9 @@
 source /etc/functions.sh
 source /etc/multipool.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+if [[ ("$wireguard" == "true") ]]; then
+source $STORAGE_ROOT/yiimp/.wireguard.conf
+fi
 
 message_box "Ultimate Crypto-Server Setup Installer v1.02" \
 "You have choosen to install YiiMP Single Server!

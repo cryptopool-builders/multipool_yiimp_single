@@ -7,9 +7,11 @@
 
 source /etc/functions.sh
 source /etc/multipool.conf
-source $HOME/multipool/yiimp_single/.wireguard.install.cnf
-source $STORAGE_ROOT/yiimp/.wireguard.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
+source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+if [[ ("$wireguard" == "true") ]]; then
+source $STORAGE_ROOT/yiimp/.wireguard.conf
+fi
 
 echo Building web file structure and copying files...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp

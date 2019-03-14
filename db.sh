@@ -5,7 +5,9 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
+fi
 
 echo Installing MariaDB...
 MARIADB_VERSION='10.3'
@@ -97,15 +99,12 @@ sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_g
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2019-03-coins_thepool_life.sql
 
 if [[ ("$wireguard" == "false") ]]; then
-
 sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
 sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
 sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
 sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
 sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
 sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
-
-
 else
   sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
   sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
