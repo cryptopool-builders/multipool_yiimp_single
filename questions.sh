@@ -216,11 +216,9 @@ AutoExchange='"${AutoExchange}"'
 DBInternalIP='"${DBInternalIP}"'
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
-' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1 ;;
-
+' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
 else
-
-  echo 'STORAGE_USER='"${STORAGE_USER}"'
+echo 'STORAGE_USER='"${STORAGE_USER}"'
   STORAGE_ROOT='"${STORAGE_ROOT}"'
   DomainName='"${DomainName}"'
   StratumURL='"${StratumURL}"'
@@ -236,8 +234,8 @@ else
   AutoExchange='"${AutoExchange}"'
   # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
   YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
-  ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1 ;;
-fi
+  ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
+fi;;
 1)
 
 clear
