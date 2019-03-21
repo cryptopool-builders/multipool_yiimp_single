@@ -5,7 +5,7 @@
 
 source /etc/functions.sh
 
-RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Setup Installer v1.26" --menu "Choose one" -1 60 3 \
+RESULT=$(dialog --stdout --title "Ultimate Crypto-Server Setup Installer v1.30" --menu "Choose one" -1 60 3 \
 1 "YiiMP - Single Server" \
 2 "YiiMP - Single Server with WireGuard" \
 3 Exit)

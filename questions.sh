@@ -10,7 +10,7 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-message_box "Ultimate Crypto-Server Setup Installer v1.02" \
+message_box "Ultimate Crypto-Server Setup Installer" \
 "You have choosen to install YiiMP Single Server!
 \n\nThis option will install all componets of YiiMP on a single server.
 \n\nAfter answering the following questions, setup will be automated.
