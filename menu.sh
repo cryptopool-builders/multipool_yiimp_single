@@ -5,7 +5,7 @@
 
 source /etc/functions.sh
 
-RESULT=$(dialog --stdout --default-item 1 --title "Ultimate Crypto-Server Setup Installer v1.36" --menu "Choose one" -1 60 5 \
+RESULT=$(dialog --stdout --default-item 1 --title "Ultimate Crypto-Server Setup Installer v1.37" --menu "Choose one" -1 60 5 \
 ' ' "- For small private pools -" \
 1 "YiiMP - Single Server" \
 ' ' "- If you plan on adding more servers later -" \
@@ -13,7 +13,7 @@ RESULT=$(dialog --stdout --default-item 1 --title "Ultimate Crypto-Server Setup 
 3 Exit)
 if [ $RESULT = ]
 then
-exit;
+bash $(basename $0) && exit;
 fi
 
 if [ $RESULT = 1 ]
