@@ -8,7 +8,7 @@
 source /etc/functions.sh
 source /etc/multipool.conf
 
-echo Boosting server performance for YiiMP...
+echo "$YELLOW Boosting server performance for YiiMP...$COL_RESET"
 # Boost Network Performance by Enabling TCP BBR
 hide_output sudo apt install -y --install-recommends linux-generic-hwe-16.04
 echo 'net.core.default_qdisc=fq' | hide_output sudo tee -a /etc/sysctl.conf
@@ -25,5 +25,6 @@ echo 'net.ipv4.tcp_sack = 1' | hide_output sudo tee -a /etc/sysctl.conf
 echo 'net.ipv4.tcp_no_metrics_save = 1' | hide_output sudo tee -a /etc/sysctl.conf
 echo 'net.core.netdev_max_backlog = 5000' | hide_output sudo tee -a /etc/sysctl.conf
 
-echo Tuning complete...
+echo
+echo "$GREEN Tuning complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single

@@ -13,7 +13,8 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo Building web file structure and copying files...
+echo
+echo "$YELLOW Building web file structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 sudo sed -i 's/AdminRights/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web $STORAGE_ROOT/yiimp/site/
@@ -24,7 +25,8 @@ sudo mkdir -p /etc/yiimp
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/backup/
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${STORAGE_ROOT}/yiimp/site|g" /bin/yiimp
 
-echo Creating NGINX config file...
+echo
+echo "$YELLOW Creating NGINX config file...$COL_RESET"
 echo 'map $http_user_agent $blockedagent {
 		default 0;
 		~*malicious 1;
@@ -153,11 +155,13 @@ restart_service nginx
 restart_service php7.2-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-echo Installing LetsEncrypt and setting up SSL...
+echo
+echo "$YELLOW Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
 hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
-echo Generating DHPARAM, this may take awhile...
+echo
+echo "$YELLOW Generating DHPARAM, this may take awhile...$COL_RESET"
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -416,11 +420,13 @@ restart_service nginx
 restart_service php7.2-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-echo Installing LetsEncrypt and setting up SSL...
+echo
+echo "$YELLOW Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
 hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
-echo Generating DHPARAM, this may take awhile...
+echo
+echo "$YELLOW Generating DHPARAM, this may take awhile...$COL_RESET"
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -562,7 +568,8 @@ restart_service nginx
 restart_service php7.2-fpm
 
 fi
-echo Creating YiiMP configuration files..
+echo
+echo "$YELLOW Creating YiiMP configuration files...$COL_RESET"
 
 #Create keys file
 echo '<?php
@@ -759,7 +766,8 @@ else
 	);' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/serverconfig.php >/dev/null 2>&1
 fi
 
-echo Setting correct folder permissions...
+echo
+echo "$YELLOW Setting correct folder permissions...$COL_RESET"
 whoami=`whoami`
 sudo usermod -aG www-data $whoami
 sudo usermod -a -G www-data $whoami
@@ -775,7 +783,8 @@ sudo chmod g+w $STORAGE_ROOT -R
 cd $HOME/multipool/yiimp_single
 
 #Updating YiiMP files for cryptopool.builders build
-echo Adding the cryptopool.builders flare to YiiMP...
+echo
+echo "$YELLOW Adding the cryptopool.builders flare to YiiMP...$COL_RESET"
 
 sudo sed -i 's/YII MINING POOLS/'${DomainName}' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/domain/'${DomainName}'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
@@ -789,6 +798,10 @@ sudo sed -i "s|/root/backup|${STORAGE_ROOT}/yiimp/site/backup|g" $STORAGE_ROOT/y
 sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 
+if [[ ("$wireguard" == "true") ]]; then
+sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${DBInternalIP}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
+sudo sed -i "s|blocknotify=\/var\/stratum\/blocknotify 127.0.0.1|blocknotify=blocknotify ${DBInternalIP}|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
+fi
 echo '#!/usr/bin/env bash
 
 PHP_CLI='"'"''"php -d max_execution_time=120"''"'"'
@@ -840,5 +853,6 @@ done
 exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/crons/blocks.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/crons/blocks.sh
 
-echo Web build complete...
+echo
+echo "$GREEN Web build complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single

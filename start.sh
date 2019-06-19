@@ -28,7 +28,7 @@ export LC_TYPE=en_US.UTF-8
 export NCURSES_NO_UTF8_ACS=1
 
 # Create the temporary installation directory if it doesn't already exist.
-echo Creating the temporary YiiMP installation folder...
+echo "$YELLOW Creating the temporary YiiMP installation folder...$COL_RESET"
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
 sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/web
@@ -39,7 +39,7 @@ sudo mkdir -p $STORAGE_ROOT/yiimp/site/log
 sudo mkdir -p $STORAGE_ROOT/yiimp/starts
 sudo mkdir -p $STORAGE_ROOT/wallets
 fi
-
+echo "$YELLOW Folders created...$COL_RESET"
 # Start the installation.
 source menu.sh
 source questions.sh
@@ -61,10 +61,10 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
 echo Installation of your YiiMP single server is now completed.
-echo You *MUST* reboot the machine to finalize the machine updates and folder permissions! YiiMP will not function until a reboot is performed!
+echo You "$RED"*MUST* reboot"$COL_RESET" the machine to finalize the machine updates and folder permissions! "$YELLOW YiiMP will not function until a reboot is performed!$COL_RESET"
 echo
 echo "Important! After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
-echo "After 1 minute, type motd to refresh"
+echo "After 1 minute, type $GREEN motd $COL_RESET to refresh"
 echo You can access your admin panel at, http://${DomainName}/site/${AdminPanel}
 echo
 echo By default all stratum ports are blocked by the firewall. To allow a port through, from the command prompt type sudo ufw allow port number.

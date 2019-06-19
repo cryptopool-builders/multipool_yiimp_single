@@ -9,13 +9,15 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo Installing MariaDB...
+echo "$YELLOW Installing MariaDB...$COL_RESET"
 MARIADB_VERSION='10.3'
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password_again password $DBRootPassword"
 apt_install mariadb-server mariadb-client
-
-echo Creating DB users for YiiMP...
+echo "$GREEN MariaDB build complete...$COL_RESET"
+echo
+echo
+echo "$YELLOW Creating DB users for YiiMP...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
 Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
@@ -32,8 +34,9 @@ else
   SQL="${Q1}${Q2}${Q3}${Q4}"
   sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
 fi
+echo "$GREEN Database creation complete...$COL_RESET"
 
-echo Creating my.cnf...
+echo "$YELLOW Creating my.cnf...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
 echo '[clienthost1]
@@ -70,7 +73,7 @@ fi
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
 echo Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf
 
-echo Importing YiiMP Default database values...
+echo "$YELLOW Importing YiiMP Default database values...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 # import sql dump
 sudo zcat 2016-04-03-yaamp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
@@ -93,7 +96,9 @@ sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-11-segwit.
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-01-stratums_ports.sql
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_getinfo.sql
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2019-03-coins_thepool_life.sql
+echo "$GREEN Database import complete...$COL_RESET"
 
+echo "$YELLOW Tweaking MariaDB for better performance...$COL_RESET"
 if [[ ("$wireguard" == "false") ]]; then
 sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
 sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
@@ -110,7 +115,10 @@ else
   sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
   sudo sed -i 's/#bind-address=0.0.0.0/bind-address='${DBInternalIP}'/g' /etc/mysql/my.cnf
 fi
-
+echo "$GREEN Database tweak complete...$COL_RESET"
 restart_service mysql
-echo Database build complete...
+echo
+echo
+echo
+echo "$GREEN Database build complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single
