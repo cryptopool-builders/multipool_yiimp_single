@@ -31,13 +31,13 @@ sudo rm -r db-4.8.30.NC.tar.gz db-4.8.30.NC
 
 echo Building Berkeley 5.3, this may take several minutes...
 sudo mkdir -p $STORAGE_ROOT/berkeley/db5/
-hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-5.3.28.tar.gz'
-hide_output sudo tar -xzvf db-5.3.28.tar.gz
-cd db-5.3.28/build_unix/
+hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-5.1.29.tar.gz'
+hide_output sudo tar -xzvf db-5.1.29.tar.gz
+cd db-5.1.29/build_unix/
 hide_output sudo ../dist/configure --enable-cxx --disable-shared --with-pic --prefix=$STORAGE_ROOT/berkeley/db5/
 hide_output sudo make install
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
-sudo rm -r db-5.3.28.tar.gz db-5.3.28
+sudo rm -r db-5.1.29.tar.gz db-5.1.29
 
 echo Building OpenSSL 1.0.2g, this may take several minutes...
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp

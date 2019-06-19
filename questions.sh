@@ -13,11 +13,12 @@ fi
 message_box "Ultimate Crypto-Server Setup Installer" \
 "You have choosen to install YiiMP Single Server!
 \n\nThis option will install all componets of YiiMP on a single server.
+\n\nPlease make sure any domain name or sub domain names are pointed to this servers IP prior to running this installer.
 \n\nAfter answering the following questions, setup will be automated.
 \n\nNOTE: If installing on a system with less then 8 GB of RAM you may experience system issues!"
 
 dialog --title "Using Sub-Domain" \
---yesno "Are you using a sub-domain for the main website domain? Example pool.example.com?" 7 60
+--yesno "Are you using a sub-domain for the main website domain? Example pool.example.com? Make sure the DNS is updated!" 7 60
 response=$?
 case $response in
    0) UsingSubDomain=yes;;
@@ -26,7 +27,7 @@ case $response in
 esac
 
 dialog --title "Install SSL" \
---yesno "Would you like the system to install SSL automatically?" 7 60
+--yesno "Would you like the system to install SSL automatically? If just using the server IP you MUST select NO!" 7 60
 response=$?
 case $response in
    0) InstallSSL=yes;;
@@ -57,6 +58,8 @@ DEFAULT_DomainName=$(get_publicip_from_web_service 4 || get_default_privateip 4)
 input_box "Domain Name" \
 "Enter your domain name. If using a subdomain enter the full domain as in pool.example.com
 \n\nDo not add www. to the domain name.
+\n\nMake sure the domain is pointed to this server before continuing!
+\n\nIf only using the server IP, enter the IP only!
 \n\nDomain Name:" \
 ${DEFAULT_DomainName} \
 DomainName
@@ -72,6 +75,7 @@ DEFAULT_StratumURL=stratum.${DomainName}
 input_box "Stratum URL" \
 "Enter your stratum URL. It is recommended to use another subdomain such as stratum.${DomainName}
 \n\nDo not add www. to the domain name.
+\n\nIf only using the server IP, enter the IP only!
 \n\nStratum URL:" \
 ${DEFAULT_StratumURL} \
 StratumURL
@@ -185,7 +189,7 @@ Domain Name      : ${DomainName}
 Stratum URL      : ${StratumURL}
 System Email     : ${SupportEmail}
 Your Public IP   : ${PublicIP}
-Admin Location   : ${AdminPanel}" 20 60
+Admin Location   : ${AdminPanel}" 15 60
 
 
 # Get exit status
