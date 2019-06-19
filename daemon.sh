@@ -5,11 +5,11 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
-echo -e "$CYAN Installing BitCoin PPA...$COL_RESET"
+echo -e " Installing BitCoin PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/bitcoin.list ]; then
 hide_output sudo add-apt-repository -y ppa:bitcoin/bitcoin
 fi
-echo -e "$CYAN Installing additional system files required for daemons...$COL_RESET"
+echo -e " Installing additional system files required for daemons...$COL_RESET"
 hide_output sudo apt-get update
 apt_install build-essential libtool autotools-dev \
 automake pkg-config libssl-dev libevent-dev bsdmainutils git libboost-all-dev libminiupnpc-dev \
@@ -20,7 +20,7 @@ sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 echo -e "$GREEN Additional System Files Completed...$COL_RESET"
 
-echo -e "$CYAN Building Berkeley 4.8, this may take several minutes...$COL_RESET"
+echo -e " Building Berkeley 4.8, this may take several minutes...$COL_RESET"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db4/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-4.8.30.NC.tar.gz'
 hide_output sudo tar -xzvf db-4.8.30.NC.tar.gz
@@ -31,7 +31,7 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-4.8.30.NC.tar.gz db-4.8.30.NC
 echo -e "$GREEN Berkeley 4.8 Completed...$COL_RESET"
 
-echo -e "$CYAN Building Berkeley 5.1, this may take several minutes...$COL_RESET"
+echo -e " Building Berkeley 5.1, this may take several minutes...$COL_RESET"
 sudo mkdir -p $STORAGE_ROOT/berkeley/db5/
 hide_output sudo wget 'http://download.oracle.com/berkeley-db/db-5.1.29.tar.gz'
 hide_output sudo tar -xzvf db-5.1.29.tar.gz
@@ -42,7 +42,7 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r db-5.1.29.tar.gz db-5.1.29
 echo -e "$GREEN Berkeley 5.1 Completed...$COL_RESET"
 
-echo -e "$CYAN Building OpenSSL 1.0.2g, this may take several minutes...$COL_RESET"
+echo -e " Building OpenSSL 1.0.2g, this may take several minutes...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 hide_output sudo wget https://www.openssl.org/source/openssl-1.0.2g.tar.gz --no-check-certificate
 hide_output sudo tar -xf openssl-1.0.2g.tar.gz
@@ -54,8 +54,6 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r openssl-1.0.2g.tar.gz openssl-1.0.2g
 echo -e "$GREEN OpenSSL 1.0.2g Completed...$COL_RESET"
 
-echo
-echo
 echo
 echo -e "$GREEN Daemon setup completed...$COL_RESET"
 

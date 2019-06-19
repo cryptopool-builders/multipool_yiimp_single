@@ -13,7 +13,7 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$CYAN Building web file structure and copying files...$COL_RESET"
+echo -e " Building web file structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 sudo sed -i 's/AdminRights/'${AdminPanel}'/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web/yaamp/modules/site/SiteController.php
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/web $STORAGE_ROOT/yiimp/site/
@@ -24,7 +24,7 @@ sudo mkdir -p /etc/yiimp
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/backup/
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${STORAGE_ROOT}/yiimp/site|g" /bin/yiimp
 
-echo -e "$CYAN Creating NGINX config file...$COL_RESET"
+echo -e " Creating NGINX config file...$COL_RESET"
 echo 'map $http_user_agent $blockedagent {
 		default 0;
 		~*malicious 1;
@@ -153,12 +153,12 @@ restart_service nginx
 restart_service php7.2-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-echo -e "$CYAN Installing LetsEncrypt and setting up SSL...$COL_RESET"
+echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
 hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
 echo
-echo -e "$CYAN Generating DHPARAM, this may take awhile...$COL_RESET"
+echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -417,11 +417,11 @@ restart_service nginx
 restart_service php7.2-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-echo -e "$CYAN Installing LetsEncrypt and setting up SSL...$COL_RESET"
+echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
 hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
-echo -e "$CYAN Generating DHPARAM, this may take awhile...$COL_RESET"
+echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
 hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -563,7 +563,7 @@ restart_service nginx
 restart_service php7.2-fpm
 
 fi
-echo -e "$CYAN Creating YiiMP configuration files...$COL_RESET"
+echo -e " Creating YiiMP configuration files...$COL_RESET"
 
 #Create keys file
 echo '<?php
@@ -760,7 +760,7 @@ else
 	);' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/serverconfig.php >/dev/null 2>&1
 fi
 
-echo -e "$CYAN Setting correct folder permissions...$COL_RESET"
+echo -e " Setting correct folder permissions...$COL_RESET"
 whoami=`whoami`
 sudo usermod -aG www-data $whoami
 sudo usermod -a -G www-data $whoami
@@ -776,7 +776,7 @@ sudo chmod g+w $STORAGE_ROOT -R
 cd $HOME/multipool/yiimp_single
 
 #Updating YiiMP files for cryptopool.builders build
-echo -e "$CYAN Adding the cryptopool.builders flare to YiiMP...$COL_RESET"
+echo -e " Adding the cryptopool.builders flare to YiiMP...$COL_RESET"
 
 sudo sed -i 's/YII MINING POOLS/'${DomainName}' Mining Pool/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php
 sudo sed -i 's/domain/'${DomainName}'/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/index.php

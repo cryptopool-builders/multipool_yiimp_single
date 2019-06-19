@@ -6,7 +6,7 @@ source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd $HOME/multipool/yiimp_single
 
-echo -e "$CYAN Installing cron screens to crontab...$COL_RESET"
+echo -e " Installing cron screens to crontab...$COL_RESET"
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/screens.start.sh") | crontab -
 if [[ ("$CoinPort" == "no") ]]; then
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/stratum.start.sh") | crontab -
@@ -16,7 +16,7 @@ fi
 sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/
 echo -e "$GREEN Crontab system complete...$COL_RESET"
 
-echo -e "$CYAN Creating YiiMP Screens startup script...$COL_RESET"
+echo -e " Creating YiiMP Screens startup script...$COL_RESET"
 
 echo '#!/usr/bin/env bash
 source /etc/multipool.conf
@@ -47,7 +47,7 @@ screen -dmS debug tail -f $LOG_DIR/debug.log
 ' | sudo -E tee $STORAGE_ROOT/yiimp/starts/screens.start.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/starts/screens.start.sh
 
-echo -e "$CYAN Creating Stratum screens start script...$COL_RESET"
+echo -e " Creating Stratum screens start script...$COL_RESET"
 
 echo '#!/usr/bin/env bash
 ################################################################################

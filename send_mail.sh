@@ -6,7 +6,7 @@ source /etc/functions.sh
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
-echo -e "$CYAN Installing mail system $COL_RESET"
+echo -e " Installing mail system $COL_RESET"
 
 echo ${DomainName} | hide_output sudo tee -a /etc/hostname
 sudo hostname "${DomainName}"

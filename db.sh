@@ -9,13 +9,13 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
-echo -e "$CYAN Installing MariaDB...$COL_RESET"
+echo -e " Installing MariaDB...$COL_RESET"
 MARIADB_VERSION='10.3'
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password password $DBRootPassword"
 sudo debconf-set-selections <<< "maria-db-$MARIADB_VERSION mysql-server/root_password_again password $DBRootPassword"
 apt_install mariadb-server mariadb-client
 echo -e "$GREEN MariaDB build complete...$COL_RESET"
-echo -e "$CYAN Creating DB users for YiiMP...$COL_RESET"
+echo -e " Creating DB users for YiiMP...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
 Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
@@ -34,7 +34,7 @@ else
 fi
 echo -e "$GREEN Database creation complete...$COL_RESET"
 
-echo -e "$CYAN Creating my.cnf...$COL_RESET"
+echo -e " Creating my.cnf...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
 echo '[clienthost1]
@@ -69,9 +69,9 @@ echo '[clienthost1]
 fi
 
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
-echo Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf
+echo -e "$GREEN Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf$COL_RESET"
 
-echo -e "$CYAN Importing YiiMP Default database values...$COL_RESET"
+echo -e " Importing YiiMP Default database values...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 # import sql dump
 sudo zcat 2016-04-03-yaamp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
@@ -96,7 +96,7 @@ sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_g
 sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2019-03-coins_thepool_life.sql
 echo -e "$GREEN Database import complete...$COL_RESET"
 
-echo -e "$CYAN Tweaking MariaDB for better performance...$COL_RESET"
+echo -e " Tweaking MariaDB for better performance...$COL_RESET"
 if [[ ("$wireguard" == "false") ]]; then
 sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
 sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf

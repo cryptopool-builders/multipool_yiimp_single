@@ -5,8 +5,7 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
-echo
-echo -e "$CYAN Building blocknotify and stratum...$COL_RESET"
+echo -e " Building blocknotify and stratum...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
@@ -19,9 +18,7 @@ if [[ ("$AutoExchange" == "yes") ]]; then
 sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/Makefile
 fi
 hide_output sudo make
-
-echo
-echo -e "$CYAN Building stratum folder structure and copying files...$COL_RESET"
+echo -e " Building stratum folder structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
 sudo cp -r stratum $STORAGE_ROOT/yiimp/site/stratum
@@ -54,9 +51,7 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd '""''"${STORAGE_ROOT}"''""'/yiimp/site/stratum/config/ && ./run.sh $*
 ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/run.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/run.sh
-
-echo
-echo -e "$CYAN Updating stratum config files with database connection info...$COL_RESET"
+echo -e " Updating stratum config files with database connection info...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/site/stratum/config
 sudo sed -i 's/password = tu8tu5/password = '${blckntifypass}'/g' *.conf
 sudo sed -i 's/server = yaamp.com/server = '${StratumURL}'/g' *.conf
@@ -73,6 +68,5 @@ sudo sed -i 's/password = patofpaq/password = '${StratumUserDBPassword}'/g' *.co
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 
-echo
 echo -e "$GREEN Stratum build complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single
