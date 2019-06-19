@@ -116,13 +116,15 @@ echo
 echo "Adding stratum.${coinsymbollower} to crontab for autostart at system boot."
 (crontab -l 2>/dev/null; echo "@reboot sleep 10 && bash stratum.${coinsymbollower} start ${coinsymbollower}") | crontab -
 echo
-echo -e "$GREEN Starting your new stratum...$COL_RESET"
+echo -e "$YELLOW Starting your new stratum...$COL_RESET"
 bash stratum.${coinsymbollower} start ${coinsymbollower}
+echo -e "$GREEN Your new stratum is started...Do NOT run the start command manually...$COL_RESET"
 echo
 echo -e "To use your new stratum type,$BLUE stratum.${coinsymbollower} start|stop|restart ${coinsymbollower} $COL_RESET"
+echo
 echo -e "To see the stratum screen type,$MAGENTA screen -r ${coinsymbollower} $COL_RESET"
 echo
-echo -e "The assigned dedicated port for this coin is :$YELLOW $coinport $COL_RESET"
+echo -e "The assigned dedicated port for this coins stratum is :$YELLOW $coinport $COL_RESET"
 echo
 echo "Make sure to add this to the Dedicated Port section in your YiiMP admin area!"
 
