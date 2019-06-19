@@ -6,7 +6,7 @@ source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd $HOME/multipool/yiimp_single
 
-echo "$YELLOW Installing cron screens to crontab...$COL_RESET"
+echo -e "$YELLOW Installing cron screens to crontab...$COL_RESET"
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/screens.start.sh") | crontab -
 if [[ ("$CoinPort" == "no") ]]; then
 (crontab -l 2>/dev/null; echo "@reboot sleep 20 && /home/crypto-data/yiimp/starts/stratum.start.sh") | crontab -
@@ -14,9 +14,10 @@ fi
 (crontab -l 2>/dev/null; echo "@reboot source /etc/functions.sh") | crontab -
 (crontab -l 2>/dev/null; echo "@reboot source /etc/multipool.conf") | crontab -
 sudo cp -r first_boot.sh $STORAGE_ROOT/yiimp/
-echo "$GREEN Crontab system complete...$COL_RESET"
+echo -e "$GREEN Crontab system complete...$COL_RESET"
 
-echo "$YELLOW Creating YiiMP Screens startup script...$COL_RESET"
+echo -e "$YELLOW Creating YiiMP Screens startup script...$COL_RESET"
+
 echo '#!/usr/bin/env bash
 source /etc/multipool.conf
 # Ugly way to remove junk coins from initial YiiMP database on first boot
@@ -46,7 +47,7 @@ screen -dmS debug tail -f $LOG_DIR/debug.log
 ' | sudo -E tee $STORAGE_ROOT/yiimp/starts/screens.start.sh >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/starts/screens.start.sh
 
-echo "$YELLOW Creating Stratum screens start script...$COL_RESET"
+echo -e "$YELLOW Creating Stratum screens start script...$COL_RESET"
 
 echo '#!/usr/bin/env bash
 ################################################################################
@@ -127,6 +128,6 @@ STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
 
 echo "source /etc/multipool.conf" | hide_output tee -a ~/.bashrc
 echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
-echo "$GREEN YiiMP Screens added...$COL_RESET"
+echo -e "$GREEN YiiMP Screens added...$COL_RESET"
 sudo rm -r $STORAGE_ROOT/yiimp/yiimp_setup
 cd $HOME/multipool/yiimp_single

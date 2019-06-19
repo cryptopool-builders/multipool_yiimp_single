@@ -13,7 +13,7 @@ fi
 
 # Set timezone
 echo
-echo "$YELLOW Setting TimeZone to UTC...$COL_RESET"
+echo -e "$YELLOW Setting TimeZone to UTC...$COL_RESET"
 if [ ! -f /etc/timezone ]; then
 echo "Setting timezone to UTC."
 echo "Etc/UTC" > sudo /etc/timezone
@@ -22,7 +22,7 @@ fi
 
 # Add repository
 echo
-echo "$YELLOW Adding the required repsoitories...$COL_RESET"
+echo -e "$YELLOW Adding the required repsoitories...$COL_RESET"
 if [ ! -f /usr/bin/add-apt-repository ]; then
 echo "Installing add-apt-repository..."
 hide_output sudo apt-get -y update
@@ -30,22 +30,22 @@ apt_install software-properties-common
 fi
 # PHP 7
 echo
-echo "$YELLOW Installing Ondrej PHP PPA...$COL_RESET"
+echo -e "$YELLOW Installing Ondrej PHP PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
 hide_output sudo add-apt-repository -y ppa:ondrej/php
 fi
 # MariaDB
 echo
-echo "$YELLOW Installing MariaDB Repository...$COL_RESET"
+echo -e "$YELLOW Installing MariaDB Repository...$COL_RESET"
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.3/ubuntu xenial main'
 
 # Upgrade System Files
 echo
-echo "$YELLOW Updating system packages...$COL_RESET"
+echo -e "$YELLOW Updating system packages...$COL_RESET"
 hide_output sudo apt-get update
 echo
-echo "$YELLOW Upgrading system packages...$COL_RESET"
+echo -e "$YELLOW Upgrading system packages...$COL_RESET"
 if [ ! -f /boot/grub/menu.lst ]; then
 apt_get_quiet upgrade
 else
@@ -54,14 +54,14 @@ hide_output sudo update-grub-legacy-ec2 -y
 apt_get_quiet upgrade
 fi
 echo
-echo "$YELLOW Running Dist-Upgrade...$COL_RESET"
+echo -e "$YELLOW Running Dist-Upgrade...$COL_RESET"
 apt_get_quiet dist-upgrade
 echo
-echo "$YELLOW Running Autoremove...$COL_RESET"
+echo -e "$YELLOW Running Autoremove...$COL_RESET"
 apt_get_quiet autoremove
 
 echo
-echo "$YELLOW Installing Base system packages...$COL_RESET"
+echo -e "$YELLOW Installing Base system packages...$COL_RESET"
 apt_install python3 python3-dev python3-pip \
 wget curl git sudo coreutils bc \
 haveged pollinate unzip \
@@ -69,14 +69,14 @@ unattended-upgrades cron ntp fail2ban screen
 
 # ### Seed /dev/urandom
 echo
-echo "$YELLOW Initializing system random number generator...$COL_RESET"
+echo -e "$YELLOW Initializing system random number generator...$COL_RESET"
 hide_output dd if=/dev/random of=/dev/urandom bs=1 count=32 2> /dev/null
 hide_output sudo pollinate -q -r
 
 if [ -z "$DISABLE_FIREWALL" ]; then
 # Install `ufw` which provides a simple firewall configuration.
 echo
-echo "$YELLOW Installing UFW...$COL_RESET"
+echo -e "$YELLOW Installing UFW...$COL_RESET"
 apt_install ufw
 
 # Allow incoming connections.
@@ -101,7 +101,7 @@ sudo ufw --force enable;
 fi #NODOC
 
 echo
-echo "$YELLOW Installing YiiMP Required system packages...$COL_RESET"
+echo -e "$YELLOW Installing YiiMP Required system packages...$COL_RESET"
 if [ -f /usr/sbin/apache2 ]; then
 echo Removing apache...
 hide_output apt-get -y purge apache2 apache2-*
@@ -123,12 +123,12 @@ build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainut
 
 
 echo
-echo "$YELLOW Downloading CryptoPool.builders YiiMP Repo...$COL_RESET"
+echo -e "$YELLOW Downloading CryptoPool.builders YiiMP Repo...$COL_RESET"
 hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 if [[ ("$CoinPort" == "Yes") ]]; then
 	cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 	sudo git fetch
 	sudo git checkout multi-port
 fi
-echo "$GREEN System files installed...$COL_RESET"
+echo -e "$GREEN System files installed...$COL_RESET"
 cd $HOME/multipool/yiimp_single
