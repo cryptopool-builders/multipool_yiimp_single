@@ -10,13 +10,21 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
+if [[ ("$wireguard" == "true") ]]; then
 message_box "Ultimate Crypto-Server Setup Installer" \
-"You have choosen to install YiiMP Single Server!
-\n\nThis option will install all componets of YiiMP on a single server.
+"You have choosen to install YiiMP Single Server with WireGuard!
+\n\nThis option will install all componets of YiiMP on a single server along with WireGuard so you can easily add additional servers in the future.
 \n\nPlease make sure any domain name or sub domain names are pointed to this servers IP prior to running this installer.
 \n\nAfter answering the following questions, setup will be automated.
 \n\nNOTE: If installing on a system with less then 8 GB of RAM you may experience system issues!"
-
+else
+  message_box "Ultimate Crypto-Server Setup Installer" \
+  "You have choosen to install YiiMP Single Server!
+  \n\nThis option will install all componets of YiiMP on a single server.
+  \n\nPlease make sure any domain name or sub domain names are pointed to this servers IP prior to running this installer.
+  \n\nAfter answering the following questions, setup will be automated.
+  \n\nNOTE: If installing on a system with less then 8 GB of RAM you may experience system issues!"
+fi
 dialog --title "Using Sub-Domain" \
 --yesno "Are you using a sub-domain for the main website domain? Example pool.example.com? Make sure the DNS is updated!" 7 60
 response=$?
