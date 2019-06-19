@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+source /etc/functions.sh
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 #####################################################
@@ -32,10 +34,10 @@ echo "This program will create a new coin.algo.conf file and also create a new s
 echo "This program also randomly selects an open port for the coin between ports 2768 and 6999."
 echo "This program will also open the new port in UFW."
 echo ""
-echo "Make sure coin symbol is all upper case."
-read -e -p "Please enter the coin symbol : " coinsymbol
+echo -e "$RED Make sure coin symbol is all upper case.$COL_RESET"
+read -e -p "Please enter the coin SYMBOL : " coinsymbol
 echo ""
-echo "Make sure algo is in all lower case."
+echo -e "$RED Make sure algo is in all lower case.$COL_RESET"
 read -e -p "Please enter the coin algo : " coinalgo
 
 # Make the coin symbol lower case
@@ -110,14 +112,16 @@ sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower}
 
 sudo cp -r stratum.${coinsymbollower} /usr/bin 
 sudo ufw allow $coinport
-
-echo "Adding new stratum port to cron"
+echo
+echo "Adding stratum.${coinsymbollower} to crontab for autostart at system boot."
 (crontab -l 2>/dev/null; echo "@reboot sleep 10 && bash stratum.${coinsymbollower} start ${coinsymbollower}") | crontab -
-
-echo "To use your new start file type stratum.${coinsymbollower} start|stop|restart ${coinsymbollower}"
-echo "To see the screen type screen -r ${coinsymbollower}"
-echo "Make sure that you update your coin.conf on your DAEMON server for blocknotify to use this new port : $coinport"
-echo "If you do not update this you will get blocknotify errors!"
+echo -e "$GREEN Starting your new stratum...$COL_RESET"
+bash stratum.${coinsymbollower} start ${coinsymbollower}
+echo -e "To use your new stratum type,$BLUE stratum.${coinsymbollower} start|stop|restart ${coinsymbollower} $COL_RESET"
+echo -e "To see the stratum screen type,$BLUE screen -r ${coinsymbollower} $COL_RESET"
+echo -e "The assigned dedicated port for this coin is :$YELLOW $coinport $COL_RESET"
+echo
+echo "Make sure to add this to the Dedicated Port section in your YiiMP admin area!"
 
 cd ~
 exit 0
