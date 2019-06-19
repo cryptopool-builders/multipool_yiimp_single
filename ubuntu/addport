@@ -31,6 +31,7 @@ coinport=$(EPHYMERAL_PORT)
 
 cd /home/crypto-data/yiimp/site/stratum/config
 echo "Thanks for using the addport script by cryptopool.builders."
+echo
 echo "addport will randomly selects an open port for the coin between ports 2768 and 6999 and open the port in UFW."
 echo "It will also create a new symbol.algo.conf in /home/crypto-data/yiimp/site/stratum/config"
 echo "and will create a new stratum.symbol run file in /usr/bin."
@@ -40,7 +41,7 @@ echo
 echo -e "$RED Make sure coin symbol is all UPPER case.$COL_RESET"
 read -e -p "Please enter the coin SYMBOL : " coinsymbol
 echo ""
-echo -e "$RED Make sure algo is in all lower case.$COL_RESET"
+echo -e "$RED Make sure algo is in all lower case and a valid algo in yiimp.$COL_RESET"
 read -e -p "Please enter the coin algo : " coinalgo
 
 # Make the coin symbol lower case
