@@ -7,7 +7,7 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd $HOME/multipool/yiimp_single
 
 # NGINX upgrade
-echo -e "$YELLOW Upgrading NGINX...$COL_RESET"
+echo -e "$CYAN Upgrading NGINX...$COL_RESET"
 hide_output sudo wget https://nginx.org/keys/nginx_signing.key
 hide_output sudo apt-key add nginx_signing.key
 sudo rm -r nginx_signing.key

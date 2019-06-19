@@ -6,7 +6,7 @@ source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 echo
-echo -e "$YELLOW Building blocknotify and stratum...$COL_RESET"
+echo -e "$CYAN Building blocknotify and stratum...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
@@ -21,7 +21,7 @@ fi
 hide_output sudo make
 
 echo
-echo -e "$YELLOW Building stratum folder structure and copying files...$COL_RESET"
+echo -e "$CYAN Building stratum folder structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
 sudo cp -r stratum $STORAGE_ROOT/yiimp/site/stratum
@@ -56,7 +56,7 @@ cd '""''"${STORAGE_ROOT}"''""'/yiimp/site/stratum/config/ && ./run.sh $*
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/run.sh
 
 echo
-echo -e "$YELLOW Updating stratum config files with database connection info...$COL_RESET"
+echo -e "$CYAN Updating stratum config files with database connection info...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/site/stratum/config
 sudo sed -i 's/password = tu8tu5/password = '${blckntifypass}'/g' *.conf
 sudo sed -i 's/server = yaamp.com/server = '${StratumURL}'/g' *.conf

@@ -6,7 +6,7 @@ source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 source /etc/multipool.conf
 
-echo -e "$YELLOW Installing WireGuard...$COL_RESET"
+echo -e "$CYAN Installing WireGuard...$COL_RESET"
 sudo add-apt-repository ppa:wireguard/wireguard -y
 sudo apt-get update -y
 sudo apt-get install wireguard-dkms wireguard-tools -y
@@ -29,6 +29,5 @@ echo '  Public Ip: '"${dbpublic}"'
 Public Key: '"${mypublic}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.wireguard_public.conf >/dev/null 2>&1;
 
-echo
 echo -e "$GREEN WireGuard setup completed...$COL_RESET"
 cd $HOME/multipool/yiimp_single
