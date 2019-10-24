@@ -25,6 +25,16 @@ else
   \n\nAfter answering the following questions, setup will be automated.
   \n\nNOTE: If installing on a system with less then 8 GB of RAM you may experience system issues!"
 fi
+
+dialog --title "Using Domain Name" \
+--yesno "Are you using a domain name? Example: example.com? Make sure the DNS is updated!" 7 60
+response=$?
+case $response in
+   0) UsingDomain=yes;;
+   1) UsingDomain=no;;
+   255) echo "[ESC] key pressed.";;
+esac
+
 dialog --title "Using Sub-Domain" \
 --yesno "Are you using a sub-domain for the main website domain? Example pool.example.com? Make sure the DNS is updated!" 7 60
 response=$?
@@ -191,13 +201,14 @@ dialog --title "Verify Your Responses" \
 
 Dedicated Coin Ports : ${CoinPort}
 AutoExchange : ${AutoExchange}
+Using Domain : ${UsingDomain}
 Using Sub-Domain : ${UsingSubDomain}
 Install SSL      : ${InstallSSL}
 Domain Name      : ${DomainName}
 Stratum URL      : ${StratumURL}
 System Email     : ${SupportEmail}
 Your Public IP   : ${PublicIP}
-Admin Location   : ${AdminPanel}" 15 60
+Admin Location   : ${AdminPanel}" 16 60
 
 
 # Get exit status
@@ -212,6 +223,7 @@ case $response in
 # tools know where to look for data.
 if [[ ("$wireguard" == "true") ]]; then
 echo 'STORAGE_USER='"${STORAGE_USER}"'
+UsingDomain='"${UsingDomain}"'
 STORAGE_ROOT='"${STORAGE_ROOT}"'
 DomainName='"${DomainName}"'
 StratumURL='"${StratumURL}"'
@@ -232,6 +244,7 @@ YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 else
 echo 'STORAGE_USER='"${STORAGE_USER}"'
   STORAGE_ROOT='"${STORAGE_ROOT}"'
+  UsingDomain='"${UsingDomain}"'
   DomainName='"${DomainName}"'
   StratumURL='"${StratumURL}"'
   SupportEmail='"${SupportEmail}"'

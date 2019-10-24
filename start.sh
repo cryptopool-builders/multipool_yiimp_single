@@ -53,7 +53,9 @@ source web.sh
 source nginx_upgrade.sh
 source stratum.sh
 source daemon.sh
+if [[ ("$UsingDomain" == "Yes") ]]; then
 source send_mail.sh
+fi
 source server_cleanup.sh
 source motd.sh
 source server_harden.sh
