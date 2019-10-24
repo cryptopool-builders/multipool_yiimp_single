@@ -10,6 +10,7 @@
 source /etc/functions.sh
 
 sleep 5
+echo "Removing junk coins from YiiMP, this will take several minutes to complete, do not restart server until done!"
 hide_output yiimp checkup
 hide_output yiimp coin MDT delete
 hide_output yiimp coin FLAX delete
@@ -248,10 +249,10 @@ hide_output	yiimp coin DUCK delete
 hide_output	yiimp coin BSY delete
 hide_output	yiimp coin SPN delete
 hide_output	yiimp coin IPC delete
-hide_output	yiimp coin "$MINEZ" delete
-hide_output	yiimp coin "$MINEW" delete
+hide_output	yiimp coin '$MINEZ' delete
+hide_output	yiimp coin '$MINEW' delete
 hide_output	yiimp coin ADD delete
-hide_output	yiimp coin "$MINE" delete
+hide_output	yiimp coin '$MINE' delete
 hide_output	yiimp coin FTCC delete
 hide_output	yiimp coin CIV delete
 hide_output	yiimp coin TOP delete
@@ -260,7 +261,7 @@ hide_output	yiimp coin NTC delete
 hide_output	yiimp coin KIWI delete
 hide_output	yiimp coin XPL delete
 hide_output	yiimp coin XGR delete
-hide_output	yiimp coin "$$$" delete
+hide_output	yiimp coin '$$$' delete
 hide_output	yiimp coin 66 delete
 hide_output	yiimp coin MDC delete
 hide_output	yiimp coin SVC delete
@@ -975,7 +976,22 @@ hide_output	yiimp coin MARYJ delete
 hide_output	yiimp coin XMG delete
 hide_output	yiimp coin RUBLE delete
 hide_output	yiimp coin XCLD delete
-
+hide_output	yiimp coin BST delete
+hide_output	yiimp coin HNC delete
+hide_output	yiimp coin GXG delete
+hide_output	yiimp coin BTX delete
+hide_output	yiimp coin 007 delete
+hide_output	yiimp coin LUX delete
+hide_output	yiimp coin ACP delete
+hide_output	yiimp coin STR delete
+hide_output	yiimp coin PAC delete
+hide_output	yiimp coin PPC delete
+hide_output	yiimp coin MLS delete
+hide_output	yiimp coin FLO delete
+hide_output	yiimp coin PTC delete
+hide_output	yiimp coin GUN delete
+hide_output	yiimp coin DOGE delete
+echo "Junk coin removal completed. Type motd to verify screens are running."
 
 # Prevents error when trying to log in to admin panel the first time...
 
