@@ -40,7 +40,7 @@ case $response in
    255) echo "[ESC] key pressed.";;
 esac
 
-if [[ ("$UsingDomain" == "true") ]]; then
+if [[ ("$UsingDomain" == "yes") ]]; then
 
 dialog --title "Using Sub-Domain" \
 --yesno "Are you using a sub-domain for the main website domain? Example pool.example.com?
