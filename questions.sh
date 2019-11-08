@@ -53,7 +53,7 @@ case $response in
 esac
 
 if [ -z "${DomainName}" ]; then
-DEFAULT_DomainName=$(get_publicip_from_web_service 4 || get_default_privateip 4)
+DEFAULT_DomainName=example.com
 input_box "Domain Name" \
 "Enter your domain name. If using a subdomain enter the full domain as in pool.example.com
 \n\nDo not add www. to the domain name.
