@@ -100,6 +100,7 @@ DomainName=$(get_publicip_from_web_service 4 || get_default_privateip 4)
 StratumURL=$(get_publicip_from_web_service 4 || get_default_privateip 4)
 UsingSubDomain=no
 InstallSSL=no
+fi
 
 # Back to user input questions regardless of domain name or IP use
 if [ -z "${SupportEmail}" ]; then
@@ -210,7 +211,7 @@ if [ -z "${StratumUserDBPassword}" ]; then
 exit
 fi
 fi
-fi
+
 clear
 
 
