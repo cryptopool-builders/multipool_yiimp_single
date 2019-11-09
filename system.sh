@@ -42,7 +42,7 @@ hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:
 if [[ ("$DISTRO" == "16") ]]; then
 sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.4/ubuntu xenial main'
 else
-sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.4/ubuntu bionic main'
+sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.timeweb.ru/mariadb/repo/10.4/ubuntu xenial main'
 fi
 echo -e "$GREEN Done...$COL_RESET"
 # Upgrade System Files
