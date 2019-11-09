@@ -114,7 +114,7 @@ server {
 
 		location ~ ^/index\.php$ {
 				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-				fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+				fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 				fastcgi_index index.php;
 				include fastcgi_params;
 				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -150,7 +150,7 @@ sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enable
 sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
 restart_service nginx
-restart_service php7.2-fpm
+restart_service php7.3-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
@@ -269,7 +269,7 @@ server {
 
 		location ~ ^/index\.php$ {
 				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-				fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+				fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 				fastcgi_index index.php;
 				include fastcgi_params;
 				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -297,7 +297,7 @@ server {
 fi
 
 restart_service nginx
-restart_service php7.2-fpm
+restart_service php7.3-fpm
 
 else
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -378,7 +378,7 @@ server {
 
 		location ~ ^/index\.php$ {
 				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-				fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+				fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 				fastcgi_index index.php;
 				include fastcgi_params;
 				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -414,7 +414,7 @@ sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enable
 sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
 restart_service nginx
-restart_service php7.2-fpm
+restart_service php7.3-fpm
 
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
 echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
@@ -532,7 +532,7 @@ server {
 
 		location ~ ^/index\.php$ {
 				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-				fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+				fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
 				fastcgi_index index.php;
 				include fastcgi_params;
 				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -560,7 +560,7 @@ server {
 fi
 
 restart_service nginx
-restart_service php7.2-fpm
+restart_service php7.3-fpm
 
 fi
 echo -e " Creating YiiMP configuration files...$COL_RESET"

@@ -26,5 +26,5 @@ sudo rm -r /etc/nginx/sites-available/default
 sudo rm -r /etc/nginx/sites-enabled/default
 echo -e "$GREEN NGINX upgrade complete...$COL_RESET"
 restart_service nginx
-restart_service php7.2-fpm
+restart_service php7.3-fpm
 cd $HOME/multipool/yiimp_single
