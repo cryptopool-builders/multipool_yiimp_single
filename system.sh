@@ -40,9 +40,9 @@ echo -e "$GREEN Done...$COL_RESET"
 echo -e " Installing MariaDB Repository...$COL_RESET"
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 if [[ ("$DISTRO" == "16") ]]; then
-sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.4/ubuntu xenial main'
+hide_output sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirrors.accretive-networks.net/mariadb/repo/10.4/ubuntu xenial main'
 else
-sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.timeweb.ru/mariadb/repo/10.4/ubuntu xenial main'
+hide_output sudo add-apt-repository 'deb [arch=amd64,arm64,i386,ppc64el] http://mirror.timeweb.ru/mariadb/repo/10.4/ubuntu xenial main'
 fi
 echo -e "$GREEN Done...$COL_RESET"
 # Upgrade System Files
@@ -124,7 +124,8 @@ fail2ban ntpdate python3 python3-dev python3-pip \
 curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 nginx pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
-build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev
+build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
+automake cmake
 else
 apt_install php7.3-fpm php7.3-opcache php7.3-fpm php7.3 php7.3-common php7.3-gd \
 php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi \
@@ -137,7 +138,7 @@ curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 nginx pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
 build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
-libpsl-dev libnghttp2-dev
+libpsl-dev libnghttp2-dev automake cmake
 fi
 
 

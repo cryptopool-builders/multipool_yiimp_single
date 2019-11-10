@@ -65,6 +65,17 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r openssl-1.0.2g.tar.gz openssl-1.0.2g
 echo -e "$GREEN OpenSSL 1.0.2g Completed...$COL_RESET"
 
+echo -e " Building bls-signatures, this may take several minutes...$COL_RESET"
+cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
+hide_output sudo wget 'https://github.com/codablock/bls-signatures/archive/v20181101.zip'
+hide_output sudo unzip v20181101.zip
+cd bls-signatures-20181101
+hide_output cmake .
+hide_output sudo make install
+cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
+sudo rm -r v20181101.zip bls-signatures-20181101
+echo -e "$GREEN bls-signatures Completed...$COL_RESET"
+
 echo
 echo -e "$GREEN Daemon setup completed...$COL_RESET"
 
