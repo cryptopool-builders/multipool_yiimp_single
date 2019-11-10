@@ -70,7 +70,7 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 hide_output sudo wget 'https://github.com/codablock/bls-signatures/archive/v20181101.zip'
 hide_output sudo unzip v20181101.zip
 cd bls-signatures-20181101
-hide_output cmake .
+hide_output sudo cmake .
 hide_output sudo make install
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 sudo rm -r v20181101.zip bls-signatures-20181101
