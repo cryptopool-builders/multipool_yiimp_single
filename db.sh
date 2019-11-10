@@ -74,26 +74,7 @@ echo -e "$GREEN Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf$COL_RESET"
 echo -e " Importing YiiMP Default database values...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 # import sql dump
-sudo zcat 2016-04-03-yaamp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
-# oh the humanity!
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-04-24-market_history.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-04-27-settings.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-05-11-coins.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-05-15-benchmarks.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-05-23-bookmarks.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-06-01-notifications.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-06-04-bench_chips.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2016-11-23-coins.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-02-05-benchmarks.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-03-31-earnings_index.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-05-accounts_case_swaptime.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-06-payouts_coinid_memo.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-09-notifications.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-10-bookmarks.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2017-11-segwit.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-01-stratums_ports.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-02-coins_getinfo.sql
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2019-03-coins_thepool_life.sql
+sudo zcat 2019-11-10-yiimp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
 echo -e "$GREEN Database import complete...$COL_RESET"
 
 echo -e " Tweaking MariaDB for better performance...$COL_RESET"
