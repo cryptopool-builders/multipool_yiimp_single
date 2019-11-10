@@ -126,8 +126,8 @@ CRONS=$STORAGE_ROOT/yiimp/site/crons
 STRATUM_DIR=$STORAGE_ROOT/yiimp/site/stratum
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.prescreens.start.conf >/dev/null 2>&1
 
-echo "source /etc/multipool.conf" | hide_output & spinnert tee -a ~/.bashrc
-echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output & spinnert tee -a ~/.bashrc
+echo "source /etc/multipool.conf" | hide_output tee -a ~/.bashrc
+echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
 echo -e "$GREEN YiiMP Screens added...$COL_RESET"
 
 exec sudo su -l $USER
