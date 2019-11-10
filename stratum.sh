@@ -10,14 +10,14 @@ cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
 sudo sed -i 's/tu8tu5/'${blckntifypass}'/' blocknotify.cpp
-hide_output & spinner sudo make
+hide_output sudo make
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/iniparser
-hide_output & spinner sudo make
+hide_output sudo make
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 if [[ ("$AutoExchange" == "yes") ]]; then
 sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/Makefile
 fi
-hide_output & spinner sudo make
+hide_output sudo make
 echo -e " Building stratum folder structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
