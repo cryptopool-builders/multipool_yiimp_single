@@ -10,7 +10,6 @@
 source /etc/functions.sh
 
 sleep 5
-echo "Removing junk coins from YiiMP, this will take several minutes to complete, do not restart server until done!"
 hide_output yiimp checkup
 
 # Prevents error when trying to log in to admin panel the first time...

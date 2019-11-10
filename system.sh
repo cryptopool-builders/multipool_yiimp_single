@@ -24,7 +24,7 @@ echo -e "$GREEN Done...$COL_RESET"
 echo -e " Adding the required repsoitories...$COL_RESET"
 if [ ! -f /usr/bin/add-apt-repository ]; then
 echo "Installing add-apt-repository..."
-hide_output sudo apt-get -y update
+hide_output & spinner sudo apt-get -y update
 apt_install software-properties-common
 fi
 echo -e "$GREEN Done...$COL_RESET"
@@ -32,7 +32,7 @@ echo -e "$GREEN Done...$COL_RESET"
 
 echo -e " Installing Ondrej PHP PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
-hide_output sudo add-apt-repository -y ppa:ondrej/php
+hide_output & spinner sudo add-apt-repository -y ppa:ondrej/php
 fi
 echo -e "$GREEN Done...$COL_RESET"
 # MariaDB
@@ -48,14 +48,14 @@ echo -e "$GREEN Done...$COL_RESET"
 # Upgrade System Files
 
 echo -e " Updating system packages...$COL_RESET"
-hide_output sudo apt-get update
+hide_output & spinner sudo apt-get update
 echo -e "$GREEN Done...$COL_RESET"
 echo -e " Upgrading system packages...$COL_RESET"
 if [ ! -f /boot/grub/menu.lst ]; then
 apt_get_quiet upgrade
 else
 sudo rm /boot/grub/menu.lst
-hide_output sudo update-grub-legacy-ec2 -y
+hide_output & spinner sudo update-grub-legacy-ec2 -y
 apt_get_quiet upgrade
 fi
 echo -e "$GREEN Done...$COL_RESET"
@@ -109,10 +109,10 @@ echo -e "$GREEN Done...$COL_RESET"
 echo -e " Installing YiiMP Required system packages...$COL_RESET"
 if [ -f /usr/sbin/apache2 ]; then
 echo Removing apache...
-hide_output apt-get -y purge apache2 apache2-*
-hide_output apt-get -y --purge autoremove
+hide_output & spinner apt-get -y purge apache2 apache2-*
+hide_output & spinner apt-get -y --purge autoremove
 fi
-hide_output sudo apt-get update
+hide_output & spinner sudo apt-get update
 if [[ ("$DISTRO" == "16") ]]; then
 apt_install php7.3-fpm php7.3-opcache php7.3-fpm php7.3 php7.3-common php7.3-gd \
 php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi \
@@ -144,7 +144,7 @@ fi
 
 echo -e "$GREEN Done...$COL_RESET"
 echo -e " Downloading CryptoPool.builders YiiMP Repo...$COL_RESET"
-hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
+hide_output & spinner sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 if [[ ("$CoinPort" == "Yes") ]]; then
 	cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 	sudo git fetch
