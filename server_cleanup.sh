@@ -130,7 +130,6 @@ echo "source /etc/multipool.conf" | hide_output tee -a ~/.bashrc
 echo "source $STORAGE_ROOT/yiimp/.prescreens.start.conf" | hide_output tee -a ~/.bashrc
 echo -e "$GREEN YiiMP Screens added...$COL_RESET"
 
-exec sudo su -l $USER
 echo "Removing junk coins from YiiMP Database, this may take several minutes...$COL_RESET"
 hide_output sg yiimpadmin "yiimp coin MDT delete"
 hide_output sg yiimpadmin "yiimp coin FLAX delete"
