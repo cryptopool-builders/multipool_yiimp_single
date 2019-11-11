@@ -570,6 +570,7 @@ echo '<?php
 // Sample config file to put in /etc/yiimp/keys.php
 define('"'"'YIIMP_MYSQLDUMP_USER'"'"', '"'"'panel'"'"');
 define('"'"'YIIMP_MYSQLDUMP_PASS'"'"', '"'"''"${PanelUserDBPassword}"''"'"');
+define('"'"'YIIMP_MYSQLDUMP_PATH'"'"', '"'"''"${STORAGE_ROOT}/yiimp/site/backup"''"'"');
 // Keys required to create/cancel orders and access your balances/deposit addresses
 define('"'"'EXCH_BITTREX_SECRET'"'"', '"'"''"'"');
 define('"'"'EXCH_BITSTAMP_SECRET'"'"', '"'"''"'"');
