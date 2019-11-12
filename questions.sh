@@ -151,7 +151,11 @@ case $response in
 esac
 
 if [ -z "${PublicIP}" ]; then
-DEFAULT_PublicIP=$(echo $SSH_CLIENT | awk '{ print $1}')
+  if pstree -p | egrep --quiet --extended-regexp ".*sshd.*\($$\)"; then
+    DEFAULT_PublicIP=$(echo $SSH_CLIENT | awk '{ print $1}')
+    else
+    DEFAULT_PublicIP=192.168.0.1
+fi
 input_box "Your Public IP" \
 "Enter your public IP from the remote system you will access your admin panel from.
 \n\nWe have guessed your public IP from the IP used to access this system.
