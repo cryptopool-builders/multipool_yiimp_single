@@ -75,6 +75,7 @@ echo -e " Importing YiiMP Default database values...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 # import sql dump
 sudo zcat 2019-11-10-yiimp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
+sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-09-22-workers.sql
 echo -e "$GREEN Database import complete...$COL_RESET"
 
 echo -e " Tweaking MariaDB for better performance...$COL_RESET"
