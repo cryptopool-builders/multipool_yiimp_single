@@ -10,7 +10,7 @@ source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 if [[ ("$wireguard" == "true") ]]; then
-	source $STORAGE_ROOT/yiimp/.wireguard.conf
+source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
 echo -e " Building web file structure and copying files...$COL_RESET"
@@ -36,7 +36,7 @@ echo 'map $http_user_agent $blockedagent {
 ' | sudo -E tee /etc/nginx/blockuseragents.rules >/dev/null 2>&1
 
 if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
-	echo 'include /etc/nginx/blockuseragents.rules;
+echo 'include /etc/nginx/blockuseragents.rules;
 
 		# NGINX Simple DDoS Defense
 		# limit the number of connections per single IP
@@ -144,24 +144,24 @@ server {
 		}
 
 }
-	' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 
-	sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
-	sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
+sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
+sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
-	restart_service nginx
-	restart_service php7.3-fpm
+restart_service nginx
+restart_service php7.3-fpm
 
-	if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-		echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
-		apt_install letsencrypt
-		hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
-		sudo rm /etc/nginx/sites-available/${DomainName}.conf
-		echo
-		echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
-		hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-		# I am SSL Man!
-		echo 'include /etc/nginx/blockuseragents.rules;
+if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
+apt_install letsencrypt
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
+sudo rm /etc/nginx/sites-available/${DomainName}.conf
+echo
+echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
+hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+# I am SSL Man!
+echo 'include /etc/nginx/blockuseragents.rules;
 
 		# NGINX Simple DDoS Defense
 		# limit the number of connections per single IP
@@ -293,14 +293,14 @@ server {
 				deny all;
 		}
 }
-		' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
-	fi
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
+fi
 
-	restart_service nginx
-	restart_service php7.3-fpm
+restart_service nginx
+restart_service php7.3-fpm
 
 else
-	echo 'include /etc/nginx/blockuseragents.rules;
+echo 'include /etc/nginx/blockuseragents.rules;
 
 		# NGINX Simple DDoS Defense
 		# limit the number of connections per single IP
@@ -408,23 +408,23 @@ server {
 		}
 
 }
-	' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
 
-	sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
-	sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
+sudo ln -s /etc/nginx/sites-available/${DomainName}.conf /etc/nginx/sites-enabled/${DomainName}.conf
+sudo ln -s $STORAGE_ROOT/yiimp/site/web /var/www/${DomainName}/html
 
-	restart_service nginx
-	restart_service php7.3-fpm
+restart_service nginx
+restart_service php7.3-fpm
 
-	if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-		echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
-		apt_install letsencrypt
-		hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
-		sudo rm /etc/nginx/sites-available/${DomainName}.conf
-		echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
-		hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-		# I am SSL Man!
-		echo 'include /etc/nginx/blockuseragents.rules;
+if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
+apt_install letsencrypt
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
+sudo rm /etc/nginx/sites-available/${DomainName}.conf
+echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
+hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+# I am SSL Man!
+echo 'include /etc/nginx/blockuseragents.rules;
 
 		# NGINX Simple DDoS Defense
 		# limit the number of connections per single IP
@@ -556,11 +556,11 @@ server {
 				deny all;
 		}
 }
-		' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
-	fi
+' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
+fi
 
-	restart_service nginx
-	restart_service php7.3-fpm
+restart_service nginx
+restart_service php7.3-fpm
 
 fi
 echo -e " Creating YiiMP configuration files...$COL_RESET"
@@ -594,7 +594,7 @@ define('"'"'EXCH_YOBIT_SECRET'"'"', '"'"''"'"');
 
 if [[ ("$wireguard" == "false") ]]; then
 
-	echo '
+echo '
 <?php
 ini_set('"'"'date.timezone'"'"', '"'"'UTC'"'"');
 define('"'"'YAAMP_LOGS'"'"', '"'"''"${STORAGE_ROOT}/yiimp/site/log"''"'"');
@@ -674,7 +674,7 @@ $configCustomPorts = array(
 // mBTC Coefs per algo (default is 1.0)
 $configAlgoNormCoef = array(
 // '"'"'x11'"'"' => 5.0,
-	);' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/serverconfig.php >/dev/null 2>&1
+);' | sudo -E tee $STORAGE_ROOT/yiimp/site/configuration/serverconfig.php >/dev/null 2>&1
 
 else
 
@@ -792,8 +792,8 @@ sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAG
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 
 if [[ ("$wireguard" == "true") ]]; then
-	sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${DBInternalIP}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
-	sudo sed -i "s|blocknotify=blocknotify 127.0.0.1|blocknotify=blocknotify ${DBInternalIP}|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
+sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${DBInternalIP}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
+sudo sed -i "s|blocknotify=blocknotify 127.0.0.1|blocknotify=blocknotify ${DBInternalIP}|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
 fi
 echo '#!/usr/bin/env bash
 
