@@ -52,7 +52,7 @@ case $response in
    255) echo "[ESC] key pressed.";;
 esac
 
-if [ -z "${DomainName}" ]; then
+if [ -z "${DomainName:-}" ]; then
 DEFAULT_DomainName=example.com
 input_box "Domain Name" \
 "Enter your domain name. If using a subdomain enter the full domain as in pool.example.com
@@ -68,7 +68,7 @@ exit
 fi
 fi
 
-if [ -z "${StratumURL}" ]; then
+if [ -z "${StratumURL:-}" ]; then
 DEFAULT_StratumURL=stratum.${DomainName}
 input_box "Stratum URL" \
 "Enter your stratum URL. It is recommended to use another subdomain such as stratum.${DomainName}
@@ -103,7 +103,7 @@ InstallSSL=no
 fi
 
 # Back to user input questions regardless of domain name or IP use
-if [ -z "${SupportEmail}" ]; then
+if [ -z "${SupportEmail:-}" ]; then
 DEFAULT_SupportEmail=root@localhost
 input_box "System Email" \
 "Enter an email address for the system to send alerts and other important messages.
@@ -117,7 +117,7 @@ exit
 fi
 fi
 
-if [ -z "${AdminPanel}" ]; then
+if [ -z "${AdminPanel:-}" ]; then
 DEFAULT_AdminPanel=AdminPortal
 input_box "Admin Panel Location" \
 "Enter your desired location name for admin access..
@@ -150,7 +150,7 @@ case $response in
    255) echo "[ESC] key pressed.";;
 esac
 
-if [ -z "${PublicIP}" ]; then
+if [ -z "${PublicIP:-}" ]; then
   if pstree -p | egrep --quiet --extended-regexp ".*sshd.*\($$\)"; then
     DEFAULT_PublicIP=$(echo $SSH_CLIENT | awk '{ print $1}')
     else
@@ -171,7 +171,7 @@ fi
 fi
 
 # These are all autgenerated but give user the oppertunity to set
-if [ -z "${DBRootPassword}" ]; then
+if [ -z "${DBRootPassword:-}" ]; then
 DEFAULT_DBRootPassword=$(openssl rand -base64 29 | tr -d "=+/")
 input_box "Database Root Password" \
 "Enter your desired database root password.
@@ -186,7 +186,7 @@ exit
 fi
 fi
 
-if [ -z "${PanelUserDBPassword}" ]; then
+if [ -z "${PanelUserDBPassword:-}" ]; then
 DEFAULT_PanelUserDBPassword=$(openssl rand -base64 29 | tr -d "=+/")
 input_box "Database Panel Password" \
 "Enter your desired database panel password.
@@ -201,7 +201,7 @@ exit
 fi
 fi
 
-if [ -z "${StratumUserDBPassword}" ]; then
+if [ -z "${StratumUserDBPassword:-}" ]; then
 DEFAULT_StratumUserDBPassword=$(openssl rand -base64 29 | tr -d "=+/")
 input_box "Database Stratum Password" \
 "Enter your desired database stratum password.
