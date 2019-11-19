@@ -88,13 +88,15 @@ echo -e " Initializing system random number generator...$COL_RESET"
 hide_output dd if=/dev/random of=/dev/urandom bs=1 count=32 2> /dev/null
 hide_output sudo pollinate -q -r
 
+echo -e " Initializing UFW Firewall...$COL_RESET"
 if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	# Install `ufw` which provides a simple firewall configuration.
 	apt_install ufw
 
 	# Allow incoming connections to SSH.
 	ufw_allow ssh;
-
+	ufw_allow http;
+	ufw_allow https;
 	# ssh might be running on an alternate port. Use sshd -T to dump sshd's #NODOC
 	# settings, find the port it is supposedly running on, and open that port #NODOC
 	# too. #NODOC
@@ -103,7 +105,9 @@ if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	if [ "$SSH_PORT" != "22" ]; then
 
 	echo Opening alternate SSH port $SSH_PORT. #NODOC
-	ufw_allow $SSH_PORT #NODOC
+	ufw_allow $SSH_PORT;
+	ufw_allow http;
+	ufw_allow https;
 
 	fi
 	fi
@@ -151,7 +155,7 @@ fi
 # When Ubuntu 20 comes out, we don't want users to be prompted to upgrade,
 # because we don't yet support it.
 if [ -f /etc/update-manager/release-upgrades ]; then
-	editconf.py /etc/update-manager/release-upgrades Prompt=never
+sudo editconf.py /etc/update-manager/release-upgrades Prompt=never
 sudo rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
 fi
 

@@ -9,7 +9,7 @@ source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 # Installs self signed SSL
-echo -e " Installing Self Signed SSL...$COL_RESET"
+echo -e "Creating initial SSL certificate...$COL_RESET"
 # RSA private key, SSL certificate, Diffie-Hellman bits files
 # -------------------------------------------
 
@@ -36,7 +36,6 @@ if  [ ! -f /usr/bin/openssl ] \
  || [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ] \
  || [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ] \
  || [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
-	echo "Creating initial SSL certificate and perfect forward secrecy Diffie-Hellman parameters..."
 fi
 
 # Install openssl.

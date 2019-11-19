@@ -63,7 +63,9 @@ source server_harden.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
-echo Installation of your YiiMP single server is now completed.
+
+if [[ ("$UsingDomain" == "Yes") ]]; then
+echo -e "Installation of your YiiMP single server is now completed."
 echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"
 echo
 echo -e "$YELLOW Important!$COL_RESET After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
@@ -73,4 +75,17 @@ echo -e "You can access your admin panel at,$BLUE http://${DomainName}/site/${Ad
 echo
 echo -e "$RED By default all stratum ports are blocked by the firewall.$COL_RESET To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.$COL_RESET"
 echo "Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf"
+else
+  echo -e "Installation of your YiiMP single server is now completed."
+  echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"
+  echo
+  echo -e "$YELLOW Important!$COL_RESET After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
+  echo -e "If they show$RED stopped$COL_RESET, after 1 minute, type$GREEN motd$COL_RESET to refresh the screen."
+  echo
+  echo -e "You can access your admin panel at,$BLUE http://${DomainName}/site/${AdminPanel} $COL_RESET"
+  echo -e "You will be alerted that the website has an invalid certificate."
+  echo
+  echo -e "$RED By default all stratum ports are blocked by the firewall.$COL_RESET To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.$COL_RESET"
+  echo "Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf"
+fi 
 exit 0

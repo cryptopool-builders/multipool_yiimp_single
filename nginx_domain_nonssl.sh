@@ -30,18 +30,71 @@ server {
 		listen [::]:80;
 		server_name '"${DomainName}"' www.'"${DomainName}"';
 		root "/var/www/'"${DomainName}"'/html/web";
+		server_tokens off;
 		index index.php;
 		charset utf-8;
 
+	location / {
+			# Redirect using the 'return' directive and the built-in
+			# variable '$request_uri' to avoid any capturing, matching
+			# or evaluation of regular expressions.
+			return 301 https://$server_name$request_uri;
+		}
+
+	location /.well-known/acme-challenge/ {
+			# This path must be served over HTTP for ACME domain validation.
+			# We map this to a special path where our TLS cert provisioning
+			# tool knows to store challenge response files.
+			alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
+		}
+	}
+
+	server {
+			if ($blockedagent) {
+				return 403;
+			}
+			if ($request_method !~ ^(GET|HEAD|POST)$) {
+				return 444;
+			}
+			listen 443 ssl http2;
+			listen [::]:443 ssl http2;
+			server_name '"${DomainName}"' www.'"${DomainName}"';
+			root /var/www/'"${DomainName}"'/html/web;
+			server_tokens off;
+			index index.php;
+			charset utf-8;
+
 		location / {
-				try_files $uri $uri/ /index.php?$args;
+			try_files $uri $uri/ /index.php?$args;
 		}
 		location @rewrite {
-				rewrite ^/(.*)$ /index.php?r=$1;
+			rewrite ^/(.*)$ /index.php?r=$1;
 		}
 
 		location = /favicon.ico { access_log off; log_not_found off; }
 		location = /robots.txt { access_log off; log_not_found off; }
+
+		ssl_certificate '"${STORAGE_ROOT}"'/ssl/ssl_certificate.pem;
+    ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
+
+		# We track the Mozilla "intermediate" compatibility TLS recommendations.
+		# Note that these settings are repeated in the SMTP and IMAP configuration.
+		# ssl_protocols has moved to nginx.conf in bionic, check there for enabled protocols.
+		ssl_ciphers "ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS";
+		ssl_dhparam '"${STORAGE_ROOT}"'/ssl/dh2048.pem;
+
+		# as recommended by http://nginx.org/en/docs/http/configuring_https_servers.html
+		ssl_session_cache shared:SSL:50m;
+		ssl_session_timeout 1d;
+
+		# Buffer size of 1400 bytes fits in one MTU.
+		# nginx 1.5.9+ ONLY
+		ssl_buffer_size 1400;
+
+		ssl_stapling on;
+		ssl_stapling_verify on;
+		resolver 127.0.0.1 valid=86400;
+		resolver_timeout 10;
 
 		# to boost I/O on HDD we can disable access logs
 		access_log off;
@@ -83,34 +136,30 @@ server {
 		keepalive_timeout 30;
 
 		location ~ ^/index\.php$ {
-				fastcgi_split_path_info ^(.+\.php)(/.+)$;
-				fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
-				fastcgi_index index.php;
-				include fastcgi_params;
-				fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-				fastcgi_intercept_errors off;
-				fastcgi_buffer_size 16k;
-				fastcgi_buffers 4 16k;
-				fastcgi_connect_timeout 300;
-				fastcgi_send_timeout 300;
-				fastcgi_read_timeout 300;
-				try_files $uri $uri/ =404;
+			fastcgi_split_path_info ^(.+\.php)(/.+)$;
+			fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+			fastcgi_index index.php;
+			include fastcgi_params;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_intercept_errors off;
+			fastcgi_buffer_size 16k;
+			fastcgi_buffers 4 16k;
+			fastcgi_connect_timeout 300;
+			fastcgi_send_timeout 300;
+			fastcgi_read_timeout 300;
+			try_files $uri $uri/ =404;
 		}
 
 		location ~ \.php$ {
-				return 404;
+			return 404;
 		}
 
 		location ~ \.sh {
-				return 404;
+			return 404;
 		}
 
 		location ~ /\.ht {
-				deny all;
-		}
-
-		location ~ /.well-known {
-				allow all;
+			deny all;
 		}
 
 }
