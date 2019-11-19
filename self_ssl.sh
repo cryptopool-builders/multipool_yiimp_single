@@ -101,6 +101,7 @@ fi
 # openssl's default bit length for this is 1024 bits, but we'll create
 # 2048 bits of bits per the latest recommendations.
 if [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
+  hide_output \
 sudo openssl dhparam -out $STORAGE_ROOT/ssl/dh2048.pem 2048
 fi
 

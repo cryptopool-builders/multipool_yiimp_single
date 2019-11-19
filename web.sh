@@ -36,13 +36,19 @@ echo 'map $http_user_agent $blockedagent {
 ' | sudo -E tee /etc/nginx/blockuseragents.rules >/dev/null 2>&1
 
 if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
+cd $HOME/multipool/yiimp_single
 source nginx_subdomain_nonssl.sh
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+cd $HOME/multipool/yiimp_single
 source nginx_subdomain_ssl.sh
+fi
 else
+cd $HOME/multipool/yiimp_single
 source nginx_domain_nonssl.sh
 if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+cd $HOME/multipool/yiimp_single
 source nginx_domain_ssl.sh
+fi
 fi
 echo -e " Creating YiiMP configuration files...$COL_RESET"
 
