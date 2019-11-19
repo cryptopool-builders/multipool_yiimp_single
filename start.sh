@@ -7,7 +7,7 @@
 # Updated by cryptopool.builders for crypto use...
 #####################################################
 
-source /etc/functions.sh # load our functions
+source /etc/functions.sh
 source /etc/multipool.conf
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
@@ -48,6 +48,7 @@ if [[ ("$wireguard" == "true") ]]; then
   source wireguard.sh
 fi
 source system.sh
+source self_ssl.sh
 source db.sh
 source web.sh
 source nginx_upgrade.sh

@@ -11,6 +11,11 @@ if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
 
+if [[ ("$UsingDomain" == "yes") ]]; then
+	echo ${DomainName} | hide_output sudo tee -a /etc/hostname
+	sudo hostname "${DomainName}"
+fi
+
 # Set timezone
 echo -e " Setting TimeZone to UTC...$COL_RESET"
 if [ ! -f /etc/timezone ]; then
@@ -19,8 +24,8 @@ echo "Etc/UTC" > sudo /etc/timezone
 restart_service rsyslog
 fi
 echo -e "$GREEN Done...$COL_RESET"
-# Add repository
 
+# Add repository
 echo -e " Adding the required repsoitories...$COL_RESET"
 if [ ! -f /usr/bin/add-apt-repository ]; then
 echo "Installing add-apt-repository..."
@@ -28,15 +33,20 @@ hide_output sudo apt-get -y update
 apt_install software-properties-common
 fi
 echo -e "$GREEN Done...$COL_RESET"
-# PHP 7
 
+# PHP 7
 echo -e " Installing Ondrej PHP PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/ondrej-php-bionic.list ]; then
 hide_output sudo add-apt-repository -y ppa:ondrej/php
 fi
 echo -e "$GREEN Done...$COL_RESET"
-# MariaDB
 
+# CertBot
+echo -e " Installing CertBot PPA...$COL_RESET"
+hide_output add-apt-repository -y ppa:certbot/certbot
+echo -e "$GREEN Done...$COL_RESET"
+
+# MariaDB
 echo -e " Installing MariaDB Repository...$COL_RESET"
 hide_output sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
 if [[ ("$DISTRO" == "16") ]]; then
@@ -45,8 +55,8 @@ else
 sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirror.timeweb.ru/mariadb/repo/10.4/ubuntu bionic main'
 fi
 echo -e "$GREEN Done...$COL_RESET"
-# Upgrade System Files
 
+# Upgrade System Files
 echo -e " Updating system packages...$COL_RESET"
 hide_output sudo apt-get update
 echo -e "$GREEN Done...$COL_RESET"
@@ -70,7 +80,7 @@ echo -e " Installing Base system packages...$COL_RESET"
 apt_install python3 python3-dev python3-pip \
 wget curl git sudo coreutils bc \
 haveged pollinate unzip \
-unattended-upgrades cron ntp fail2ban screen
+unattended-upgrades cron ntp fail2ban screen rsyslog
 
 # ### Seed /dev/urandom
 echo -e "$GREEN Done...$COL_RESET"
@@ -78,31 +88,27 @@ echo -e " Initializing system random number generator...$COL_RESET"
 hide_output dd if=/dev/random of=/dev/urandom bs=1 count=32 2> /dev/null
 hide_output sudo pollinate -q -r
 
-if [ -z "$DISABLE_FIREWALL" ]; then
-# Install `ufw` which provides a simple firewall configuration.
-echo -e "$GREEN Done...$COL_RESET"
-echo -e " Installing UFW...$COL_RESET"
-apt_install ufw
+if [ -z "${DISABLE_FIREWALL:-}" ]; then
+	# Install `ufw` which provides a simple firewall configuration.
+	apt_install ufw
 
-# Allow incoming connections.
-ufw_allow ssh;
-ufw_allow http;
-ufw_allow https;
+	# Allow incoming connections to SSH.
+	ufw_allow ssh;
 
-# ssh might be running on an alternate port. Use sshd -T to dump sshd's #NODOC
-# settings, find the port it is supposedly running on, and open that port #NODOC
-# too. #NODOC
-SSH_PORT=$(sshd -T 2>/dev/null | grep "^port " | sed "s/port //") #NODOC
-if [ ! -z "$SSH_PORT" ]; then
-if [ "$SSH_PORT" != "22" ]; then
+	# ssh might be running on an alternate port. Use sshd -T to dump sshd's #NODOC
+	# settings, find the port it is supposedly running on, and open that port #NODOC
+	# too. #NODOC
+	SSH_PORT=$(sshd -T 2>/dev/null | grep "^port " | sed "s/port //") #NODOC
+	if [ ! -z "$SSH_PORT" ]; then
+	if [ "$SSH_PORT" != "22" ]; then
 
-echo Opening alternate SSH port $SSH_PORT. #NODOC
-ufw_allow $SSH_PORT #NODOC
+	echo Opening alternate SSH port $SSH_PORT. #NODOC
+	ufw_allow $SSH_PORT #NODOC
 
-fi
-fi
+	fi
+	fi
 
-sudo ufw --force enable;
+	ufw --force enable;
 fi #NODOC
 
 echo -e "$GREEN Done...$COL_RESET"
@@ -140,6 +146,25 @@ libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
 build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
 libpsl-dev libnghttp2-dev automake cmake
 fi
+
+# ### Suppress Upgrade Prompts
+# When Ubuntu 20 comes out, we don't want users to be prompted to upgrade,
+# because we don't yet support it.
+if [ -f /etc/update-manager/release-upgrades ]; then
+	tools/editconf.py /etc/update-manager/release-upgrades Prompt=never
+	rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
+fi
+
+# ### Package maintenance
+#
+# Allow apt to install system updates automatically every day.
+
+cat > /etc/apt/apt.conf.d/02periodic <<EOF;
+APT::Periodic::MaxAge "7";
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Unattended-Upgrade "1";
+APT::Periodic::Verbose "0";
+EOF
 
 
 echo -e "$GREEN Done...$COL_RESET"

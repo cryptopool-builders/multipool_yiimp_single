@@ -1,6 +1,7 @@
+#!/bin/bash
 #####################################################
-# Modified by cryptopool.builders for crypto use...
-# Source https://gist.github.com/adamrunner/285746ca0f22b0f2e10192427e0b703c
+# Source https://mailinabox.email/ https://github.com/mail-in-a-box/mailinabox
+# Updated by cryptopool.builders for crypto use...
 #####################################################
 
 source /etc/functions.sh
@@ -9,42 +10,102 @@ cd $HOME/multipool/yiimp_single
 
 # Installs self signed SSL
 echo -e " Installing Self Signed SSL...$COL_RESET"
-# Make DIR
-sudo mkdir /etc/ssl/private
-sudo chmod 700 /etc/ssl/private
-cd /etc/ssl/private
-# Set external server IP
-IP=$(get_publicip_from_web_service 4 || get_default_privateip 4)
-DOMAIN=nginx-selfsigned
-# Generate a passphrase
-export PASSPHRASE=$(head -c 500 /dev/urandom | tr -dc a-z0-9A-Z | head -c 128; echo)
-# Certificate details
-subj="
-C=US
-ST=NC
-O=cryptopool.builders
-localityName=cryptopool.builders
-commonName=$IP
-organizationalUnitName=cryptopool.builders
-emailAddress=admin@example.com
-"
-# Generate the server private key
-hide_output sudo openssl genrsa -des3 -out $DOMAIN.key -passout env:PASSPHRASE 2048
-# Generate the CSR
-hide_output sudo openssl req \
-    -new \
-    -batch \
-    -subj "$(echo -n "$subj" | tr "\n" "/")" \
-    -key $DOMAIN.key \
-    -out $DOMAIN.csr \
-    -passin env:PASSPHRASE
+# RSA private key, SSL certificate, Diffie-Hellman bits files
+# -------------------------------------------
 
-sudo cp $DOMAIN.key $DOMAIN.key.org
-# Strip the password so we don't have to type it every time we restart Apache
-hide_output sudo openssl rsa -in $DOMAIN.key.org -out $DOMAIN.key -passin env:PASSPHRASE
-# Generate the cert (good for 10 years)
-hide_output sudo openssl x509 -req -days 3650 -in $DOMAIN.csr -signkey $DOMAIN.key -out $DOMAIN.crt
-hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+# Create an RSA private key, a self-signed SSL certificate, and some
+# Diffie-Hellman cipher bits, if they have not yet been created.
+#
+# The RSA private key and certificate are used for:
+#
+#  * DNSSEC DANE TLSA records
+#  * IMAP
+#  * SMTP (opportunistic TLS for port 25 and submission on port 587)
+#  * HTTPS
+#
+# The certificate is created with its CN set to the PRIMARY_HOSTNAME. It is
+# also used for other domains served over HTTPS until the user installs a
+# better certificate for those domains.
+#
+# The Diffie-Hellman cipher bits are used for SMTP and HTTPS, when a
+# Diffie-Hellman cipher is selected during TLS negotiation. Diffie-Hellman
+# provides Perfect Forward Secrecy.
+
+source setup/functions.sh # load our functions
+source /etc/mailinabox.conf # load global vars
+
+# Show a status line if we are going to take any action in this file.
+if  [ ! -f /usr/bin/openssl ] \
+ || [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ] \
+ || [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ] \
+ || [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
+	echo "Creating initial SSL certificate and perfect forward secrecy Diffie-Hellman parameters..."
+fi
+
+# Install openssl.
+
+apt_install openssl
+
+# Create a directory to store TLS-related things like "SSL" certificates.
+
+mkdir -p $STORAGE_ROOT/ssl
+
+# Generate a new private key.
+#
+# The key is only as good as the entropy available to openssl so that it
+# can generate a random key. "OpenSSL’s built-in RSA key generator ....
+# is seeded on first use with (on Linux) 32 bytes read from /dev/urandom,
+# the process ID, user ID, and the current time in seconds. [During key
+# generation OpenSSL] mixes into the entropy pool the current time in seconds,
+# the process ID, and the possibly uninitialized contents of a ... buffer
+# ... dozens to hundreds of times."
+#
+# A perfect storm of issues can cause the generated key to be not very random:
+#
+#   * improperly seeded /dev/urandom, but see system.sh for how we mitigate this
+#   * the user ID of this process is always the same (we're root), so that seed is useless
+#   * zero'd memory (plausible on embedded systems, cloud VMs?)
+#   * a predictable process ID (likely on an embedded/virtualized system)
+#   * a system clock reset to a fixed time on boot
+#
+# Since we properly seed /dev/urandom in system.sh we should be fine, but I leave
+# in the rest of the notes in case that ever changes.
+if [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ]; then
+	# Set the umask so the key file is never world-readable.
+	(umask 077; hide_output \
+		openssl genrsa -out $STORAGE_ROOT/ssl/ssl_private_key.pem 2048)
+fi
+
+# Generate a self-signed SSL certificate because things like nginx, dovecot,
+# etc. won't even start without some certificate in place, and we need nginx
+# so we can offer the user a control panel to install a better certificate.
+if [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ]; then
+	# Generate a certificate signing request.
+	CSR=/tmp/ssl_cert_sign_req-$$.csr
+	hide_output \
+	openssl req -new -key $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CSR \
+	  -sha256 -subj "/CN=$PRIMARY_HOSTNAME"
+
+	# Generate the self-signed certificate.
+	CERT=$STORAGE_ROOT/ssl/$PRIMARY_HOSTNAME-selfsigned-$(date --rfc-3339=date | sed s/-//g).pem
+	hide_output \
+	openssl x509 -req -days 365 \
+	  -in $CSR -signkey $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CERT
+
+	# Delete the certificate signing request because it has no other purpose.
+	rm -f $CSR
+
+	# Symlink the certificate into the system certificate path, so system services
+	# can find it.
+	ln -s $CERT $STORAGE_ROOT/ssl/ssl_certificate.pem
+fi
+
+# Generate some Diffie-Hellman cipher bits.
+# openssl's default bit length for this is 1024 bits, but we'll create
+# 2048 bits of bits per the latest recommendations.
+if [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
+	openssl dhparam -out $STORAGE_ROOT/ssl/dh2048.pem 2048
+fi
 
 echo -e "$GREEN Self Signed SSL Generation complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single

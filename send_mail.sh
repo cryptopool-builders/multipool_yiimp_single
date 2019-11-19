@@ -8,9 +8,6 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo -e " Installing mail system $COL_RESET"
 
-echo ${DomainName} | hide_output sudo tee -a /etc/hostname
-sudo hostname "${DomainName}"
-
 sudo debconf-set-selections <<< "postfix postfix/mailname string ${host_name}"
 sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 apt_install mailutils
