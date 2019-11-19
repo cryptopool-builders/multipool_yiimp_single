@@ -5,8 +5,8 @@
 #####################################################
 
 source /etc/functions.sh
+source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
-cd $HOME/multipool/yiimp_single
 
 # Installs self signed SSL
 echo -e " Installing Self Signed SSL...$COL_RESET"
@@ -31,9 +31,6 @@ echo -e " Installing Self Signed SSL...$COL_RESET"
 # Diffie-Hellman cipher is selected during TLS negotiation. Diffie-Hellman
 # provides Perfect Forward Secrecy.
 
-source setup/functions.sh # load our functions
-source /etc/mailinabox.conf # load global vars
-
 # Show a status line if we are going to take any action in this file.
 if  [ ! -f /usr/bin/openssl ] \
  || [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ] \
@@ -48,7 +45,7 @@ apt_install openssl
 
 # Create a directory to store TLS-related things like "SSL" certificates.
 
-mkdir -p $STORAGE_ROOT/ssl
+sudo mkdir -p $STORAGE_ROOT/ssl
 
 # Generate a new private key.
 #
@@ -93,18 +90,18 @@ if [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ]; then
 	  -in $CSR -signkey $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CERT
 
 	# Delete the certificate signing request because it has no other purpose.
-	rm -f $CSR
+sudo rm -f $CSR
 
 	# Symlink the certificate into the system certificate path, so system services
 	# can find it.
-	ln -s $CERT $STORAGE_ROOT/ssl/ssl_certificate.pem
+sudo ln -s $CERT $STORAGE_ROOT/ssl/ssl_certificate.pem
 fi
 
 # Generate some Diffie-Hellman cipher bits.
 # openssl's default bit length for this is 1024 bits, but we'll create
 # 2048 bits of bits per the latest recommendations.
 if [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
-	openssl dhparam -out $STORAGE_ROOT/ssl/dh2048.pem 2048
+sudo openssl dhparam -out $STORAGE_ROOT/ssl/dh2048.pem 2048
 fi
 
 echo -e "$GREEN Self Signed SSL Generation complete...$COL_RESET"

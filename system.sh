@@ -93,7 +93,7 @@ if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	apt_install ufw
 
 	# Allow incoming connections to SSH.
-	ufw_allow ssh;
+	sudo ufw_allow ssh;
 
 	# ssh might be running on an alternate port. Use sshd -T to dump sshd's #NODOC
 	# settings, find the port it is supposedly running on, and open that port #NODOC
@@ -103,12 +103,12 @@ if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	if [ "$SSH_PORT" != "22" ]; then
 
 	echo Opening alternate SSH port $SSH_PORT. #NODOC
-	ufw_allow $SSH_PORT #NODOC
+	sudo ufw_allow $SSH_PORT #NODOC
 
 	fi
 	fi
 
-	ufw --force enable;
+sudo ufw --force enable;
 fi #NODOC
 
 echo -e "$GREEN Done...$COL_RESET"
@@ -151,21 +151,9 @@ fi
 # When Ubuntu 20 comes out, we don't want users to be prompted to upgrade,
 # because we don't yet support it.
 if [ -f /etc/update-manager/release-upgrades ]; then
-	tools/editconf.py /etc/update-manager/release-upgrades Prompt=never
-	rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
+	editconf.py /etc/update-manager/release-upgrades Prompt=never
+sudo rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
 fi
-
-# ### Package maintenance
-#
-# Allow apt to install system updates automatically every day.
-
-cat > /etc/apt/apt.conf.d/02periodic <<EOF;
-APT::Periodic::MaxAge "7";
-APT::Periodic::Update-Package-Lists "1";
-APT::Periodic::Unattended-Upgrade "1";
-APT::Periodic::Verbose "0";
-EOF
-
 
 echo -e "$GREEN Done...$COL_RESET"
 echo -e " Downloading CryptoPool.builders YiiMP Repo...$COL_RESET"
