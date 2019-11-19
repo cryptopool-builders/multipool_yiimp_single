@@ -43,7 +43,7 @@ echo -e "$GREEN Done...$COL_RESET"
 
 # CertBot
 echo -e " Installing CertBot PPA...$COL_RESET"
-hide_output add-apt-repository -y ppa:certbot/certbot
+hide_output sudo add-apt-repository -y ppa:certbot/certbot
 echo -e "$GREEN Done...$COL_RESET"
 
 # MariaDB

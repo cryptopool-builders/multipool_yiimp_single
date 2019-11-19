@@ -70,7 +70,7 @@ sudo mkdir -p $STORAGE_ROOT/ssl
 if [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ]; then
 	# Set the umask so the key file is never world-readable.
 	(umask 077; hide_output \
-		openssl genrsa -out $STORAGE_ROOT/ssl/ssl_private_key.pem 2048)
+		sudo openssl genrsa -out $STORAGE_ROOT/ssl/ssl_private_key.pem 2048)
 fi
 
 # Generate a self-signed SSL certificate because things like nginx, dovecot,
@@ -80,13 +80,13 @@ if [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ]; then
 	# Generate a certificate signing request.
 	CSR=/tmp/ssl_cert_sign_req-$$.csr
 	hide_output \
-	openssl req -new -key $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CSR \
+	sudo openssl req -new -key $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CSR \
 	  -sha256 -subj "/CN=$PRIMARY_HOSTNAME"
 
 	# Generate the self-signed certificate.
 	CERT=$STORAGE_ROOT/ssl/$PRIMARY_HOSTNAME-selfsigned-$(date --rfc-3339=date | sed s/-//g).pem
 	hide_output \
-	openssl x509 -req -days 365 \
+	sudo openssl x509 -req -days 365 \
 	  -in $CSR -signkey $STORAGE_ROOT/ssl/ssl_private_key.pem -out $CERT
 
 	# Delete the certificate signing request because it has no other purpose.
