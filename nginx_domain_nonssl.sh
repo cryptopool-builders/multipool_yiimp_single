@@ -8,61 +8,56 @@ source /etc/multipool.conf
 
 echo 'include /etc/nginx/blockuseragents.rules;
 
-		# NGINX Simple DDoS Defense
-		# limit the number of connections per single IP
-		limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
+# NGINX Simple DDoS Defense
+# limit the number of connections per single IP
+	limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
 
-		# zone which we want to limit by upper values, we want limit whole server
-		limit_conn conn_limit_per_ip 80;
-		limit_req zone=req_limit_per_ip burst=80 nodelay;
+# zone which we want to limit by upper values, we want limit whole server
+	limit_conn conn_limit_per_ip 80;
+	limit_req zone=req_limit_per_ip burst=80 nodelay;
 
-		# limit the number of requests for a given session
-		limit_req_zone $binary_remote_addr zone=req_limit_per_ip:40m rate=5r/s;
+# limit the number of requests for a given session
+	limit_req_zone $binary_remote_addr zone=req_limit_per_ip:40m rate=5r/s;
 
 server {
+	if ($blockedagent) {
+		return 403;
+	}
+	if ($request_method !~ ^(GET|HEAD|POST)$) {
+		return 444;
+	}
+
+	listen 80;
+	listen [::]:80;
+	server_name '"${DomainName}"' www.'"${DomainName}"';
+	root "/var/www/'"${DomainName}"'/html/web";
+	server_tokens off;
+	index index.php;
+	charset utf-8;
+
+	location / {
+		return 301 https://$server_name$request_uri;
+	}
+
+	location /.well-known/acme-challenge/ {
+		alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
+		}
+}
+
+	server {
 		if ($blockedagent) {
-				return 403;
+			return 403;
 		}
 		if ($request_method !~ ^(GET|HEAD|POST)$) {
-				return 444;
+			return 444;
 		}
-		listen 80;
-		listen [::]:80;
+		listen 443 ssl http2;
+		listen [::]:443 ssl http2;
 		server_name '"${DomainName}"' www.'"${DomainName}"';
-		root "/var/www/'"${DomainName}"'/html/web";
+		root /var/www/'"${DomainName}"'/html/web;
 		server_tokens off;
 		index index.php;
 		charset utf-8;
-
-	location / {
-			# Redirect using the 'return' directive and the built-in
-			# variable '$request_uri' to avoid any capturing, matching
-			# or evaluation of regular expressions.
-			return 301 https://$server_name$request_uri;
-		}
-
-	location /.well-known/acme-challenge/ {
-			# This path must be served over HTTP for ACME domain validation.
-			# We map this to a special path where our TLS cert provisioning
-			# tool knows to store challenge response files.
-			alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
-		}
-	}
-
-	server {
-			if ($blockedagent) {
-				return 403;
-			}
-			if ($request_method !~ ^(GET|HEAD|POST)$) {
-				return 444;
-			}
-			listen 443 ssl http2;
-			listen [::]:443 ssl http2;
-			server_name '"${DomainName}"' www.'"${DomainName}"';
-			root /var/www/'"${DomainName}"'/html/web;
-			server_tokens off;
-			index index.php;
-			charset utf-8;
 
 		location / {
 			try_files $uri $uri/ /index.php?$args;
@@ -75,22 +70,13 @@ server {
 		location = /robots.txt { access_log off; log_not_found off; }
 
 		ssl_certificate '"${STORAGE_ROOT}"'/ssl/ssl_certificate.pem;
-    ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
-
-		# We track the Mozilla "intermediate" compatibility TLS recommendations.
-		# Note that these settings are repeated in the SMTP and IMAP configuration.
-		# ssl_protocols has moved to nginx.conf in bionic, check there for enabled protocols.
-		ssl_ciphers "ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA:ECDHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA:ECDHE-ECDSA-DES-CBC3-SHA:ECDHE-RSA-DES-CBC3-SHA:EDH-RSA-DES-CBC3-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:DES-CBC3-SHA:!DSS";
+		ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
+		ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+		ssl_ciphers "TLS-CHACHA20-POLY1305-SHA256:TLS-AES-256-GCM-SHA384:TLS-AES-128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256";
 		ssl_dhparam '"${STORAGE_ROOT}"'/ssl/dh2048.pem;
-
-		# as recommended by http://nginx.org/en/docs/http/configuring_https_servers.html
 		ssl_session_cache shared:SSL:50m;
 		ssl_session_timeout 1d;
-
-		# Buffer size of 1400 bytes fits in one MTU.
-		# nginx 1.5.9+ ONLY
 		ssl_buffer_size 1400;
-
 		ssl_stapling on;
 		ssl_stapling_verify on;
 		resolver 127.0.0.1 valid=86400;
