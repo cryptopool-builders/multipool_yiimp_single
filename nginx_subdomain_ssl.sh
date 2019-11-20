@@ -8,10 +8,8 @@ source /etc/multipool.conf
 
 echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}" -d www."${DomainName}"
+hide_output sudo letsencrypt certonly --server https://acme-v02.api.letsencrypt.org/directory -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
-echo -e " Generating DHPARAM, this may take awhile...$COL_RESET"
-hide_output sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
 
@@ -45,7 +43,7 @@ server {
 	location / {
 		return 301 https://$server_name$request_uri;
 	}
-	
+
 	location /.well-known/acme-challenge/ {
 		alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
 	}
