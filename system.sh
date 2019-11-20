@@ -87,7 +87,7 @@ echo -e "$GREEN Done...$COL_RESET"
 echo -e " Initializing system random number generator...$COL_RESET"
 hide_output dd if=/dev/random of=/dev/urandom bs=1 count=32 2> /dev/null
 hide_output sudo pollinate -q -r
-
+echo -e "$GREEN Done...$COL_RESET"
 echo -e " Initializing UFW Firewall...$COL_RESET"
 if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	# Install `ufw` which provides a simple firewall configuration.
