@@ -164,7 +164,6 @@ location ~ /\.ht {
 
 }
 ' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
-fi
 
 restart_service nginx
 restart_service php7.3-fpm
