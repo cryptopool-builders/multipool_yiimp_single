@@ -40,8 +40,9 @@ server {
 	}
 
 	location /.well-known/acme-challenge/ {
-		alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
-		}
+		allow all;
+	}
+
 }
 
 server {

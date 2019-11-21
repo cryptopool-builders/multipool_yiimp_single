@@ -8,7 +8,7 @@ source /etc/multipool.conf
 
 echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly --server https://acme-v02.api.letsencrypt.org/directory -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
@@ -45,8 +45,9 @@ server {
 	}
 
 	location /.well-known/acme-challenge/ {
-		alias '"${STORAGE_ROOT}"'/ssl/lets_encrypt/webroot/.well-known/acme-challenge/;
+		allow all;
 	}
+
 }
 
 server {
