@@ -8,7 +8,7 @@ source /etc/multipool.conf
 
 echo -e " Installing LetsEncrypt and setting up SSL...$COL_RESET"
 apt_install letsencrypt
-hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --email "${SupportEmail}" --agree-tos -d "${DomainName}"
+hide_output sudo letsencrypt certonly -a webroot --webroot-path=${STORAGE_ROOT}/yiimp/site/web --register-unsafely-without-email --agree-tos -d "${DomainName}"
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
 # I am SSL Man!
 echo 'include /etc/nginx/blockuseragents.rules;
