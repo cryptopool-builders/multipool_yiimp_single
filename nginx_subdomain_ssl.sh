@@ -25,7 +25,7 @@ server {
 	listen [::]:443 ssl http2;
 
 	server_name www.'"${DomainName}"';
-	set $base root "/var/www/'"${DomainName}"'/html";
+	set $base "/var/www/'"${DomainName}"'/html";
 	root $base/web;
 
 	# SSL
