@@ -35,7 +35,7 @@ if  [ ! -f /usr/bin/openssl ] \
  || [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ] \
  || [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ] \
  || [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
-echo -e "Creating initial SSL certificate...$COL_RESET"   
+echo -e "Creating initial SSL certificate...$COL_RESET"
 fi
 
 # Install openssl.
@@ -99,10 +99,10 @@ fi
 # Generate some Diffie-Hellman cipher bits.
 # openssl's default bit length for this is 1024 bits, but we'll create
 # 2048 bits of bits per the latest recommendations.
-if [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
+if [ ! -f /etc/nginx/dhparam.pem ]; then
   hide_output \
-sudo openssl dhparam -out $STORAGE_ROOT/ssl/dh2048.pem 2048
+sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 fi
 
-echo -e "$GREEN Self Signed SSL Generation complete...$COL_RESET"
+echo -e "$GREEN Initial Self Signed SSL Generation complete...$COL_RESET"
 cd $HOME/multipool/yiimp_single

@@ -32,6 +32,7 @@ echo -e " Creating the temporary YiiMP installation folder...$COL_RESET"
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
 sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/web
+sudo mkdir -p $STORAGE_ROOT/yiimp/site/web/_letsencrypt
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/stratum
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/configuration
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/crons
@@ -50,8 +51,8 @@ fi
 source system.sh
 source self_ssl.sh
 source db.sh
-source web.sh
 source nginx_upgrade.sh
+source web.sh
 source stratum.sh
 source daemon.sh
 if [[ ("$UsingDomain" == "Yes") ]]; then
@@ -87,5 +88,5 @@ else
   echo
   echo -e "$RED By default all stratum ports are blocked by the firewall.$COL_RESET To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.$COL_RESET"
   echo "Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf"
-fi 
+fi
 exit 0
