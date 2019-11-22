@@ -57,20 +57,6 @@ server {
 	include cryptopool.builders/general.conf;
 }
 
-# non-www, subdomains redirect
-server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2;
-
-	server_name '"${DomainName}"';
-
-	# SSL
-	ssl_certificate '"${STORAGE_ROOT}"'/ssl/ssl_certificate.pem;
-	ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
-
-	return 301 https://'"${DomainName}"'$request_uri;
-}
-
 # HTTP redirect
 server {
 	listen 80;

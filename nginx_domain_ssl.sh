@@ -66,21 +66,6 @@ server {
 	include cryptopool.builders/general.conf;
 }
 
-# non-www, subdomains redirect
-server {
-	listen 443 ssl http2;
-	listen [::]:443 ssl http2;
-
-	server_name '"${DomainName}"';
-
-	# SSL
-	ssl_certificate /etc/letsencrypt/live/'"${DomainName}"'/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/'"${DomainName}"'/privkey.pem;
-	ssl_trusted_certificate /etc/letsencrypt/live/'"${DomainName}"'/chain.pem;
-
-	return 301 https://'"${DomainName}"'$request_uri;
-}
-
 # HTTP redirect
 server {
 	listen 80;
