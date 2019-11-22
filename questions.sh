@@ -268,8 +268,8 @@ CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
 DBInternalIP='"${DBInternalIP}"'
 YiiMPDBName='"${YiiMPDBName}"'
-YiiMPPanelName'"${YiiMPPanelName}"'
-YiiMPStratumName'"${YiiMPStratumName}"'
+YiiMPPanelName='"${YiiMPPanelName}"'
+YiiMPStratumName='"${YiiMPStratumName}"'
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
@@ -291,8 +291,8 @@ InstallSSL='"${InstallSSL}"'
 CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
 YiiMPDBName='"${YiiMPDBName}"'
-YiiMPPanelName'"${YiiMPPanelName}"'
-YiiMPStratumName'"${YiiMPStratumName}"'
+YiiMPPanelName='"${YiiMPPanelName}"'
+YiiMPStratumName='"${YiiMPStratumName}"'
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
