@@ -20,6 +20,12 @@ echo '#####################################################
 # Updated by cryptopool.builders for crypto use...
 #####################################################
 
+# NGINX Simple DDoS Defense
+limit_conn_zone $binary_remote_addr zone=conn_limit_per_ip:10m;
+limit_conn conn_limit_per_ip 80;
+limit_req zone=req_limit_per_ip burst=80 nodelay;
+limit_req_zone $binary_remote_addr zone=req_limit_per_ip:40m rate=5r/s;
+
 server {
 	listen 443 ssl http2;
 	listen [::]:443 ssl http2;
