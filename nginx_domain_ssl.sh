@@ -37,8 +37,8 @@ server {
 	include cryptopool.builders/security.conf;
 
 	# logging
-	access_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'/'"${DomainName}"'.app.access.log;
-	error_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'/'"${DomainName}"'.app.error.log warn;
+	access_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'.app.access.log;
+	error_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'.app.error.log warn;
 
 	# index.php
 	index index.php;

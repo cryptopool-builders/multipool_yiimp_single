@@ -28,8 +28,8 @@ server {
 	include cryptopool.builders/security.conf;
 
 	# logging
-	access_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'/'"${DomainName}"'.app.access.log;
-	error_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'/'"${DomainName}"'.app.error.log warn;
+	access_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'.app.access.log;
+	error_log '"${STORAGE_ROOT}"'/yiimp/site/log/'"${DomainName}"'.app.error.log warn;
 
 	# index.php
 	index index.php;
@@ -60,7 +60,7 @@ server {
 
 	# SSL
 	ssl_certificate '"${STORAGE_ROOT}"'/ssl/ssl_certificate.pem;
-	ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem
+	ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
 
 	return 301 https://www.'"${DomainName}"'$request_uri;
 }
