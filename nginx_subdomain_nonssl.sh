@@ -22,7 +22,7 @@ server {
 	listen 443 ssl http2;
 	listen [::]:443 ssl http2;
 
-	server_name www.'"${DomainName}"';
+	server_name '"${DomainName}"';
 	set $base "/var/www/'"${DomainName}"'/html";
 	root $base/web;
 
@@ -68,7 +68,7 @@ server {
 	ssl_certificate '"${STORAGE_ROOT}"'/ssl/ssl_certificate.pem;
 	ssl_certificate_key '"${STORAGE_ROOT}"'/ssl/ssl_private_key.pem;
 
-	return 301 https://www.'"${DomainName}"'$request_uri;
+	return 301 https://'"${DomainName}"'$request_uri;
 }
 
 # HTTP redirect
@@ -76,12 +76,12 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	server_name .'"${DomainName}"';
+	server_name '"${DomainName}"';
 
 	include cryptopool.builders/letsencrypt.conf;
 
 	location / {
-		return 301 https://www.'"${DomainName}"'$request_uri;
+		return 301 https://'"${DomainName}"'$request_uri;
 	}
 }
 ' | sudo -E tee /etc/nginx/sites-available/${DomainName}.conf >/dev/null 2>&1
