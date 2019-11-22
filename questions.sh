@@ -216,8 +216,13 @@ exit
 fi
 fi
 
-clear
+# To increase security we are now randonly generating the yiimpfrontend DB name, panel, and stratum user names. So each installation is more secure.
+# We do it here to save the variables in the global .yiimp.conf file
+YiiMPDBName=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+YiiMPPanelName=Panel$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+YiiMPStratumName=Stratum$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
+clear
 
 dialog --title "Verify Your Responses" \
 --yesno "Please verify your answers to continue setup:
@@ -262,6 +267,9 @@ InstallSSL='"${InstallSSL}"'
 CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
 DBInternalIP='"${DBInternalIP}"'
+YiiMPDBName='"${YiiMPDBName}"'
+YiiMPPanelName'"${YiiMPPanelName}"'
+YiiMPStratumName'"${YiiMPStratumName}"'
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
@@ -282,6 +290,9 @@ UsingSubDomain='"${UsingSubDomain}"'
 InstallSSL='"${InstallSSL}"'
 CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
+YiiMPDBName='"${YiiMPDBName}"'
+YiiMPPanelName'"${YiiMPPanelName}"'
+YiiMPStratumName'"${YiiMPStratumName}"'
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1

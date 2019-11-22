@@ -18,16 +18,16 @@ echo -e "$GREEN MariaDB build complete...$COL_RESET"
 echo -e " Creating DB users for YiiMP...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
-Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
-Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
-Q3="GRANT ALL ON yiimpfrontend.* TO 'stratum'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
+Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
+Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
+Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPStratumName}'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
 Q4="FLUSH PRIVILEGES;"
 SQL="${Q1}${Q2}${Q3}${Q4}"
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
 else
-  Q1="CREATE DATABASE IF NOT EXISTS yiimpfrontend;"
-  Q2="GRANT ALL ON yiimpfrontend.* TO 'panel'@'${DBInternalIP}' IDENTIFIED BY '$PanelUserDBPassword';"
-  Q3="GRANT ALL ON yiimpfrontend.* TO 'stratum'@'${DBInternalIP}' IDENTIFIED BY '$StratumUserDBPassword';"
+  Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
+  Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'${DBInternalIP}' IDENTIFIED BY '$PanelUserDBPassword';"
+  Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPStratumName}'@'${DBInternalIP}' IDENTIFIED BY '$StratumUserDBPassword';"
   Q4="FLUSH PRIVILEGES;"
   SQL="${Q1}${Q2}${Q3}${Q4}"
   sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
@@ -38,14 +38,14 @@ echo -e " Creating my.cnf...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
 echo '[clienthost1]
-user=panel
+user='"${YiiMPPanelName}"'
 password='"${PanelUserDBPassword}"'
-database=yiimpfrontend
+database='"${YiiMPDBName}"'
 host=localhost
 [clienthost2]
-user=stratum
+user='"${YiiMPStratumName}"'
 password='"${StratumUserDBPassword}"'
-database=yiimpfrontend
+database='"${YiiMPDBName}"'
 host=localhost
 [mysql]
 user=root
@@ -53,14 +53,14 @@ password='"${DBRootPassword}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
 else
 echo '[clienthost1]
-  user=panel
+  user='"${YiiMPPanelName}"'
   password='"${PanelUserDBPassword}"'
-  database=yiimpfrontend
+  database='"${YiiMPDBName}"'
   host='"${DBInternalIP}"'
   [clienthost2]
-  user=stratum
+  user='"${YiiMPStratumName}"'
   password='"${StratumUserDBPassword}"'
-  database=yiimpfrontend
+  database='"${YiiMPDBName}"'
   host='"${DBInternalIP}"'
   [mysql]
   user=root
@@ -74,8 +74,8 @@ echo -e "$GREEN Passwords can be found in $STORAGE_ROOT/yiimp/.my.cnf$COL_RESET"
 echo -e " Importing YiiMP Default database values...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/sql
 # import sql dump
-sudo zcat 2019-11-10-yiimp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend
-sudo mysql -u root -p"${DBRootPassword}" yiimpfrontend --force < 2018-09-22-workers.sql
+sudo zcat 2019-11-10-yiimp.sql.gz | sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}"
+sudo mysql -u root -p"${DBRootPassword}" "${YiiMPDBName}" --force < 2018-09-22-workers.sql
 echo -e "$GREEN Database import complete...$COL_RESET"
 
 echo -e " Tweaking MariaDB for better performance...$COL_RESET"
