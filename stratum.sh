@@ -50,9 +50,12 @@ source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd '""''"${STORAGE_ROOT}"''""'/yiimp/site/stratum/config/ && ./run.sh $*
 ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/run.sh >/dev/null 2>&1
+
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/run.sh
+
 echo -e " Updating stratum config files with database connection info...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/site/stratum/config
+
 sudo sed -i 's/password = tu8tu5/password = '${blckntifypass}'/g' *.conf
 sudo sed -i 's/server = yaamp.com/server = '${StratumURL}'/g' *.conf
 if [[ ("$wireguard" == "true") ]]; then
@@ -60,8 +63,8 @@ if [[ ("$wireguard" == "true") ]]; then
 else
 sudo sed -i 's/host = yaampdb/host = localhost/g' *.conf
 fi
-sudo sed -i 's/database = yaamp/database = yiimpfrontend/g' *.conf
-sudo sed -i 's/username = root/username = stratum/g' *.conf
+sudo sed -i 's/database = yaamp/database = '${YiiMPDBName}'/g' *.conf
+sudo sed -i 's/username = root/username = '${YiiMPStratumName}'/g' *.conf
 sudo sed -i 's/password = patofpaq/password = '${StratumUserDBPassword}'/g' *.conf
 
 #set permissions
