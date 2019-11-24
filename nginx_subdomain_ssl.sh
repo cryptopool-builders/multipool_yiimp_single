@@ -8,9 +8,10 @@ source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 echo -e " Generating Certbot Request for ${DomainName} ...$COL_RESET"
-hide_output sudo certbot certonly --webroot -d "${DomainName}" --email '"${SupportEmail}"' -w /var/www/'"${DomainName}"'/html/web/_letsencrypt -n --agree-tos --force-renewal
+sudo mkdir -p /var/www/'"${DomainName}"'/html/web/_letsencrypt
+hide_output sudo certbot certonly --webroot -d "${DomainName}" --register-unsafely-without-email -w /var/www/'"${DomainName}"'/html/web/_letsencrypt -n --agree-tos --force-renewal
 # Configure Certbot to reload NGINX after success renew:
-echo -e '#!/bin/bash\nnginx -t && systemctl reload nginx' | sudo tee /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh
+echo '#!/bin/bash\nnginx -t && systemctl reload nginx' | sudo -E tee /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh >/dev/null 2>&1
 sudo chmod a+x /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh
 # Remove the '"${DomainName}"'.conf that had the self signed SSL and replace with the new file.
 sudo rm /etc/nginx/sites-available/${DomainName}.conf
