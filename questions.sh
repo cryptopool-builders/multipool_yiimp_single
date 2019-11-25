@@ -26,10 +26,7 @@ message_box "Ultimate Crypto-Server Setup Installer" \
 \n\nNOTE: If installing on a system with less then 8 GB of RAM you may experience system issues!"
 fi
 
-
 # Begin user inputted responses for auto install
-
-
 dialog --title "Using Domain Name" \
 --yesno "Are you using a domain name? Example: example.com?
 Make sure the DNS is updated!" 7 60
@@ -220,24 +217,23 @@ fi
 # We do it here to save the variables in the global .yiimp.conf file
 YiiMPDBName=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 YiiMPPanelName=Panel$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
-YiiMPStratumName=Stratum$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
+StratumDBUser=Stratum$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 
 clear
 
 dialog --title "Verify Your Responses" \
 --yesno "Please verify your answers to continue setup:
 
-Dedicated Coin Ports : ${CoinPort}
-AutoExchange : ${AutoExchange}
 Using Domain : ${UsingDomain}
 Using Sub-Domain : ${UsingSubDomain}
-Install SSL      : ${InstallSSL}
 Domain Name      : ${DomainName}
 Stratum URL      : ${StratumURL}
+Install SSL      : ${InstallSSL}
 System Email     : ${SupportEmail}
-Your Public IP   : ${PublicIP}
-Admin Location   : ${AdminPanel}" 16 60
-
+Admin Location   : ${AdminPanel}
+Dedicated Coin Ports : ${CoinPort}
+AutoExchange : ${AutoExchange}
+Your Public IP   : ${PublicIP}" 16 60
 
 # Get exit status
 # 0 means user hit [yes] button.
@@ -251,48 +247,57 @@ case $response in
 # tools know where to look for data.
 if [[ ("$wireguard" == "true") ]]; then
 echo 'STORAGE_USER='"${STORAGE_USER}"'
-UsingDomain='"${UsingDomain}"'
 STORAGE_ROOT='"${STORAGE_ROOT}"'
 PRIMARY_HOSTNAME='"${DomainName}"'
+
+UsingDomain='"${UsingDomain}"'
+UsingSubDomain='"${UsingSubDomain}"'
 DomainName='"${DomainName}"'
 StratumURL='"${StratumURL}"'
-SupportEmail='"${SupportEmail}"'
-PublicIP='"${PublicIP}"'
-DBRootPassword='"'"''"${DBRootPassword}"''"'"'
-AdminPanel='"${AdminPanel}"'
-PanelUserDBPassword='"'"''"${PanelUserDBPassword}"''"'"'
-StratumUserDBPassword='"'"''"${StratumUserDBPassword}"''"'"'
-UsingSubDomain='"${UsingSubDomain}"'
 InstallSSL='"${InstallSSL}"'
+SupportEmail='"${SupportEmail}"'
+
+AdminPanel='"${AdminPanel}"'
+PublicIP='"${PublicIP}"'
 CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
+
 DBInternalIP='"${DBInternalIP}"'
 YiiMPDBName='"${YiiMPDBName}"'
+DBRootPassword='"'"''"${DBRootPassword}"''"'"'
 YiiMPPanelName='"${YiiMPPanelName}"'
-YiiMPStratumName='"${YiiMPStratumName}"'
+PanelUserDBPassword='"'"''"${PanelUserDBPassword}"''"'"'
+StratumDBUser='"${StratumDBUser}"'
+StratumUserDBPassword='"'"''"${StratumUserDBPassword}"''"'"'
+
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1
 else
 echo 'STORAGE_USER='"${STORAGE_USER}"'
 STORAGE_ROOT='"${STORAGE_ROOT}"'
-UsingDomain='"${UsingDomain}"'
 PRIMARY_HOSTNAME='"${DomainName}"'
+
+UsingDomain='"${UsingDomain}"'
+UsingSubDomain='"${UsingSubDomain}"'
 DomainName='"${DomainName}"'
 StratumURL='"${StratumURL}"'
-SupportEmail='"${SupportEmail}"'
-PublicIP='"${PublicIP}"'
-DBRootPassword='"'"''"${DBRootPassword}"''"'"'
-AdminPanel='"${AdminPanel}"'
-PanelUserDBPassword='"'"''"${PanelUserDBPassword}"''"'"'
-StratumUserDBPassword='"'"''"${StratumUserDBPassword}"''"'"'
-UsingSubDomain='"${UsingSubDomain}"'
 InstallSSL='"${InstallSSL}"'
+SupportEmail='"${SupportEmail}"'
+
+AdminPanel='"${AdminPanel}"'
+PublicIP='"${PublicIP}"'
 CoinPort='"${CoinPort}"'
 AutoExchange='"${AutoExchange}"'
+
 YiiMPDBName='"${YiiMPDBName}"'
+DBRootPassword='"'"''"${DBRootPassword}"''"'"'
 YiiMPPanelName='"${YiiMPPanelName}"'
+PanelUserDBPassword='"'"''"${PanelUserDBPassword}"''"'"'
+StratumDBUser='"${StratumDBUser}"'
+StratumUserDBPassword='"'"''"${StratumUserDBPassword}"''"'"'
 YiiMPStratumName='"${YiiMPStratumName}"'
+
 # Unless you do some serious modifications this installer will not work with any other repo of yiimp!
 YiiMPRepo='https://github.com/cryptopool-builders/yiimp.git'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.yiimp.conf >/dev/null 2>&1

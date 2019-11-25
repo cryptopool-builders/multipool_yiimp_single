@@ -5,7 +5,9 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+
 echo -e " Building blocknotify and stratum...$COL_RESET"
+
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify
 blckntifypass=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
@@ -18,6 +20,7 @@ if [[ ("$AutoExchange" == "yes") ]]; then
 sudo sed -i 's/CFLAGS += -DNO_EXCHANGE/#CFLAGS += -DNO_EXCHANGE/' $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum/Makefile
 fi
 hide_output sudo make
+
 echo -e " Building stratum folder structure and copying files...$COL_RESET"
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/stratum
 sudo cp -a config.sample/. $STORAGE_ROOT/yiimp/site/stratum/config
@@ -28,7 +31,6 @@ sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify/blocknotify $STORAG
 sudo cp -r $STORAGE_ROOT/yiimp/yiimp_setup/yiimp/blocknotify/blocknotify /usr/bin
 
 sudo rm -r $STORAGE_ROOT/yiimp/site/stratum/config/run.sh
-
 echo '#!/usr/bin/env bash
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
@@ -40,17 +42,14 @@ while true; do
 sleep 2
 done
 exec bash' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/config/run.sh >/dev/null 2>&1
-
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/run.sh
 
 sudo rm -r $STORAGE_ROOT/yiimp/site/stratum/run.sh
-
 echo '#!/usr/bin/env bash
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd '""''"${STORAGE_ROOT}"''""'/yiimp/site/stratum/config/ && ./run.sh $*
 ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/run.sh >/dev/null 2>&1
-
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/run.sh
 
 echo -e " Updating stratum config files with database connection info...$COL_RESET"
@@ -64,7 +63,7 @@ else
 sudo sed -i 's/host = yaampdb/host = localhost/g' *.conf
 fi
 sudo sed -i 's/database = yaamp/database = '${YiiMPDBName}'/g' *.conf
-sudo sed -i 's/username = root/username = '${YiiMPStratumName}'/g' *.conf
+sudo sed -i 's/username = root/username = '${StratumDBUser}'/g' *.conf
 sudo sed -i 's/password = patofpaq/password = '${StratumUserDBPassword}'/g' *.conf
 
 #set permissions

@@ -9,6 +9,7 @@ echo -e " Installing BitCoin PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/bitcoin.list ]; then
 hide_output sudo add-apt-repository -y ppa:bitcoin/bitcoin
 fi
+
 echo -e " Installing additional system files required for daemons...$COL_RESET"
 hide_output sudo apt-get update
 apt_install build-essential libtool autotools-dev \

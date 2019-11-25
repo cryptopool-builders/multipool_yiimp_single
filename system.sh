@@ -122,7 +122,9 @@ echo Removing apache...
 hide_output apt-get -y purge apache2 apache2-*
 hide_output apt-get -y --purge autoremove
 fi
+
 hide_output sudo apt-get update
+
 if [[ ("$DISTRO" == "16") ]]; then
 apt_install php7.3-fpm php7.3-opcache php7.3-fpm php7.3 php7.3-common php7.3-gd \
 php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi \
@@ -160,6 +162,7 @@ sudo rm -f /var/lib/ubuntu-release-upgrader/release-upgrade-available
 fi
 
 echo -e "$GREEN Done...$COL_RESET"
+
 echo -e " Downloading CryptoPool.builders YiiMP Repo...$COL_RESET"
 hide_output sudo git clone ${YiiMPRepo} $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
 if [[ ("$CoinPort" == "yes") ]]; then

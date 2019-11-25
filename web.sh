@@ -25,23 +25,19 @@ sudo mkdir -p $STORAGE_ROOT/yiimp/site/backup/
 sudo sed -i "s|ROOTDIR=/data/yiimp|ROOTDIR=${STORAGE_ROOT}/yiimp/site|g" /bin/yiimp
 
 if [[ ("$UsingSubDomain" == "y" || "$UsingSubDomain" == "Y" || "$UsingSubDomain" == "yes" || "$UsingSubDomain" == "Yes" || "$UsingSubDomain" == "YES") ]]; then
-cd $HOME/multipool/yiimp_single
-source nginx_subdomain_nonssl.sh
-
-if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-cd $HOME/multipool/yiimp_single
-source nginx_subdomain_ssl.sh
-fi
-
-else
-
-cd $HOME/multipool/yiimp_single
-source nginx_domain_nonssl.sh
-
-if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
-cd $HOME/multipool/yiimp_single
-source nginx_domain_ssl.sh
-fi
+  cd $HOME/multipool/yiimp_single
+  source nginx_subdomain_nonssl.sh
+    if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+      cd $HOME/multipool/yiimp_single
+      source nginx_subdomain_ssl.sh
+    fi
+      else
+        cd $HOME/multipool/yiimp_single
+        source nginx_domain_nonssl.sh
+    if [[ ("$InstallSSL" == "y" || "$InstallSSL" == "Y" || "$InstallSSL" == "yes" || "$InstallSSL" == "Yes" || "$InstallSSL" == "YES") ]]; then
+      cd $HOME/multipool/yiimp_single
+      source nginx_domain_ssl.sh
+    fi
 fi
 
 echo -e " Creating YiiMP configuration files...$COL_RESET"

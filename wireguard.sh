@@ -5,6 +5,7 @@
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 source /etc/multipool.conf
+
 clear
 echo -e " Installing WireGuard...$COL_RESET"
 sudo add-apt-repository ppa:wireguard/wireguard -y

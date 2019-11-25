@@ -9,6 +9,7 @@
 
 source /etc/functions.sh
 source /etc/multipool.conf
+
 # Ensure Python reads/writes files in UTF-8. If the machine
 # triggers some other locale in Python, like ASCII encoding,
 # Python may not be able to read/write files. This is also
@@ -32,7 +33,6 @@ echo -e " Creating the temporary YiiMP installation folder...$COL_RESET"
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
 sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/web
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/web/_letsencrypt
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/stratum
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/configuration
 sudo mkdir -p $STORAGE_ROOT/yiimp/site/crons
@@ -66,16 +66,16 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 clear
 
 if [[ ("$UsingDomain" == "Yes") ]]; then
-echo -e "Installation of your YiiMP single server is now completed."
-echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"
-echo
-echo -e "$YELLOW Important!$COL_RESET After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
-echo -e "If they show$RED stopped$COL_RESET, after 1 minute, type$GREEN motd$COL_RESET to refresh the screen."
-echo
-echo -e "You can access your admin panel at,$BLUE http://${DomainName}/site/${AdminPanel} $COL_RESET"
-echo
-echo -e "$RED By default all stratum ports are blocked by the firewall.$COL_RESET To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.$COL_RESET"
-echo "Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf"
+  echo -e "Installation of your YiiMP single server is now completed."
+  echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"
+  echo
+  echo -e "$YELLOW Important!$COL_RESET After first reboot it may take up to 1 minute for the main|loop2|blocks|debug screens to start!"
+  echo -e "If they show$RED stopped$COL_RESET, after 1 minute, type$GREEN motd$COL_RESET to refresh the screen."
+  echo
+  echo -e "You can access your admin panel at,$BLUE http://${DomainName}/site/${AdminPanel} $COL_RESET"
+  echo
+  echo -e "$RED By default all stratum ports are blocked by the firewall.$COL_RESET To allow a port through, from the command prompt type $GREEN sudo ufw allow port number.$COL_RESET"
+  echo "Database user names and passwords can be found in $STORAGE_ROOT/yiimp_setup/.my.cnf"
 else
   echo -e "Installation of your YiiMP single server is now completed."
   echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"

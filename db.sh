@@ -18,32 +18,34 @@ echo -e "$GREEN MariaDB build complete...$COL_RESET"
 echo -e " Creating DB users for YiiMP...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
-Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
-Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
-Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPStratumName}'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
-Q4="FLUSH PRIVILEGES;"
-SQL="${Q1}${Q2}${Q3}${Q4}"
+  Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
+  Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'localhost' IDENTIFIED BY '$PanelUserDBPassword';"
+  Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${StratumDBUser}'@'localhost' IDENTIFIED BY '$StratumUserDBPassword';"
+  Q4="FLUSH PRIVILEGES;"
+  SQL="${Q1}${Q2}${Q3}${Q4}"
 sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
+
 else
   Q1="CREATE DATABASE IF NOT EXISTS ${YiiMPDBName};"
   Q2="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPPanelName}'@'${DBInternalIP}' IDENTIFIED BY '$PanelUserDBPassword';"
-  Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${YiiMPStratumName}'@'${DBInternalIP}' IDENTIFIED BY '$StratumUserDBPassword';"
+  Q3="GRANT ALL ON ${YiiMPDBName}.* TO '${StratumDBUser}'@'${DBInternalIP}' IDENTIFIED BY '$StratumUserDBPassword';"
   Q4="FLUSH PRIVILEGES;"
   SQL="${Q1}${Q2}${Q3}${Q4}"
   sudo mysql -u root -p"${DBRootPassword}" -e "$SQL"
 fi
+
 echo -e "$GREEN Database creation complete...$COL_RESET"
 
 echo -e " Creating my.cnf...$COL_RESET"
 
 if [[ ("$wireguard" == "false") ]]; then
-echo '[clienthost1]
+  echo '[clienthost1]
 user='"${YiiMPPanelName}"'
 password='"${PanelUserDBPassword}"'
 database='"${YiiMPDBName}"'
 host=localhost
 [clienthost2]
-user='"${YiiMPStratumName}"'
+user='"${StratumDBUser}"'
 password='"${StratumUserDBPassword}"'
 database='"${YiiMPDBName}"'
 host=localhost
@@ -51,21 +53,22 @@ host=localhost
 user=root
 password='"${DBRootPassword}"'
 ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
+
 else
-echo '[clienthost1]
-  user='"${YiiMPPanelName}"'
-  password='"${PanelUserDBPassword}"'
-  database='"${YiiMPDBName}"'
-  host='"${DBInternalIP}"'
-  [clienthost2]
-  user='"${YiiMPStratumName}"'
-  password='"${StratumUserDBPassword}"'
-  database='"${YiiMPDBName}"'
-  host='"${DBInternalIP}"'
-  [mysql]
-  user=root
-  password='"${DBRootPassword}"'
-  ' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
+  echo '[clienthost1]
+user='"${YiiMPPanelName}"'
+password='"${PanelUserDBPassword}"'
+database='"${YiiMPDBName}"'
+host='"${DBInternalIP}"'
+[clienthost2]
+user='"${StratumDBUser}"'
+password='"${StratumUserDBPassword}"'
+database='"${YiiMPDBName}"'
+host='"${DBInternalIP}"'
+[mysql]
+user=root
+password='"${DBRootPassword}"'
+' | sudo -E tee $STORAGE_ROOT/yiimp/.my.cnf >/dev/null 2>&1
 fi
 
 sudo chmod 0600 $STORAGE_ROOT/yiimp/.my.cnf
@@ -80,12 +83,12 @@ echo -e "$GREEN Database import complete...$COL_RESET"
 
 echo -e " Tweaking MariaDB for better performance...$COL_RESET"
 if [[ ("$wireguard" == "false") ]]; then
-sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
-sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
-sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
-sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
-sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
-sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
+  sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
+  sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
+  sudo sed -i '/tmp_table_size/c\tmp_table_size          = 128M' /etc/mysql/my.cnf
+  sudo sed -i '/max_heap_table_size/c\max_heap_table_size     = 128M' /etc/mysql/my.cnf
+  sudo sed -i '/wait_timeout/c\wait_timeout            = 60' /etc/mysql/my.cnf
+  sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
 else
   sudo sed -i '/max_connections/c\max_connections         = 800' /etc/mysql/my.cnf
   sudo sed -i '/thread_cache_size/c\thread_cache_size       = 512' /etc/mysql/my.cnf
@@ -95,6 +98,7 @@ else
   sudo sed -i '/max_allowed_packet/c\max_allowed_packet      = 64M' /etc/mysql/my.cnf
   sudo sed -i 's/#bind-address=0.0.0.0/bind-address='${DBInternalIP}'/g' /etc/mysql/my.cnf
 fi
+
 echo -e "$GREEN Database tweak complete...$COL_RESET"
 restart_service mysql
 echo
