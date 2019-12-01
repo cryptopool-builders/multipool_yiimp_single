@@ -90,4 +90,5 @@ echo -e "$GREEN bls-signatures Completed...$COL_RESET"
 echo
 echo -e "$GREEN Daemon setup completed...$COL_RESET"
 
+set +eu +o pipefail
 cd $HOME/multipool/yiimp_single
