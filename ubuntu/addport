@@ -37,7 +37,7 @@ echo "It will also create a new symbol.algo.conf in /home/crypto-data/yiimp/site
 echo "and will create a new stratum.symbol run file in /usr/bin."
 echo
 
-echo 
+echo
 echo -e "$RED Make sure coin symbol is all UPPER case.$COL_RESET"
 read -e -p "Please enter the coin SYMBOL : " coinsymbol
 echo ""
@@ -54,7 +54,7 @@ cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf
 # Insert the port in to the new coin.algo.conf
 sed -i '/port/c\port = '${coinport}'' $coinsymbollower.$coinalgo.conf
 
-# Insert the include 
+# Insert the include
 sed -i -e '$a\
 [WALLETS]\
 include = '${coinsymbol}'' $coinsymbollower.$coinalgo.conf
@@ -114,7 +114,7 @@ for name; do
 done ' | sudo -E tee $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower} >/dev/null 2>&1
 sudo chmod +x $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower}
 
-sudo cp -r stratum.${coinsymbollower} /usr/bin 
+sudo cp -r stratum.${coinsymbollower} /usr/bin
 sudo ufw allow $coinport
 echo
 echo "Adding stratum.${coinsymbollower} to crontab for autostart at system boot."

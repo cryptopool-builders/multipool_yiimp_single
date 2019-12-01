@@ -31,16 +31,11 @@ export NCURSES_NO_UTF8_ACS=1
 # Create the temporary installation directory if it doesn't already exist.
 echo -e " Creating the temporary YiiMP installation folder...$COL_RESET"
 if [ ! -d $STORAGE_ROOT/yiimp/yiimp_setup ]; then
-sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/web
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/stratum
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/configuration
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/crons
-sudo mkdir -p $STORAGE_ROOT/yiimp/site/log
-sudo mkdir -p $STORAGE_ROOT/yiimp/starts
-sudo mkdir -p $STORAGE_ROOT/wallets
+sudo mkdir -p $STORAGE_ROOT/{wallets,yiimp/{yiimp_setup/log,site/{web,stratum,configuration,crons,log},starts}}
+sudo touch $STORAGE_ROOT/yiimp/yiimp_setup/log/installer.log
 fi
 echo -e "$GREEN Folders created...$COL_RESET"
+
 # Start the installation.
 source menu.sh
 source questions.sh

@@ -5,6 +5,16 @@
 source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
+set -eu -o pipefail
+
+function print_error {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
+
+
 echo -e " Installing BitCoin PPA...$COL_RESET"
 if [ ! -f /etc/apt/sources.list.d/bitcoin.list ]; then
 hide_output sudo add-apt-repository -y ppa:bitcoin/bitcoin
