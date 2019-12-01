@@ -6,6 +6,19 @@ source /etc/functions.sh
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
+set -eu -o pipefail
+
+function print_error {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
+
+if [[ ("$wireguard" == "true") ]]; then
+source $STORAGE_ROOT/yiimp/.wireguard.conf
+fi
+
 echo -e " Installing mail system $COL_RESET"
 
 sudo debconf-set-selections <<< "postfix postfix/mailname string ${host_name}"
@@ -25,4 +38,5 @@ sudo newaliases
 
 sudo adduser $whoami mail
 echo -e "$GREEN Mail system complete...$COL_RESET"
+set +eu +o pipefail
 cd $HOME/multipool/yiimp_single

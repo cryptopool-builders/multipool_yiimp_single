@@ -6,6 +6,19 @@ source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 cd $HOME/multipool/yiimp_single
 
+set -eu -o pipefail
+
+function print_error {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
+
+if [[ ("$wireguard" == "true") ]]; then
+source $STORAGE_ROOT/yiimp/.wireguard.conf
+fi
+
 # NGINX upgrade
 echo -e " Upgrading NGINX...$COL_RESET"
 
@@ -34,4 +47,5 @@ sudo rm -r /etc/nginx/sites-enabled/default
 echo -e "$GREEN NGINX upgrade complete...$COL_RESET"
 restart_service nginx
 restart_service php7.3-fpm
+set +eu +o pipefail
 cd $HOME/multipool/yiimp_single

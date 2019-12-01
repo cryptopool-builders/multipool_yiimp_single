@@ -9,6 +9,16 @@ source /etc/functions.sh
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
+
+set -eu -o pipefail
+
+function print_error {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
+
 if [[ ("$wireguard" == "true") ]]; then
 source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
@@ -86,4 +96,6 @@ sudo sed -i "s|blocknotify=blocknotify 127.0.0.1|blocknotify=blocknotify ${DBInt
 fi
 
 echo -e "$GREEN Web build complete...$COL_RESET"
+
+set +eu +o pipefail
 cd $HOME/multipool/yiimp_single

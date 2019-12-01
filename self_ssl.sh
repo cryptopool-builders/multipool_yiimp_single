@@ -8,35 +8,20 @@ source /etc/functions.sh
 source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 
-# Installs self signed SSL
-# RSA private key, SSL certificate, Diffie-Hellman bits files
-# -------------------------------------------
+set -eu -o pipefail
 
-# Create an RSA private key, a self-signed SSL certificate, and some
-# Diffie-Hellman cipher bits, if they have not yet been created.
-#
-# The RSA private key and certificate are used for:
-#
-#  * DNSSEC DANE TLSA records
-#  * IMAP
-#  * SMTP (opportunistic TLS for port 25 and submission on port 587)
-#  * HTTPS
-#
-# The certificate is created with its CN set to the PRIMARY_HOSTNAME. It is
-# also used for other domains served over HTTPS until the user installs a
-# better certificate for those domains.
-#
-# The Diffie-Hellman cipher bits are used for SMTP and HTTPS, when a
-# Diffie-Hellman cipher is selected during TLS negotiation. Diffie-Hellman
-# provides Perfect Forward Secrecy.
+function print_error {
+    read line file <<<$(caller)
+    echo "An error occurred in line $line of file $file:" >&2
+    sed "${line}q;d" "$file" >&2
+}
+trap print_error ERR
 
-# Show a status line if we are going to take any action in this file.
-if  [ ! -f /usr/bin/openssl ] \
- || [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ] \
- || [ ! -f $STORAGE_ROOT/ssl/ssl_certificate.pem ] \
- || [ ! -f $STORAGE_ROOT/ssl/dh2048.pem ]; then
-echo -e "Creating initial SSL certificate...$COL_RESET"
+if [[ ("$wireguard" == "true") ]]; then
+source $STORAGE_ROOT/yiimp/.wireguard.conf
 fi
+echo -e "Creating initial SSL certificate...$COL_RESET"
+
 
 # Install openssl.
 
@@ -46,24 +31,6 @@ apt_install openssl
 
 sudo mkdir -p $STORAGE_ROOT/ssl
 
-# Generate a new private key.
-#
-# The key is only as good as the entropy available to openssl so that it
-# can generate a random key. "OpenSSL’s built-in RSA key generator ....
-# is seeded on first use with (on Linux) 32 bytes read from /dev/urandom,
-# the process ID, user ID, and the current time in seconds. [During key
-# generation OpenSSL] mixes into the entropy pool the current time in seconds,
-# the process ID, and the possibly uninitialized contents of a ... buffer
-# ... dozens to hundreds of times."
-#
-# A perfect storm of issues can cause the generated key to be not very random:
-#
-#   * improperly seeded /dev/urandom, but see system.sh for how we mitigate this
-#   * the user ID of this process is always the same (we're root), so that seed is useless
-#   * zero'd memory (plausible on embedded systems, cloud VMs?)
-#   * a predictable process ID (likely on an embedded/virtualized system)
-#   * a system clock reset to a fixed time on boot
-#
 # Since we properly seed /dev/urandom in system.sh we should be fine, but I leave
 # in the rest of the notes in case that ever changes.
 if [ ! -f $STORAGE_ROOT/ssl/ssl_private_key.pem ]; then
@@ -105,4 +72,5 @@ sudo openssl dhparam -out /etc/nginx/dhparam.pem 2048
 fi
 
 echo -e "$GREEN Initial Self Signed SSL Generation complete...$COL_RESET"
+set +eu +o pipefail
 cd $HOME/multipool/yiimp_single
