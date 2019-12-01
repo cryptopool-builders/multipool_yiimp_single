@@ -100,6 +100,7 @@ hide_output sudo pollinate -q -r
 echo -e "$GREEN Done...$COL_RESET"
 
 echo -e " Initializing UFW Firewall...$COL_RESET"
+set +eu +o pipefail
 if [ -z "${DISABLE_FIREWALL:-}" ]; then
 	# Install `ufw` which provides a simple firewall configuration.
 	apt_install ufw
@@ -125,7 +126,7 @@ if [ -z "${DISABLE_FIREWALL:-}" ]; then
 
 sudo ufw --force enable;
 fi #NODOC
-
+set -eu -o pipefail
 echo -e "$GREEN Done...$COL_RESET"
 echo -e " Installing YiiMP Required system packages...$COL_RESET"
 if [ -f /usr/sbin/apache2 ]; then
