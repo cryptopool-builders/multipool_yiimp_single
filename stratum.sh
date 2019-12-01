@@ -6,19 +6,6 @@ source /etc/functions.sh
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 
-set -eu -o pipefail
-
-function print_error {
-    read line file <<<$(caller)
-    echo "An error occurred in line $line of file $file:" >&2
-    sed "${line}q;d" "$file" >&2
-}
-trap print_error ERR
-
-if [[ ("$wireguard" == "true") ]]; then
-source $STORAGE_ROOT/yiimp/.wireguard.conf
-fi
-
 echo -e " Building blocknotify and stratum...$COL_RESET"
 
 cd $STORAGE_ROOT/yiimp/yiimp_setup/yiimp
@@ -84,5 +71,4 @@ sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/
 sudo setfacl -m u:$USER:rwx $STORAGE_ROOT/yiimp/site/stratum/config
 
 echo -e "$GREEN Stratum build complete...$COL_RESET"
-set +eu +o pipefail
 cd $HOME/multipool/yiimp_single
