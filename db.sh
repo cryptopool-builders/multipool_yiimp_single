@@ -3,6 +3,7 @@
 #####################################################
 
 source /etc/functions.sh
+source /etc/multipool.conf
 source $STORAGE_ROOT/yiimp/.yiimp.conf
 source $HOME/multipool/yiimp_single/.wireguard.install.cnf
 
@@ -111,7 +112,6 @@ fi
 
 echo -e "$GREEN Database tweak complete...$COL_RESET"
 restart_service mysql
-echo
 echo -e "$GREEN Database build complete...$COL_RESET"
 set +eu +o pipefail
 cd $HOME/multipool/yiimp_single
