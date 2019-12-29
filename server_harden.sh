@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #####################################################
 # Source various web sources:
 # https://www.linuxbabe.com/ubuntu/enable-google-tcp-bbr-ubuntu
