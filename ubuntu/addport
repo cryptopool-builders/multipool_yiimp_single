@@ -44,9 +44,25 @@ echo ""
 echo -e "$RED Make sure algo is in all lower case and a valid algo in yiimp.$COL_RESET"
 read -e -p "Please enter the coin algo : " coinalgo
 
-# Make the coin symbol lower case
+# Make sure the stratum.symbol config doesnt exist and that the algo file does.
+if [ -f $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower} ]; then
+  echo -e -p "A file for ${coinsymbol} already exists. Are you sure you want to overwrite? A new port will be generated."
+  read -r -e -p "Do you need to use a specific github branch of the coin (y/n) : " overwrite
+  if [[ ("$overwrite" == "n" || "$overwrite" == "N" || "$overwrite" == "no" || "$overwrite" == "NO") ]]; then
+    echo -e -p "later gator..."
+    exit 0
+  fi
+if [ ! -f /home/crypto-data/yiimp/site/stratum/config/$coinalgo.conf ]; then
+  echo -e -p "Sorry that algo config file doesn't exist in /home/crypto-data/yiimp/site/stratum/config/ please double check and try again."
+  exit 0
+fi
 
+# Make the coin symbol lower case
 coinsymbollower=${coinsymbol,,}
+# make sure algo is lower as well since we are Here
+coinalgo=${coinalgo,,}
+# and might as well make sure the symbol is upper case
+coinsymbol=${coinsymbol^^}
 
 # Copy the default algo.conf to the new coin.algo.conf
 cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf

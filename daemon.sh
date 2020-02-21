@@ -27,7 +27,7 @@ hide_output sudo apt-get update
 apt_install build-essential libtool autotools-dev \
 automake pkg-config libssl-dev libevent-dev bsdmainutils git libboost-all-dev libminiupnpc-dev \
 libqt5gui5 libqt5core5a libqt5webkit5-dev libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev \
-protobuf-compiler libqrencode-dev libzmq3-dev
+protobuf-compiler libqrencode-dev libzmq3-dev libgmp-dev
 
 sudo mkdir -p $STORAGE_ROOT/yiimp/yiimp_setup/tmp
 cd $STORAGE_ROOT/yiimp/yiimp_setup/tmp
