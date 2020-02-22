@@ -216,6 +216,9 @@ tribusstop='screen -X -S tribus quit'
 a5a="screen -dmS a5a bash $STRATUM_DIR/run.sh a5a"
 a5astop='screen -X -S a5a quit'
 
+x16rv2="screen -dmS x16rv2 bash $STRATUM_DIR/run.sh x16rv2"
+x16rv2stop='screen -X -S x16rv2 quit'
+
 startstop_service() {
     cmd=$1
     name=$2
@@ -1119,6 +1122,19 @@ startstop_a5a() {
     esac
 }
 
+startstop_x16rv2() {
+    cmd=$1
+    case $cmd in
+        stop) $x16rv2stop ;;
+        start) $x16rv2 ;;
+        restart)
+            $x16rv2stop
+            sleep 1
+            $x16rv2
+            ;;
+    esac
+}
+
 
 case "$1" in
     start|stop|restart) cmd=$1 ;;
@@ -1201,6 +1217,7 @@ for name; do
     skunk) startstop_skunk $cmd ;;
     tribus) startstop_tribus $cmd ;;
     a5a) startstop_a5a $cmd ;;
+    x16rv2) startstop_x16rv2 $cmd ;;
         *) startstop_service $cmd $name ;;
     esac
 done
