@@ -43,7 +43,11 @@ read -e -p "Please enter the coin SYMBOL : " coinsymbol
 echo ""
 echo -e "$RED Make sure algo is in all lower case and a valid algo in yiimp.$COL_RESET"
 read -e -p "Please enter the coin algo : " coinalgo
-
+echo ""
+read -e -p "Would you like to set a minimum nicehash value for this stratum? (y/n) : " nicehash
+if [[ ("$nicehash" == "y" || "$nicehash" == "Y" || "$nicehash" == "yes" || "$nicehash" == "YES") ]]; then
+read -e -p "Please enter a whole value, example: 750000 : " nicevalue
+fi
 # Make the coin symbol lower case
 coinsymbollower=${coinsymbol,,}
 # make sure algo is lower as well since we are Here
@@ -53,34 +57,57 @@ coinsymbol=${coinsymbol^^}
 
 # Make sure the stratum.symbol config doesnt exist and that the algo file does.
 if [ -f $STORAGE_ROOT/yiimp/site/stratum/config/stratum.${coinsymbollower} ]; then
-  echo -e -p "A file for ${coinsymbol} already exists. Are you sure you want to overwrite? A new port will be generated."
-  read -r -e -p "Do you need to use a specific github branch of the coin (y/n) : " overwrite
+  read -r -e -p "A file for ${coinsymbol} already exists. Are you sure you want to overwrite? A new port will be generated and you will need to update your coind.conf blocknotify line (y/n) : " overwrite
   if [[ ("$overwrite" == "n" || "$overwrite" == "N" || "$overwrite" == "no" || "$overwrite" == "NO") ]]; then
-    echo -e -p "later gator..."
+    echo -e "Later gator..."
     exit 0
   fi
 if [ ! -f /home/crypto-data/yiimp/site/stratum/config/$coinalgo.conf ]; then
-  echo -e -p "Sorry that algo config file doesn't exist in /home/crypto-data/yiimp/site/stratum/config/ please double check and try again."
+  echo -e "Sorry that algo config file doesn't exist in /home/crypto-data/yiimp/site/stratum/config/ please double check and try again."
   exit 0
 fi
 fi
 
-# Copy the default algo.conf to the new coin.algo.conf
-cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf
-
-# Insert the port in to the new coin.algo.conf
-sed -i '/port/c\port = '${coinport}'' $coinsymbollower.$coinalgo.conf
-
-# Insert the include
-sed -i -e '$a\
+# Prevent duplications from people running addport multiple times for the same coin...Also known as asshats...
+if [ -f $STORAGE_ROOT/yiimp/site/stratum/config/$coinsymbollower.$coinalgo.conf ]; then
+  if [[ ("$overwrite" == "y" || "$overwrite" == "Y" || "$overwrite" == "yes" || "$overwrite" == "YES") ]]; then
+    # Insert the port in to the new symbol.algo.conf
+    sed -i '/port/c\port = '${coinport}'' $coinsymbollower.$coinalgo.conf
+    echo -e "Port updated! Remeber to update your blocknotify line!!"
+  fi
+else
+# Since this is a new symbol we are going to add it to the other conf files first.
+for r in *.$coinalgo.conf; do
+  if ! grep -Fxq "exclude = ${coinsymbol}" "$r"; then
+    sed -i -e '$a\
+[WALLETS]\
+exclude = '${coinsymbol}'' "$r"
+fi
+done
+# Copy the default algo.conf to the new symbol.algo.conf
+  cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf
+# Insert the port in to the new symbol.algo.conf
+  sed -i '/port/c\port = '${coinport}'' $coinsymbollower.$coinalgo.conf
+# If setting a nicehash value
+if [[ ("$nicehash" == "y" || "$nicehash" == "Y" || "$nicehash" == "yes" || "$nicehash" == "YES") ]]; then
+  sed -i -e '/difficulty =/a\
+nicehash = '${nicevalue}'' $coinsymbollower.$coinalgo.conf
+fi
+# Insert the include in to the new symbol.algo.conf
+  sed -i -e '$a\
 [WALLETS]\
 include = '${coinsymbol}'' $coinsymbollower.$coinalgo.conf
+fi
 
-# Insert the exclude
-sed -i -e '$a\
+#Again preventing asshat duplications...
+if ! grep -Fxq "exclude = ${coinsymbol}" "$coinalgo.conf"; then
+# Insert the exclude in to algo.conf
+  sed -i -e '$a\
 [WALLETS]\
 exclude = '${coinsymbol}'' $coinalgo.conf
-
+else
+  echo -e "${coinsymbol} is already in $coinalgo.conf, skipping... Which means you are trying to run this multiple times for the same coin."
+fi
 
 # New coin stratum start file
 
