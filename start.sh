@@ -49,7 +49,7 @@ source nginx_upgrade.sh
 source web.sh
 source stratum.sh
 source daemon.sh
-if [[ ("$UsingDomain" == "Yes") ]]; then
+if [[ ("$UsingDomain" == "yes") ]]; then
 source send_mail.sh
 fi
 source server_cleanup.sh
@@ -59,7 +59,7 @@ source $STORAGE_ROOT/yiimp/.yiimp.conf
 
 clear
 
-if [[ ("$UsingDomain" == "Yes") ]]; then
+if [[ ("$UsingDomain" == "yes") ]]; then
   echo -e "Installation of your YiiMP single server is now completed."
   echo -e "You $RED*MUST REBOOT*$COL_RESET the machine to finalize the machine updates and folder permissions! $MAGENTA YiiMP will not function until a reboot is performed!$COL_RESET"
   echo

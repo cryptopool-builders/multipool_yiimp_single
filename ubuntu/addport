@@ -77,6 +77,9 @@ if [ -f $STORAGE_ROOT/yiimp/site/stratum/config/$coinsymbollower.$coinalgo.conf 
   fi
 else
 # Since this is a new symbol we are going to add it to the other conf files first.
+# First we need to check if this is the first time addport has been ran
+files=(*.$coinalgo.conf)
+if [ -e "${files[0]}" ]; then
 for r in *.$coinalgo.conf; do
   if ! grep -Fxq "exclude = ${coinsymbol}" "$r"; then
     sed -i -e '$a\
@@ -84,6 +87,7 @@ for r in *.$coinalgo.conf; do
 exclude = '${coinsymbol}'' "$r"
 fi
 done
+fi
 # Copy the default algo.conf to the new symbol.algo.conf
   cp -r $coinalgo.conf $coinsymbollower.$coinalgo.conf
 # Insert the port in to the new symbol.algo.conf
