@@ -91,8 +91,12 @@ sudo sed -i 's/service $webserver start/sudo service $webserver start/g' $STORAG
 sudo sed -i 's/service nginx stop/sudo service nginx stop/g' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/thread/CronjobController.php
 
 if [[ ("$wireguard" == "true") ]]; then
-sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${DBInternalIP}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
-sudo sed -i "s|blocknotify=blocknotify 127.0.0.1|blocknotify=blocknotify ${DBInternalIP}|g" $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
+  #Set Insternal IP to .0/26
+  internalrpcip=$DBInternalIP
+  internalrpcip="${DBInternalIP::-1}"
+  internalrpcip="${internalrpcip::-1}"
+  internalrpcip=$internalrpcip.0/26
+sudo sed -i '/# onlynet=ipv4/i\        echo "rpcallowip='${internalrpcip}'\\n";' $STORAGE_ROOT/yiimp/site/web/yaamp/modules/site/coin_form.php
 fi
 
 echo -e "$GREEN Web build complete...$COL_RESET"

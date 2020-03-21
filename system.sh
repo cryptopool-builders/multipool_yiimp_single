@@ -151,7 +151,8 @@ curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
 build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
-automake cmake gnupg2 ca-certificates lsb-release nginx certbot
+automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev default-libmysqlclient-dev \
+libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
 else
 apt_install php7.3-fpm php7.3-opcache php7.3-fpm php7.3 php7.3-common php7.3-gd \
 php7.3-mysql php7.3-imap php7.3-cli php7.3-cgi \
@@ -164,7 +165,8 @@ curl git sudo coreutils pollinate unzip unattended-upgrades cron \
 pwgen libgmp3-dev libmysqlclient-dev libcurl4-gnutls-dev \
 libkrb5-dev libldap2-dev libidn11-dev gnutls-dev librtmp-dev \
 build-essential libtool autotools-dev automake pkg-config libevent-dev bsdmainutils libssl-dev \
-libpsl-dev libnghttp2-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot
+libpsl-dev libnghttp2-dev automake cmake gnupg2 ca-certificates lsb-release nginx certbot libsodium-dev default-libmysqlclient-dev \
+libnghttp2-dev librtmp-dev libssh2-1 libssh2-1-dev libldap2-dev libidn11-dev libpsl-dev libkrb5-dev
 fi
 
 # ### Suppress Upgrade Prompts
