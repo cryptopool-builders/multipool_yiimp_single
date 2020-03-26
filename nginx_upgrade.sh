@@ -53,11 +53,11 @@ fi
 if [ -f /etc/nginx/conf.d/default.conf ]; then
 sudo rm -r /etc/nginx/conf.d/default.conf
 fi
-if [ -f /etc/nginx/sites-available/default ]; then
-sudo rm -r /etc/nginx/sites-available/default
-fi
 if [ -f /etc/nginx/sites-enabled/default ]; then
 sudo rm -r /etc/nginx/sites-enabled/default
+fi
+if [ -f /etc/nginx/sites-available/default ]; then
+sudo rm -r /etc/nginx/sites-available/default
 fi
 
 echo -e "$GREEN NGINX upgrade complete...$COL_RESET"
