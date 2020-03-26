@@ -7,7 +7,7 @@
 
 source /etc/functions.sh
 
-RESULT=$(dialog --stdout --default-item 1 --title "Ultimate Crypto-Server Setup Installer v1.89" --menu "Choose one" -1 60 6 \
+RESULT=$(dialog --stdout --default-item 1 --title "Ultimate Crypto-Server Setup Installer v1.90" --menu "Choose one" -1 60 6 \
 ' ' "- For small private pools -" \
 1 "YiiMP - Single Server" \
 ' ' "- If you plan on adding more servers later -" \
