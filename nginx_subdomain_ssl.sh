@@ -25,7 +25,7 @@ sudo mkdir -p /var/www/_letsencrypt
 sudo chown www-data /var/www/_letsencrypt
 hide_output sudo certbot certonly --webroot -d "${DomainName}" --register-unsafely-without-email -w /var/www/_letsencrypt -n --agree-tos --force-renewal
 # Check to make sure certbot installed ok, if not keep the self generated ssl config.
-if [ -f /etc/letsencrypt/live/'"${DomainName}"'/fullchain.pem ]; then
+if [ -f /etc/letsencrypt/live/${DomainName}/fullchain.pem ]; then
 # Configure Certbot to reload NGINX after success renew:
 sudo mkdir -p /etc/letsencrypt/renewal-hooks/post/
 echo '#!/bin/bash\nnginx -t && systemctl reload nginx' | sudo -E tee /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh >/dev/null 2>&1
