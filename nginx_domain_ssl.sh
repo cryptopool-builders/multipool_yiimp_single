@@ -24,7 +24,6 @@ echo -e " Generating Certbot Request for ${DomainName} ...$COL_RESET"
 sudo mkdir -p /var/www/_letsencrypt
 sudo chown www-data /var/www/_letsencrypt
 hide_output sudo certbot certonly --webroot -d "${DomainName}" --register-unsafely-without-email -w /var/www/_letsencrypt -n --agree-tos --force-renewal
-wait $!
 # Check to make sure certbot installed ok, if not keep the self generated ssl config.
 if sudo [ -f /etc/letsencrypt/live/"$DomainName"/fullchain.pem ]; then
 # Configure Certbot to reload NGINX after success renew:

@@ -28,8 +28,10 @@ sudo debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Intern
 apt_install mailutils
 
 sudo sed -i 's/inet_interfaces = all/inet_interfaces = loopback-only/g' /etc/postfix/main.cf
+sudo sed -i 's/myhostname =/# myhostname =/g' /etc/postfix/main.cf
 sudo sed -i 's/mydestination/# mydestination/g' /etc/postfix/main.cf
-sudo sed -i '/# mydestination/i mydestination = $myhostname, localhost.$mydomain, $mydomain' /etc/postfix/main.cf
+sudo sed -i '/# mydestination/i mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain' /etc/postfix/main.cf
+sudo sed -i '/# myhostname =/i myhostname = localhost' /etc/postfix/main.cf
 
 sudo systemctl restart postfix
 whoami=`whoami`
